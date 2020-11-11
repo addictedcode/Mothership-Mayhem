@@ -2,6 +2,9 @@
 
 
 #include "MothershipMayhem/Public/Character/MMCharacterBase.h"
+#include "Gun/MMGunLoadout.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AMMCharacterBase::AMMCharacterBase()
@@ -9,12 +12,40 @@ AMMCharacterBase::AMMCharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	#pragma region Player Mesh
+	// Create a gun mesh component
+	tempMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("tempMesh"));
+	tempMesh->bCastDynamicShadow = false;
+	tempMesh->CastShadow = false;
+	tempMesh->SetupAttachment(RootComponent);
+	#pragma endregion 
+
+	#pragma region Camera Component
+	// Create a CameraComponent	
+	cameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("firstPersonCamera"));
+	cameraComponent->SetupAttachment(GetCapsuleComponent());
+	cameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
+	cameraComponent->bUsePawnControlRotation = true;
+	#pragma endregion
+
+	#pragma region Gun Loadout Component
+	//Create Gun Loadout Component
+	gunLoadoutComponent = CreateDefaultSubobject<UMMGunLoadout>(TEXT("PlayerGunLoadout"));
+	#pragma endregion 
 }
 
 // Called when the game starts or when spawned
 void AMMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (tempMesh->DoesSocketExist("GripPoint")) {
+		const FRotator gunRotation = tempMesh->GetSocketRotation("GripPoint");
+		const FVector gunLocation = tempMesh->GetSocketLocation("GripPoint");
+
+		gunLoadoutComponent->SetWorldLocationAndRotation(gunLocation, gunRotation);
+		gunLoadoutComponent->AttachToComponent(cameraComponent, FAttachmentTransformRules::KeepWorldTransform);
+	}
 	
 }
 
@@ -36,6 +67,10 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//Mouse Movement
 	PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
 	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);
+
+	//Gun Controls
+	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AMMCharacterBase::OnShoot);
+	PlayerInputComponent->BindAxis("SwapGunWheel", this, &AMMCharacterBase::OnSwapWheel);
 }
 
 #pragma region Character Movement
@@ -87,6 +122,27 @@ void AMMCharacterBase::MouseX(float value)
 void AMMCharacterBase::MouseY(float value)
 {
 	AddControllerPitchInput(value);
+}
+
+#pragma endregion
+
+#pragma region Gun
+
+void AMMCharacterBase::OnShoot()
+{
+	if (gunLoadoutComponent != NULL) {
+		gunLoadoutComponent->OnShoot();
+	}
+}
+
+void AMMCharacterBase::OnSwapWheel(float value)
+{
+	if (value != 0)
+	{
+		if (gunLoadoutComponent != NULL) {
+			gunLoadoutComponent->OnSwapWheel(value);
+		}
+	}
 }
 
 #pragma endregion 

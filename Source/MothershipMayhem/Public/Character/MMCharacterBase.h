@@ -19,18 +19,36 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//Keyboard
 	void MoveX(float value);
 	void MoveY(float value);
 
 	void StartCrouch();
 	void EndCrouch();
-	
+
+	//Mouse
 	void MouseX(float value);
 	void MouseY(float value);
+
+	//Gun
+	void OnShoot();
+	void OnSwapWheel(float value);
 
 public:	
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	/** TempMesh */
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+		class UStaticMeshComponent* tempMesh;
+
+	/** First person camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		class UCameraComponent* cameraComponent;
+	
+	/**Gun Loadout */
+	class UMMGunLoadout* gunLoadoutComponent;
+	
 };
