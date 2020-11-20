@@ -31,8 +31,10 @@ protected:
 	void MouseY(float value);
 
 	//Gun
-	void OnShoot();
+	void OnPrimaryShootPressed();
+	void OnPrimaryShootReleased();
 	void OnSwapWheel(float value);
+	void OnReload();
 
 public:	
 

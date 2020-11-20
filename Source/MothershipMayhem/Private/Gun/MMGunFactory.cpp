@@ -63,8 +63,14 @@ namespace GunFactory
             newGun->SetMesh(gunData->gunMesh);
             newGun->SetProjectile(gunData->projectileClass);
 
-            TGunStats gunStats = newGun->GetGunStats();
-            gunStats.currentAmmo = 20;
+            TGunStats& gunStats = newGun->GetGunStats();
+            gunStats.fireRate.SetBaseValue(gunData->fireRate);
+            gunStats.maxAmmo.SetBaseValue(gunData->maxAmmo);
+            gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
+            gunStats.reloadTime.SetBaseValue(gunData->reloadTime);
+            gunStats.isAutomatic = gunData->isAutomatic;
+            gunStats.accuracy.SetBaseValue(gunData->accuracy);
+            gunStats.numberOfProjectilesToShoot.SetBaseValue(gunData->numberOfProjectilesToShoot);
 
             return newGun;
         }

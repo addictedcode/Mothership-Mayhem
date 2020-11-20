@@ -22,8 +22,10 @@ protected:
 
 public:
 
-	void OnShoot();
+	void OnPrimaryShootPressed();
+	void OnPrimaryShootReleased();
 	void OnSwapWheel(float value);
+	void OnReload();
 	void ChangeGun(class AMMGunBase* newGun, int index);
 	
 protected:

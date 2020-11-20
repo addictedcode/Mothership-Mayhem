@@ -23,4 +23,22 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		bool isAutomatic;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float fireRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float maxAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float reloadTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float accuracy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float numberOfProjectilesToShoot;
 };

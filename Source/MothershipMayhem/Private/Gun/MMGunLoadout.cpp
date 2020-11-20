@@ -29,17 +29,26 @@ void UMMGunLoadout::BeginPlay()
 	ChangeGun(GunFactory::CreateGun("MachineGun", world), 1);
 }
 
-void UMMGunLoadout::OnShoot()
+void UMMGunLoadout::OnPrimaryShootPressed()
 {
 	if (gun[currentGunIndex] != NULL) 
 	{
-		gun[currentGunIndex]->OnShoot();
+		gun[currentGunIndex]->OnPrimaryShootPressed();
 	}
 }
 
+void UMMGunLoadout::OnPrimaryShootReleased()
+{
+	if (gun[currentGunIndex] != NULL)
+	{
+		gun[currentGunIndex]->OnPrimaryShootReleased();
+	}
+}
+
+
 void UMMGunLoadout::OnSwapWheel(float value)
 {
-	gun[currentGunIndex]->SetActorHiddenInGame(true);
+	int previousGunIndex = currentGunIndex;
 	
 	//scroll down
 	if (value < 0)
@@ -71,8 +80,25 @@ void UMMGunLoadout::OnSwapWheel(float value)
 			}
 		}
 	}
+
+	if (previousGunIndex == currentGunIndex)
+	{
+		return;
+	}
+	
+	gun[previousGunIndex]->SetActorHiddenInGame(true);
+	gun[previousGunIndex]->OnHolster();
 	
 	gun[currentGunIndex]->SetActorHiddenInGame(false);
+	gun[currentGunIndex]->OnDraw();
+}
+
+void UMMGunLoadout::OnReload()
+{
+	if (gun[currentGunIndex] != NULL)
+	{
+		gun[currentGunIndex]->OnReload();
+	}
 }
 
 void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
