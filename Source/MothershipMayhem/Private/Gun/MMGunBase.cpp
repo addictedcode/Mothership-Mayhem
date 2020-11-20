@@ -16,7 +16,7 @@ AMMGunBase::AMMGunBase()
 	gunMesh->bCastDynamicShadow = false;
 	gunMesh->CastShadow = false;
 	gunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	gunMesh->SetupAttachment(RootComponent);
+	RootComponent = gunMesh;
 	#pragma endregion 
 }
 
@@ -39,16 +39,93 @@ void AMMGunBase::SetProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass
 	projectileClass = newProjectileClass;
 }
 
-bool AMMGunBase::OnShoot()
+
+#pragma region Inputs
+void AMMGunBase::OnPrimaryShootPressed()
 {
+	isShooting = true;
+	accuracyAngle = 45 - (45 * (gunStats.accuracy.GetFinalValue() / 100));
+	
 	if (projectileClass == NULL)
 	{
-		return false;
+		return;
+	}
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(primaryShootTimerHandle))
+	{
+		return;
 	}
 	
+	GetWorld()->GetTimerManager().SetTimer
+	(primaryShootTimerHandle, this, &AMMGunBase::PrimaryShoot, gunStats.fireRate.GetFinalValue(), gunStats.isAutomatic, 0.0f);
+}
+
+void AMMGunBase::OnPrimaryShootReleased()
+{
+	isShooting = false;
+}
+
+void AMMGunBase::OnReload()
+{
+	if (GetWorld()->GetTimerManager().IsTimerActive(reloadTimerHandle))
+	{
+		return;
+	}
+
+	isReloading = true;
+	
+	GetWorld()->GetTimerManager().SetTimer
+	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
+}
+
+void AMMGunBase::OnDraw()
+{
+	
+}
+
+void AMMGunBase::OnHolster()
+{
+	isReloading = false;
+	isShooting = false;
+	
+	GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
+}
+
+
+#pragma endregion 
+
+void AMMGunBase::PrimaryShoot()
+{
+	if (!isShooting)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
+		return;
+	}
+
+	if (gunStats.currentAmmo > 0) {
+		if (isReloading)
+		{
+			GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
+		}
+		for (int i = 0; i < gunStats.numberOfProjectilesToShoot.GetFinalValue(); ++i) {
+		        ShootProjectile();
+		}
+		gunStats.currentAmmo--;
+	}
+	
+	if (gunStats.currentAmmo <= 0)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
+		OnReload();
+	}
+}
+
+
+bool AMMGunBase::ShootProjectile()
+{
 	UWorld* const world = this->GetWorld();
 
-	if (world == NULL) 
+	if (world == NULL)
 	{
 		return false;
 	}
@@ -58,18 +135,37 @@ bool AMMGunBase::OnShoot()
 		return false;
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("%f"), gunStats.currentAmmo);
-	
-	const FRotator SpawnRotation = gunMesh->GetSocketRotation("MuzzlePoint");
+	//Get Spawn Location and Rotation for the projectile to spawn
+	FRotator SpawnRotation = gunMesh->GetSocketRotation("MuzzlePoint");
 	const FVector SpawnLocation = gunMesh->GetSocketLocation("MuzzlePoint");
 
+	//Apply Weapon Spread
+	const FRotator weaponSpread = FRotator(FMath::RandRange(-accuracyAngle, accuracyAngle), 
+		FMath::RandRange(-accuracyAngle, accuracyAngle), FMath::RandRange(-accuracyAngle, accuracyAngle));
+	FVector spreadVector = SpawnRotation.Vector();;
+	spreadVector = weaponSpread.RotateVector(spreadVector);
+	SpawnRotation = spreadVector.Rotation();
+	
 	//Set Spawn Collision Handling Override
 	FActorSpawnParameters ActorSpawnParams;
-	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	// spawn the projectile at the muzzle
-	world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+	AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+	
+	if (!newProjectile)
+	{
+		return false;
+	}
 	return true;
 }
 
-
+void AMMGunBase::Reload()
+{
+	gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
+	isReloading = false;
+	if (isShooting)
+	{
+		OnPrimaryShootPressed();
+	}
+}

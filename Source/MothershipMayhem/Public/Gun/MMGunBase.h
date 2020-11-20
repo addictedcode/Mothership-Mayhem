@@ -14,6 +14,8 @@ struct TGunStats
 	TMMStatsBase reloadTime;
 	TMMStatsBase maxAmmo;
 	float currentAmmo = 0;
+	TMMStatsBase accuracy;
+	bool isAutomatic;
 	TMMStatsBase numberOfProjectilesToShoot;
 
 	//Affect Projectile
@@ -38,6 +40,13 @@ protected:
 protected:
 	TGunStats gunStats;
 
+	FTimerHandle primaryShootTimerHandle;
+	bool isShooting = false;
+
+	FTimerHandle reloadTimerHandle;
+	bool isReloading = false;
+
+	float accuracyAngle;
 //UE Visible Variables
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */
@@ -51,8 +60,23 @@ protected:
 //Functions
 public:	
 
-	bool OnShoot();
+	void OnPrimaryShootPressed();
+	void OnPrimaryShootReleased();
 
+	void OnHolster();
+	void OnDraw();
+	
+	void OnReload();
+
+protected:
+
+	UFUNCTION()
+		void PrimaryShoot();
+	bool ShootProjectile();
+
+	UFUNCTION()
+		void Reload();
+	
 //Get / Set Functions
 public:
 

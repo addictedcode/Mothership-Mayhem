@@ -69,8 +69,11 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);
 
 	//Gun Controls
-	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AMMCharacterBase::OnShoot);
+	PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AMMCharacterBase::OnPrimaryShootPressed);
+	PlayerInputComponent->BindAction("PrimaryFire", IE_Released, this, &AMMCharacterBase::OnPrimaryShootReleased);
 	PlayerInputComponent->BindAxis("SwapGunWheel", this, &AMMCharacterBase::OnSwapWheel);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMMCharacterBase::OnReload);
+
 }
 
 #pragma region Character Movement
@@ -128,10 +131,17 @@ void AMMCharacterBase::MouseY(float value)
 
 #pragma region Gun
 
-void AMMCharacterBase::OnShoot()
+void AMMCharacterBase::OnPrimaryShootPressed()
 {
 	if (gunLoadoutComponent != NULL) {
-		gunLoadoutComponent->OnShoot();
+		gunLoadoutComponent->OnPrimaryShootPressed();
+	}
+}
+
+void AMMCharacterBase::OnPrimaryShootReleased()
+{
+	if (gunLoadoutComponent != NULL) {
+		gunLoadoutComponent->OnPrimaryShootReleased();
 	}
 }
 
@@ -142,6 +152,13 @@ void AMMCharacterBase::OnSwapWheel(float value)
 		if (gunLoadoutComponent != NULL) {
 			gunLoadoutComponent->OnSwapWheel(value);
 		}
+	}
+}
+
+void AMMCharacterBase::OnReload()
+{
+	if (gunLoadoutComponent != NULL) {
+		gunLoadoutComponent->OnReload();
 	}
 }
 
