@@ -26,6 +26,31 @@ void AMMGunBase::BeginPlay()
 	Super::BeginPlay();
 }
 
+
+FGunStats AMMGunBase::GetStats()
+{
+	// make sure to include the final values later on
+
+	FGunStats statsToReturn;
+
+	statsToReturn.fireRate = gunStats.fireRate.GetBaseValue();
+	statsToReturn.reloadTime = gunStats.reloadTime.GetBaseValue();
+
+	statsToReturn.maxAmmo = gunStats.maxAmmo.GetBaseValue();
+	//statsToReturn.currentAmmo = gunStats.accuracy.GetBaseValue();
+	statsToReturn.currentAmmo = ammo; // THIS IS ONLY FOR TESTING
+
+	statsToReturn.accuracy = gunStats.accuracy.GetBaseValue(); 
+	statsToReturn.isAutomatic = gunStats.isAutomatic;
+	
+	statsToReturn.numberOfProjectilesToShoot = gunStats.numberOfProjectilesToShoot.GetBaseValue();
+
+	statsToReturn.damage = gunStats.damage.GetBaseValue();
+	statsToReturn.projectileSpeed = gunStats.projectileSpeed.GetBaseValue();
+
+	return statsToReturn;
+}
+
 void AMMGunBase::SetMesh(UStaticMesh* newStaticMesh)
 {
 	if (gunMesh != NULL)
@@ -45,6 +70,7 @@ void AMMGunBase::OnPrimaryShootPressed()
 {
 	isShooting = true;
 	accuracyAngle = 45 - (45 * (gunStats.accuracy.GetFinalValue() / 100));
+	ammo--; // THIS IS ONLY FOR TESTING
 	
 	if (projectileClass == NULL)
 	{
@@ -58,6 +84,9 @@ void AMMGunBase::OnPrimaryShootPressed()
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(primaryShootTimerHandle, this, &AMMGunBase::PrimaryShoot, gunStats.fireRate.GetFinalValue(), gunStats.isAutomatic, 0.0f);
+
+	
+
 }
 
 void AMMGunBase::OnPrimaryShootReleased()
