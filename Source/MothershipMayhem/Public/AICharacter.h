@@ -31,4 +31,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void UpdateWalkSpeed(float newWalkSpeed);
+
+	UFUNCTION(BlueprintCallable)
+		void AttackTarget(AActor* target);
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		TSubclassOf<class AMMProjectileBase> projectileClass;
 };

@@ -47,11 +47,16 @@ void AMMProjectileBase::BeginPlay()
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-		Destroy();
+		//do not fail to collide with things that should not get knocked back
+		if (OtherComp->IsSimulatingPhysics()) {
+			OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+			Destroy();
+		}
+		else {//will use this to test on enemies -Nathan
+			Destroy();
+		}
 	}
 }
 
