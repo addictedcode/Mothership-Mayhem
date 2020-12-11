@@ -23,6 +23,8 @@ void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	this->currentReloadTime += DeltaTime;
+	
 }
 
 // Called to bind functionality to input
@@ -47,36 +49,39 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 
 void AAICharacter::AttackTarget(AActor* target)
 {
-	UWorld* const world = this->GetWorld();
-	if (world == NULL)
-	{
-		return;
+	if (this->currentReloadTime >= this->timeToReload) {
+		UWorld* const world = this->GetWorld();
+		if (world == NULL)
+		{
+			return;
+		}
+
+		AActor* owner = this;
+		//Get Spawn Location and Rotation for the projectile to spawn
+		FRotator SpawnRotation = owner->GetActorRotation();
+		FVector SpawnLocation = owner->GetActorLocation();
+
+		if (GetMesh() != nullptr)
+		{
+			UE_LOG(LogTemp, Display, TEXT("OK"));
+			//SpawnRotation = GetMesh()->GetRelativeRotation();
+			SpawnLocation = GetMesh()->GetComponentLocation() + FVector(0, 0, 100);
+		}
+
+		//Apply Weapon Spread
+		const FRotator weaponSpread = FRotator(0,
+			0, 0);
+		FVector spreadVector = SpawnRotation.Vector();;
+		spreadVector = weaponSpread.RotateVector(spreadVector);
+		SpawnRotation = spreadVector.Rotation();
+
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		// spawn the projectile at the muzzle
+		AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+		this->currentReloadTime = 0;
 	}
-	
-	AActor* owner = this;
-	//Get Spawn Location and Rotation for the projectile to spawn
-	FRotator SpawnRotation = owner->GetActorRotation();
-	FVector SpawnLocation = owner->GetActorLocation();
-
-	if (GetMesh() != nullptr)
-	{
-		UE_LOG(LogTemp, Display, TEXT("OK"));
-		//SpawnRotation = GetMesh()->GetRelativeRotation();
-		SpawnLocation = GetMesh()->GetComponentLocation() + FVector(0,0, 100);
-	}
-
-	//Apply Weapon Spread
-	const FRotator weaponSpread = FRotator(0,
-		0, 0);
-	FVector spreadVector = SpawnRotation.Vector();;
-	spreadVector = weaponSpread.RotateVector(spreadVector);
-	SpawnRotation = spreadVector.Rotation();
-
-	//Set Spawn Collision Handling Override
-	FActorSpawnParameters ActorSpawnParams;
-	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-	// spawn the projectile at the muzzle
-	AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 }
 

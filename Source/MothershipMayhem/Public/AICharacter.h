@@ -37,4 +37,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
+
+private:
+	float timeToReload = 2.0f;
+	float currentReloadTime = 0;
 };
