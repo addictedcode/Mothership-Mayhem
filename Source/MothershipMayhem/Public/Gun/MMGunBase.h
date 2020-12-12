@@ -115,6 +115,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
+
+	
+
 	TGunStats& GetGunStats() { return gunStats; };
 	
 	void SetMesh(class UStaticMesh*);

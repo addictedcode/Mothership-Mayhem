@@ -38,7 +38,7 @@ FGunStats AMMGunBase::GetStats()
 
 	statsToReturn.maxAmmo = gunStats.maxAmmo.GetBaseValue();
 	//statsToReturn.currentAmmo = gunStats.accuracy.GetBaseValue();
-	statsToReturn.currentAmmo = ammo; // THIS IS ONLY FOR TESTING
+	statsToReturn.currentAmmo = gunStats.currentAmmo; // THIS IS ONLY FOR TESTING
 
 	statsToReturn.accuracy = gunStats.accuracy.GetBaseValue(); 
 	statsToReturn.isAutomatic = gunStats.isAutomatic;
@@ -70,7 +70,6 @@ void AMMGunBase::OnPrimaryShootPressed()
 {
 	isShooting = true;
 	accuracyAngle = 45 - (45 * (gunStats.accuracy.GetFinalValue() / 100));
-	ammo--; // THIS IS ONLY FOR TESTING
 	
 	if (projectileClass == NULL)
 	{
