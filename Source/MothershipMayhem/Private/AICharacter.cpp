@@ -49,6 +49,7 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 
 void AAICharacter::AttackTarget(AActor* target)
 {
+	//UE_LOG(LogTemp, Warning, TEXT("%f %f"), this->currentReloadTime, this->timeToReload);
 	if (this->currentReloadTime >= this->timeToReload) {
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
@@ -63,9 +64,9 @@ void AAICharacter::AttackTarget(AActor* target)
 
 		if (GetMesh() != nullptr)
 		{
-			UE_LOG(LogTemp, Display, TEXT("OK"));
 			//SpawnRotation = GetMesh()->GetRelativeRotation();
-			SpawnLocation = GetMesh()->GetComponentLocation() + FVector(0, 0, 100);
+			FVector spawnPoint = FVector(100 * cos(SpawnRotation.Euler().Z), 100 * sin(SpawnRotation.Euler().Z), 100);
+			SpawnLocation = GetMesh()->GetComponentLocation() + spawnPoint;
 		}
 
 		//Apply Weapon Spread
