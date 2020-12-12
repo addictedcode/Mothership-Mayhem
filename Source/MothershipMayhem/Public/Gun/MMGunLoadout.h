@@ -27,9 +27,14 @@ public:
 	void OnSwapWheel(float value);
 	void OnReload();
 	void ChangeGun(class AMMGunBase* newGun, int index);
+	UFUNCTION(BlueprintCallable)
+		TArray<AMMGunBase*> getGuns();
 	
+
 protected:
 	/**Gun */
+	
 	class AMMGunBase* gun[3];
-	int currentGunIndex;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int currentGunIndex;
 };

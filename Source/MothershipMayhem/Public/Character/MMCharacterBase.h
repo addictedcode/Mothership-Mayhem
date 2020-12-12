@@ -51,6 +51,7 @@ protected:
 		class UCameraComponent* cameraComponent;
 	
 	/**Gun Loadout */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMMGunLoadout* gunLoadoutComponent;
 	
 };

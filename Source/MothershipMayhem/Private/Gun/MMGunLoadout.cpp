@@ -125,6 +125,19 @@ void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
 	}
 }
 
+TArray<AMMGunBase*> UMMGunLoadout::getGuns()
+{
+	TArray<AMMGunBase*> gunsToReturn;
+	for (int i = 0; i < 3; ++i) {
+		gunsToReturn.Emplace(gun[i]);
+	}
+	return gunsToReturn;
+}
+
+
+
+
+
 
 
 

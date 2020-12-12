@@ -3,6 +3,7 @@
 
 #include "AICharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Projectiles/MMProjectileBase.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
@@ -22,6 +23,8 @@ void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	this->currentReloadTime += DeltaTime;
+	
 }
 
 // Called to bind functionality to input
@@ -41,6 +44,45 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("NO character movement component"));
+	}
+}
+
+void AAICharacter::AttackTarget(AActor* target)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("%f %f"), this->currentReloadTime, this->timeToReload);
+	if (this->currentReloadTime >= this->timeToReload) {
+		UWorld* const world = this->GetWorld();
+		if (world == NULL)
+		{
+			return;
+		}
+
+		AActor* owner = this;
+		//Get Spawn Location and Rotation for the projectile to spawn
+		FRotator SpawnRotation = owner->GetActorRotation();
+		FVector SpawnLocation = owner->GetActorLocation();
+
+		if (GetMesh() != nullptr)
+		{
+			//SpawnRotation = GetMesh()->GetRelativeRotation();
+			FVector spawnPoint = FVector(100 * cos(SpawnRotation.Euler().Z), 100 * sin(SpawnRotation.Euler().Z), 100);
+			SpawnLocation = GetMesh()->GetComponentLocation() + spawnPoint;
+		}
+
+		//Apply Weapon Spread
+		const FRotator weaponSpread = FRotator(0,
+			0, 0);
+		FVector spreadVector = SpawnRotation.Vector();;
+		spreadVector = weaponSpread.RotateVector(spreadVector);
+		SpawnRotation = spreadVector.Rotation();
+
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		// spawn the projectile at the muzzle
+		AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+		this->currentReloadTime = 0;
 	}
 }
 

@@ -23,6 +23,36 @@ struct TGunStats
 	TMMStatsBase projectileSpeed;
 };
 
+
+USTRUCT(BlueprintType)
+struct FGunStats
+{
+
+	GENERATED_USTRUCT_BODY()
+
+	//Affect Gun
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float fireRate;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float reloadTime;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float maxAmmo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float currentAmmo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float accuracy;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool isAutomatic;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float numberOfProjectilesToShoot;
+
+	//Affect Projectile
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float damage;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float projectileSpeed;
+};
+
 UCLASS()
 class MOTHERSHIPMAYHEM_API AMMGunBase : public AActor
 {
@@ -38,6 +68,7 @@ protected:
 
 //Variables
 protected:
+	
 	TGunStats gunStats;
 
 	FTimerHandle primaryShootTimerHandle;
@@ -80,6 +111,10 @@ protected:
 //Get / Set Functions
 public:
 
+	int ammo = 10; // THIS IS ONLY FOR TESTING
+
+	UFUNCTION(BlueprintCallable)
+		FGunStats GetStats();
 	TGunStats& GetGunStats() { return gunStats; };
 	
 	void SetMesh(class UStaticMesh*);
