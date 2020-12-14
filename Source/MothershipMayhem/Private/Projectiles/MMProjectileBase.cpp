@@ -52,9 +52,14 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		//do not fail to collide with things that should not get knocked back
 		if (OtherComp->IsSimulatingPhysics()) {
 			OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+			
 			Destroy();
 		}
 		else {//will use this to test on enemies -Nathan
+			//philip bootleg damage the enemy
+			
+			UE_LOG(LogClass, Log, TEXT("Hit1, %s"), *OtherActor->GetClass()->GetName());
+			//philip end
 			Destroy();
 		}
 	}
