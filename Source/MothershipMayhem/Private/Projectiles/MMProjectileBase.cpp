@@ -32,8 +32,8 @@ AMMProjectileBase::AMMProjectileBase()
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
 
-	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	// Die after 1.5 seconds by default
+	InitialLifeSpan = 1.5f;
 	
 }
 
@@ -56,10 +56,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			Destroy();
 		}
 		else {//will use this to test on enemies -Nathan
-			//philip bootleg damage the enemy
 			
-			UE_LOG(LogClass, Log, TEXT("Hit1, %s"), *OtherActor->GetClass()->GetName());
-			//philip end
 			Destroy();
 		}
 	}
