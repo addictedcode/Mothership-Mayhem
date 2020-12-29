@@ -43,15 +43,23 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 	{
 		if (InActor)
 		{
-			if (InActor->ActorHasTag("Player") && Stimulus.WasSuccessfullySensed()) {
-				GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
-				BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
-				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
-				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
+			if (InActor->ActorHasTag("Player")) {
+				if (Stimulus.WasSuccessfullySensed()) {
+					GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
+					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
+					BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
+					BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
+					UE_LOG(LogTemp, Display, TEXT("Detected player"));
+				}
+				else
+				{
+					OnTargetSightLost();
+					UE_LOG(LogTemp, Display, TEXT("lost target"));
+				}
 			}
 			else
 			{
-				OnTargetSightLost();
+				UE_LOG(LogTemp, Display, TEXT("Detected nonplayer"));
 			}
 		}
 	}
