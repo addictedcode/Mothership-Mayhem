@@ -46,6 +46,7 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 			if (InActor->ActorHasTag("Player") && Stimulus.WasSuccessfullySensed()) {
 				GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
 				BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
+				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
 				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
 			}
 			else
@@ -65,6 +66,7 @@ void AEnemyController::OnTargetSightLost()
 	if (BlackboardComp)
 	{
 		GetWorld()->GetTimerManager().SetTimer(StartEnemyTimer, this, &AEnemyController::OnLostTarget, LineOfSightTimer, false);
+		BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 	}
 	else
 	{
@@ -75,5 +77,5 @@ void AEnemyController::OnTargetSightLost()
 void AEnemyController::OnLostTarget()
 {
 	BlackboardComp->SetValueAsObject(BlackboardTarget, nullptr);
-	BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
+	BlackboardComp->SetValueAsBool(BlackboardChasingTarget, false);
 }
