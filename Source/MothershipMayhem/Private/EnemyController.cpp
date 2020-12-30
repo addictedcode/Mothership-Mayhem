@@ -49,17 +49,11 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
 					BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
 					BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
-					UE_LOG(LogTemp, Display, TEXT("Detected player"));
 				}
 				else
 				{
 					OnTargetSightLost();
-					UE_LOG(LogTemp, Display, TEXT("lost target"));
 				}
-			}
-			else
-			{
-				UE_LOG(LogTemp, Display, TEXT("Detected nonplayer"));
 			}
 		}
 	}
