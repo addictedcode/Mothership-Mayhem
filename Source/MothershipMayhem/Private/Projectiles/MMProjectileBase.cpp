@@ -32,8 +32,8 @@ AMMProjectileBase::AMMProjectileBase()
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
 
-	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	// Die after 1.5 seconds by default
+	InitialLifeSpan = 1.5f;
 	
 }
 
@@ -52,9 +52,11 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		//do not fail to collide with things that should not get knocked back
 		if (OtherComp->IsSimulatingPhysics()) {
 			OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+			
 			Destroy();
 		}
 		else {//will use this to test on enemies -Nathan
+			
 			Destroy();
 		}
 	}
