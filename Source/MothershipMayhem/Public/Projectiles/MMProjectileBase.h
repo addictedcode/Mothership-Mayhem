@@ -31,4 +31,8 @@ protected:
 public:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	//Object pooling implementation
+	void SetActorActivation(bool state);
+	AActor* parentPool;
 };

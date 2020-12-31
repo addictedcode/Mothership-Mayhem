@@ -2,7 +2,6 @@
 
 
 #include "SpawnerComponent.h"
-#include "EnemyMovementComponent.h"
 
 // Sets default values for this component's properties
 USpawnerComponent::USpawnerComponent()
@@ -74,18 +73,6 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 		this->DisabledSpawns.pop_back();
 
 		ReusedActorRef->SetActorLocation(loc);
-
-		UEnemyMovementComponent* MovementComponent = ReusedActorRef->FindComponentByClass<UEnemyMovementComponent>();
-		if (MovementComponent != nullptr)
-		{
-			MovementComponent->ReactivateActor();
-			//MovementComponent->GetOwner()->SetActorHiddenInGame(false);
-			UE_LOG(LogTemp, Warning, TEXT("REVEALING"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("NO MOVEMENT COMPONENT ATTACHED"));
-		}
 
 		UE_LOG(LogTemp, Display, TEXT("RESPAWNING"));
 

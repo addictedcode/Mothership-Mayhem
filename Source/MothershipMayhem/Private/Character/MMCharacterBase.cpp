@@ -31,6 +31,7 @@ AMMCharacterBase::AMMCharacterBase()
 	#pragma region Gun Loadout Component
 	//Create Gun Loadout Component
 	gunLoadoutComponent = CreateDefaultSubobject<UMMGunLoadout>(TEXT("PlayerGunLoadout"));
+	gunLoadoutComponent->bulletPool = &this->bulletPool;
 	#pragma endregion 
 }
 

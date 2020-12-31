@@ -3,6 +3,7 @@
 
 #include "Projectiles/MMProjectileBase.h"
 #include "Components/SphereComponent.h"
+#include "ProjectilePool.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
@@ -52,14 +53,48 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		//do not fail to collide with things that should not get knocked back
 		if (OtherComp->IsSimulatingPhysics()) {
 			OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-			
-			Destroy();
+
+			if (parentPool != nullptr) {
+				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+				if (pool != nullptr) {
+					pool->ReturnObject(this);
+					this->SetActorActivation(false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+			}
 		}
 		else {//will use this to test on enemies -Nathan
-			
-			Destroy();
+			if (parentPool != nullptr) {
+				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+				if (pool != nullptr) {
+					pool->ReturnObject(this);
+					this->SetActorActivation(false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+			}
 		}
 	}
+}
+
+void AMMProjectileBase::SetActorActivation(bool state)
+{
+	this->SetActorHiddenInGame(!state);
+	this->SetActorEnableCollision(state);
+	this->SetActorTickEnabled(state);
 }
 
 

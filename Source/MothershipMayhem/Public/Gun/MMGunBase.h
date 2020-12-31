@@ -78,6 +78,11 @@ protected:
 	bool isReloading = false;
 
 	float accuracyAngle;
+
+public:
+	//object pool for the bullets
+	AActor** bulletPool;
+	
 //UE Visible Variables
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */

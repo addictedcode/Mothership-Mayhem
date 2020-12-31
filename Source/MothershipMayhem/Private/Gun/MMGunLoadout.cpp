@@ -103,6 +103,9 @@ void UMMGunLoadout::OnReload()
 
 void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
 {
+	if (this->bulletPool != nullptr) {
+		newGun->bulletPool = this->bulletPool;
+	}
 	// old gun
 	if (gun[index] != NULL)
 	{
