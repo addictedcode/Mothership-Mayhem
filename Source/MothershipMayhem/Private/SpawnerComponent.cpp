@@ -2,6 +2,7 @@
 
 
 #include "SpawnerComponent.h"
+#include "AICharacter.h"
 
 // Sets default values for this component's properties
 USpawnerComponent::USpawnerComponent()
@@ -64,8 +65,12 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 	if (this->DisabledSpawns.empty()) {
 		FActorSpawnParameters SpawnParams;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, loc, rot, SpawnParams);
+		AAICharacter* spawnedEnemy = Cast<AAICharacter>(SpawnedActorRef);
+		if (spawnedEnemy != nullptr)
+		{
+			spawnedEnemy->bulletPool = this->bulletPool;
+		}
 		this->SpawnedPool.push_back(SpawnedActorRef);
-		UE_LOG(LogTemp, Display, TEXT("SPAWNING"));
 	}
 	else
 	{
@@ -74,7 +79,15 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 
 		ReusedActorRef->SetActorLocation(loc);
 
-		UE_LOG(LogTemp, Display, TEXT("RESPAWNING"));
+		AAICharacter* spawnedEnemy = Cast<AAICharacter>(ReusedActorRef);
+		if (spawnedEnemy != nullptr)
+		{
+			
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawn is not an enemy"));
+		}
 
 		this->SpawnedPool.push_back(ReusedActorRef);
 	}

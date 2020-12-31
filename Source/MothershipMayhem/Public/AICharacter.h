@@ -37,6 +37,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		AActor* bulletPool;
 
 private:
 	float timeToReload = 2.0f;

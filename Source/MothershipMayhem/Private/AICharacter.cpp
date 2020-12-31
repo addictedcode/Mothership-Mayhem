@@ -2,6 +2,8 @@
 
 
 #include "AICharacter.h"
+
+#include "ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Projectiles/MMProjectileBase.h"
 
@@ -49,8 +51,8 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 
 void AAICharacter::AttackTarget(AActor* target)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%f %f"), this->currentReloadTime, this->timeToReload);
 	if (this->currentReloadTime >= this->timeToReload) {
+		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
 		{
@@ -82,10 +84,24 @@ void AAICharacter::AttackTarget(AActor* target)
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
+		
 		// spawn the projectile at the muzzle
-		AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-		this->currentReloadTime = 0;
+		if (bulletPool != nullptr)
+		{
+			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
+			if (pool != nullptr)
+			{
+				pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference AICharacter"));
+		}
 	}
 }
 
