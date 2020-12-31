@@ -95,6 +95,11 @@ void AMMProjectileBase::SetActorActivation(bool state)
 	this->SetActorHiddenInGame(!state);
 	this->SetActorEnableCollision(state);
 	this->SetActorTickEnabled(state);
+
+	if (state)
+	{
+		projectileMovement->Velocity = FVector(GetActorForwardVector() * 3000.0f);
+	}
 }
 
 

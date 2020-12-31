@@ -31,6 +31,9 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 		AActor* ReusedActorRef = this->DisabledSpawns.back();
 		this->DisabledSpawns.pop_back();
 
+		ReusedActorRef->SetActorLocation(loc);
+		ReusedActorRef->SetActorRotation(rot);
+
 		AMMProjectileBase* projectileClass = Cast<AMMProjectileBase>(ReusedActorRef);
 		if (projectileClass != nullptr)
 		{
@@ -40,8 +43,6 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Actor is not a projectile"));
 		}
-
-		ReusedActorRef->SetActorLocation(loc);
 
 		this->SpawnedPool.push_back(ReusedActorRef);
 
