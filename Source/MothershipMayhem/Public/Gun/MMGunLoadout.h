@@ -29,7 +29,9 @@ public:
 	void ChangeGun(class AMMGunBase* newGun, int index);
 	UFUNCTION(BlueprintCallable)
 		TArray<AMMGunBase*> getGuns();
-	
+
+	//object pool for the bullets
+	AActor** bulletPool;
 
 protected:
 	/**Gun */

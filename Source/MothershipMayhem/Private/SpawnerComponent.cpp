@@ -2,7 +2,7 @@
 
 
 #include "SpawnerComponent.h"
-#include "EnemyMovementComponent.h"
+#include "AICharacter.h"
 
 // Sets default values for this component's properties
 USpawnerComponent::USpawnerComponent()
@@ -65,8 +65,12 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 	if (this->DisabledSpawns.empty()) {
 		FActorSpawnParameters SpawnParams;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, loc, rot, SpawnParams);
+		AAICharacter* spawnedEnemy = Cast<AAICharacter>(SpawnedActorRef);
+		if (spawnedEnemy != nullptr)
+		{
+			spawnedEnemy->bulletPool = this->bulletPool;
+		}
 		this->SpawnedPool.push_back(SpawnedActorRef);
-		UE_LOG(LogTemp, Display, TEXT("SPAWNING"));
 	}
 	else
 	{
@@ -75,19 +79,15 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 
 		ReusedActorRef->SetActorLocation(loc);
 
-		UEnemyMovementComponent* MovementComponent = ReusedActorRef->FindComponentByClass<UEnemyMovementComponent>();
-		if (MovementComponent != nullptr)
+		AAICharacter* spawnedEnemy = Cast<AAICharacter>(ReusedActorRef);
+		if (spawnedEnemy != nullptr)
 		{
-			MovementComponent->ReactivateActor();
-			//MovementComponent->GetOwner()->SetActorHiddenInGame(false);
-			UE_LOG(LogTemp, Warning, TEXT("REVEALING"));
+			
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("NO MOVEMENT COMPONENT ATTACHED"));
+			UE_LOG(LogTemp, Warning, TEXT("Spawn is not an enemy"));
 		}
-
-		UE_LOG(LogTemp, Display, TEXT("RESPAWNING"));
 
 		this->SpawnedPool.push_back(ReusedActorRef);
 	}

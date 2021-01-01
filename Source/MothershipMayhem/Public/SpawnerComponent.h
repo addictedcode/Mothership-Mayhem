@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+		AActor* bulletPool;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -41,6 +41,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Projectile pool reference
+	AActor* bulletPool = nullptr;
+
 protected:
 	/** TempMesh */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
