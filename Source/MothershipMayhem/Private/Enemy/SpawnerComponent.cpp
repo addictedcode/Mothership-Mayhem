@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SpawnerComponent.h"
-#include "AICharacter.h"
+#include "Enemy/SpawnerComponent.h"
+#include "Enemy/AICharacter.h"
 
 // Sets default values for this component's properties
 USpawnerComponent::USpawnerComponent()

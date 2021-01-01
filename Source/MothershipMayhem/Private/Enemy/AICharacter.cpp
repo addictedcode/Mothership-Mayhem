@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AICharacter.h"
+#include "Enemy/AICharacter.h"
 
-#include "ProjectilePool.h"
+#include "Projectiles/ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Projectiles/MMProjectileBase.h"
 

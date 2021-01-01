@@ -2,7 +2,7 @@
 
 
 #include "MothershipMayhem/Public/Gun/MMGunBase.h"
-#include "ProjectilePool.h"
+#include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
 
 // Sets default values
