@@ -10,7 +10,7 @@
 AMMProjectileBase::AMMProjectileBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// Use a sphere as a simple collision representation
 	collisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("sphereComp"));
@@ -34,7 +34,7 @@ AMMProjectileBase::AMMProjectileBase()
 	projectileMovement->bShouldBounce = true;
 
 	// Die after 1.5 seconds by default
-	InitialLifeSpan = 1.5f;
+	this->lifespan = 10.0f;
 	
 }
 
@@ -42,7 +42,34 @@ AMMProjectileBase::AMMProjectileBase()
 void AMMProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	projectileMovement->BounceVelocityStopSimulatingThreshold = 0;
+}
+
+// Called every frame
+void AMMProjectileBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	this->currentLifePeriod += DeltaTime;
+	if (this->currentLifePeriod >= this->lifespan)
+	{
+		this->currentLifePeriod = 0;
+		if (parentPool != nullptr) {
+			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+			if (pool != nullptr) {
+				pool->ReturnObject(this);
+				this->SetActorActivation(false);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+		}
+	}
 }
 
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

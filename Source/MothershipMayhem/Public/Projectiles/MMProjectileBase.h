@@ -28,7 +28,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 		class UProjectileMovementComponent* projectileMovement;
 
+	//Projectile lifespan
+	float lifespan = 0;
+	float currentLifePeriod = 0;
 public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
