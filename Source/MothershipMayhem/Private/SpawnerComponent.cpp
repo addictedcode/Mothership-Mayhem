@@ -19,7 +19,7 @@ USpawnerComponent::USpawnerComponent()
 void USpawnerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	this->SpawnPoint = GetOwner();
 	// ...
 	
 }
