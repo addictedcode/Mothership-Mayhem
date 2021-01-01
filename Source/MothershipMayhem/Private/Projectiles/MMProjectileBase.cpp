@@ -34,7 +34,7 @@ AMMProjectileBase::AMMProjectileBase()
 	projectileMovement->bShouldBounce = true;
 
 	// Die after 1.5 seconds by default
-	this->lifespan = 10.0f;
+	this->lifespan = 20.0f;
 	
 }
 
@@ -42,7 +42,6 @@ AMMProjectileBase::AMMProjectileBase()
 void AMMProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-	projectileMovement->BounceVelocityStopSimulatingThreshold = 0;
 }
 
 // Called every frame
@@ -125,7 +124,9 @@ void AMMProjectileBase::SetActorActivation(bool state)
 
 	if (state)
 	{
+		projectileMovement->UpdatedComponent = RootComponent;
 		projectileMovement->Velocity = FVector(GetActorForwardVector() * 3000.0f);
+		projectileMovement->SetComponentTickEnabled(true);
 	}
 }
 
