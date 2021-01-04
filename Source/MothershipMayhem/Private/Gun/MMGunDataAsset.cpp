@@ -3,3 +3,8 @@
 
 #include "Gun/MMGunDataAsset.h"
 
+ FPrimaryAssetId UMMGunDataAsset::GetPrimaryAssetId() const
+{
+
+	return FPrimaryAssetId(ItemType, GetFName());
+}

@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class MOTHERSHIPMAYHEM_API UMMGunDataAsset : public UDataAsset
+class MOTHERSHIPMAYHEM_API UMMGunDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 
@@ -28,6 +28,9 @@ public:
 		bool isAutomatic;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float attack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float fireRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
@@ -41,4 +44,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float numberOfProjectilesToShoot;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UItemDataAsset")
+		FPrimaryAssetType    ItemType;
+
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
 };

@@ -13,6 +13,9 @@ namespace GunFactory
     {
         //Get gun list from asset manager
         UAssetManager& assetManager = UAssetManager::Get();
+
+        assetManager.LoadPrimaryAssetsWithType("Guns");
+
         TArray<FAssetData> gunList;
         assetManager.GetPrimaryAssetDataList("Guns", gunList);
 
@@ -26,6 +29,7 @@ namespace GunFactory
                 break;
             }
         }
+        UE_LOG(LogTemp, Warning, TEXT("LENGTH: %d"), gunList.Num());
 
         //Spawn gun
         return SpawnGun(foundGunData, world);
@@ -55,11 +59,12 @@ namespace GunFactory
     //Instantiate gun object to world
     AMMGunBase* SpawnGun(UMMGunDataAsset* gunData, UWorld* const world)
     {
-        if (world != NULL || gunData != NULL) {
+        if (world != NULL && gunData != NULL) {
             AActor* newObject = world->SpawnActor<AMMGunBase>();
             AMMGunBase* newGun = Cast<AMMGunBase>(newObject);
 
             //set gun stats
+                
             newGun->SetMesh(gunData->gunMesh);
             newGun->SetProjectile(gunData->projectileClass);
 
