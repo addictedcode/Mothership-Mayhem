@@ -33,6 +33,8 @@ public:
 		FName BlackboardTarget = "EnemyActor";
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName BlackboardSeesTarget = "HasLineOfSight";
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName BlackboardChasingTarget = "IsChasingTarget";
 
 	UFUNCTION() void UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus);
 

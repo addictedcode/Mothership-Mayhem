@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditAnywhere, Category = "Projectile")
+		AActor* bulletPool;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -27,12 +29,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Spawning") AActor* SpawnPoint;
+	AActor* SpawnPoint;
 
 	std::vector<AActor*> SpawnedPool;
 	std::vector<AActor*> DisabledSpawns;
 
-	float SpawnCooldown = 2.0f;
+	float SpawnCooldown = 10.0f;
 	float TimeSinceLastSpawn = 0.0f;
 	float currentTime = 0.0f;
 

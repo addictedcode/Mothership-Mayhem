@@ -2,6 +2,7 @@
 
 
 #include "MothershipMayhem/Public/Gun/MMGunBase.h"
+#include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
 
 // Sets default values
@@ -179,12 +180,24 @@ bool AMMGunBase::ShootProjectile()
 	ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	// spawn the projectile at the muzzle
-	AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-	
-	if (!newProjectile)
+	if (*bulletPool != nullptr)
 	{
-		return false;
+		AProjectilePool* pool = Cast<AProjectilePool>(*bulletPool);
+		if (pool != nullptr)
+		{
+			if (!pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams))
+				return false;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+	}
+	
 	return true;
 }
 

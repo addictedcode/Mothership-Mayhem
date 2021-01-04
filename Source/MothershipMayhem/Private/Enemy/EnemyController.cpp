@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemyController.h"
+#include "Enemy/EnemyController.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "AICharacter.h"
+#include "Enemy/AICharacter.h"
 #include "Perception/AISense_Sight.h"
 
 void AEnemyController::OnPossess(APawn *InPawn) {
@@ -43,14 +43,17 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 	{
 		if (InActor)
 		{
-			if (InActor->ActorHasTag("Player") && Stimulus.WasSuccessfullySensed()) {
-				GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
-				BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
-				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
-			}
-			else
-			{
-				OnTargetSightLost();
+			if (InActor->ActorHasTag("Player")) {
+				if (Stimulus.WasSuccessfullySensed()) {
+					GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
+					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
+					BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
+					BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
+				}
+				else
+				{
+					OnTargetSightLost();
+				}
 			}
 		}
 	}
@@ -65,6 +68,7 @@ void AEnemyController::OnTargetSightLost()
 	if (BlackboardComp)
 	{
 		GetWorld()->GetTimerManager().SetTimer(StartEnemyTimer, this, &AEnemyController::OnLostTarget, LineOfSightTimer, false);
+		BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 	}
 	else
 	{
@@ -75,5 +79,5 @@ void AEnemyController::OnTargetSightLost()
 void AEnemyController::OnLostTarget()
 {
 	BlackboardComp->SetValueAsObject(BlackboardTarget, nullptr);
-	BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
+	BlackboardComp->SetValueAsBool(BlackboardChasingTarget, false);
 }

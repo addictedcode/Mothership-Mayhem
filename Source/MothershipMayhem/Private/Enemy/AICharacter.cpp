@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AICharacter.h"
+#include "Enemy/AICharacter.h"
+
+#include "Projectiles/ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Projectiles/MMProjectileBase.h"
 
@@ -49,8 +51,8 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 
 void AAICharacter::AttackTarget(AActor* target)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%f %f"), this->currentReloadTime, this->timeToReload);
 	if (this->currentReloadTime >= this->timeToReload) {
+		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
 		{
@@ -61,11 +63,14 @@ void AAICharacter::AttackTarget(AActor* target)
 		//Get Spawn Location and Rotation for the projectile to spawn
 		FRotator SpawnRotation = owner->GetActorRotation();
 		FVector SpawnLocation = owner->GetActorLocation();
-
+		FVector lineToTarget = target->GetActorLocation() - GetMesh()->GetComponentLocation();
+		
 		if (GetMesh() != nullptr)
 		{
 			//SpawnRotation = GetMesh()->GetRelativeRotation();
-			FVector spawnPoint = FVector(100 * cos(SpawnRotation.Euler().Z), 100 * sin(SpawnRotation.Euler().Z), 100);
+			lineToTarget.Z = 0;
+			lineToTarget.Normalize();
+			FVector spawnPoint = FVector(100 * lineToTarget.X, 100 * lineToTarget.Y, 100);
 			SpawnLocation = GetMesh()->GetComponentLocation() + spawnPoint;
 		}
 
@@ -74,15 +79,29 @@ void AAICharacter::AttackTarget(AActor* target)
 			0, 0);
 		FVector spreadVector = SpawnRotation.Vector();;
 		spreadVector = weaponSpread.RotateVector(spreadVector);
-		SpawnRotation = spreadVector.Rotation();
+		SpawnRotation = lineToTarget.Rotation();
 
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
+		
 		// spawn the projectile at the muzzle
-		AActor* newProjectile = world->SpawnActor<AMMProjectileBase>(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-		this->currentReloadTime = 0;
+		if (bulletPool != nullptr)
+		{
+			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
+			if (pool != nullptr)
+			{
+				pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference AICharacter"));
+		}
 	}
 }
 
