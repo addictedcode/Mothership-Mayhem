@@ -3,6 +3,7 @@
 
 #include "Enemy/AICharacter.h"
 
+#include "Enemy/EnemyStatsComponent.h"
 #include "Projectiles/ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Projectiles/MMProjectileBase.h"
@@ -12,6 +13,11 @@ AAICharacter::AAICharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	#pragma region StatsComponent
+	enemyStats = CreateDefaultSubobject<UEnemyStatsComponent>(TEXT("StatsComponent"));
+	enemyStats->movementComponent = GetCharacterMovement();
+	#pragma  endregion 
 }
 
 // Called when the game starts or when spawned

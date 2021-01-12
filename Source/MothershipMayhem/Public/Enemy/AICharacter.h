@@ -40,6 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		AActor* bulletPool;
 
+	UPROPERTY(BlueprintReadOnly, Category = Stats)
+		class UEnemyStatsComponent* enemyStats;
+
 private:
 	float timeToReload = 2.0f;
 	float currentReloadTime = 0;
