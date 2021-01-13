@@ -35,14 +35,22 @@ public:
 		FName BlackboardSeesTarget = "HasLineOfSight";
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName BlackboardChasingTarget = "IsChasingTarget";
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName BlackboardIsDisoriented = "IsDisoriented";
 
 	UFUNCTION() void UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus);
 
 	void OnTargetSightLost();
+
+	void OnCharacterDisoriented(float duration);
 
 private:
 	FTimerHandle StartEnemyTimer;
 	float LineOfSightTimer = 4.0f;
 
 	UFUNCTION() void OnLostTarget();
+
+	FTimerHandle disorientationTimer;
+
+	UFUNCTION() void ClearDisorientation();
 };

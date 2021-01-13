@@ -4,6 +4,7 @@
 #include "Enemy/EnemyStatsComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Enemy/AICharacter.h"
+#include "Enemy/EnemyController.h"
 
 // Sets default values for this component's properties
 UEnemyStatsComponent::UEnemyStatsComponent()
@@ -73,6 +74,11 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 		}
 		break;
 	case WET:
+		if (this->currentStatusAilment == BURN)
+		{
+			this->GetWorld()->GetTimerManager().ClearTimer(DoTTimer);
+			this->RemoveDoT();
+		}
 		break;
 	case FREEZE:
 		if (this->currentStatusAilment != WET) {
@@ -101,6 +107,9 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 
 		GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
 		GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 2.0f, false);
+		break;
+	case DISORIENTED:
+		Cast<AEnemyController>(Cast<AAICharacter>(this->GetOwner())->Controller)->OnCharacterDisoriented(10.0f);
 		break;
 	default:
 		break;

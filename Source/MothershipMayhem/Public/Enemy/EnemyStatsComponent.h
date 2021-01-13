@@ -7,7 +7,7 @@
 #include "EnemyStatsComponent.generated.h"
 
 UENUM()
-enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4};
+enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MOTHERSHIPMAYHEM_API UEnemyStatsComponent : public UActorComponent

@@ -99,11 +99,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		{
 			UEnemyStatsComponent* enemyStats = enemy->enemyStats;
 			if (enemyStats != nullptr) {
-				FVector direction = GetVelocity();
-				direction.Z = 0;
-				direction.Normalize();
-				direction.Z = 1.0f;
-				enemyStats->ApplyStatusEffect(WET, direction * 500.0f);
+				enemyStats->ApplyStatusEffect(DISORIENTED);
 			}
 			else
 			{
