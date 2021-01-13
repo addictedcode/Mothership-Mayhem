@@ -80,6 +80,7 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 		ReusedActorRef->SetActorLocation(loc);
 
 		AAICharacter* spawnedEnemy = Cast<AAICharacter>(ReusedActorRef);
+		//Unhide the actor when reused
 		if (spawnedEnemy != nullptr)
 		{
 			

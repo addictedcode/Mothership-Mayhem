@@ -35,6 +35,8 @@ public:
 	void ApplyDamageOverTime(int damage, float duration);
 
 	void ApplyStatusEffect(StatusEffects ailment);
+	
+	void ApplyStatusEffect(StatusEffects ailment, FVector knockbackStrength);
 
 	void ApplyStatusEffect(StatusEffects ailment, int damage, float duration);
 	

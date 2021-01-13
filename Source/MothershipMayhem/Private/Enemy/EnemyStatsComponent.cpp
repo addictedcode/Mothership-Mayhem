@@ -40,11 +40,6 @@ void UEnemyStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 			this->TakeDamage(DoTDamage);
 		}
 	}
-
-	if (GetWorld()->GetTimerManager().IsTimerActive(DebuffTimer))
-	{
-		UE_LOG(LogTemp, Display, TEXT("%f"), GetWorld()->GetTimerManager().GetTimerRemaining(DebuffTimer));
-	}
 }
 
 //Take damage and return whether the enemy reached 0 HP or not
@@ -71,10 +66,33 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 	switch (ailment)
 	{
 	case BURN:
+		if (this->currentStatusAilment == FREEZE)
+		{
+			GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
+			this->ApplyMovespeedMultiplier(1.0f);
+		}
 		break;
 	case WET:
 		break;
 	case FREEZE:
+		if (this->currentStatusAilment != WET) {
+			if (this->currentStatusAilment != FREEZE)
+				this->ApplyMovespeedMultiplier(0.5f);
+
+			timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
+
+			GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
+			GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 5.0f, false);
+		}
+		else
+		{
+			this->ApplyMovespeedMultiplier(0.0f);
+
+			timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
+
+			GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
+			GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 5.0f, false);
+		}
 		break;
 	case SHOCKING:
 		this->ApplyMovespeedMultiplier(0.0f);
@@ -82,13 +100,19 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 		timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
 
 		GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
-		GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 5.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 2.0f, false);
 		break;
 	default:
 		break;
 	}
 	this->currentStatusAilment = ailment;
 	
+}
+
+void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, FVector knockbackStrength)
+{
+	this->movementComponent->Launch(knockbackStrength);
+	this->ApplyStatusEffect(ailment);
 }
 
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage, float duration)
@@ -118,6 +142,7 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 			TakeDamage(damage);
 		break;
 	default:
+		TakeDamage(damage);
 		break;
 	}
 
@@ -135,12 +160,14 @@ void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
 	AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
 	if (parent != nullptr)
 	{
-		if (multiplier == 0)
+		if (multiplier == 0.0f)
 			this->movementComponent->SetComponentTickEnabled(false);
-		else
+		else {
 			this->movementComponent->SetComponentTickEnabled(true);
-		
-		parent->ChangeSpeedMultiplier(multiplier);
+			parent->ChangeSpeedMultiplier(multiplier);
+			if (multiplier == 1.0f)
+				this->currentStatusAilment = NONE;
+		}
 	}
 	else
 	{

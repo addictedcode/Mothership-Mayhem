@@ -78,59 +78,41 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
-		//do not fail to collide with things that should not get knocked back
-		if (OtherComp->IsSimulatingPhysics()) {
-			OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-			if (parentPool != nullptr) {
-				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
-				if (pool != nullptr) {
-					pool->ReturnObject(this);
-					this->SetActorActivation(false);
-				}
-				else
-				{
-					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
-				}
+		if (parentPool != nullptr) {
+			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+			if (pool != nullptr) {
+				pool->ReturnObject(this);
+				this->SetActorActivation(false);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
 			}
 		}
-		else {//will use this to test on enemies -Nathan
-			if (parentPool != nullptr) {
-				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
-				if (pool != nullptr) {
-					pool->ReturnObject(this);
-					this->SetActorActivation(false);
-				}
-				else
-				{
-					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
-				}
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
-			}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+		}
 
-			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
-			if (enemy != nullptr)
-			{
-				UEnemyStatsComponent* enemyStats = enemy->enemyStats;
-				if (enemyStats != nullptr) {
-					enemyStats->ApplyStatusEffect(SHOCKING, 1);
-				}
-				else
-				{
-					UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
-				}
+		AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
+		if (enemy != nullptr)
+		{
+			UEnemyStatsComponent* enemyStats = enemy->enemyStats;
+			if (enemyStats != nullptr) {
+				FVector direction = GetVelocity();
+				direction.Z = 0;
+				direction.Normalize();
+				direction.Z = 1.0f;
+				enemyStats->ApplyStatusEffect(WET, direction * 500.0f);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
+				UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
 			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 		}
 	}
 }
