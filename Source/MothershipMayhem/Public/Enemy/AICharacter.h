@@ -40,8 +40,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		AActor* bulletPool;
 
-	UPROPERTY(BlueprintReadOnly, Category = Stats)
-		class UEnemyStatsComponent* enemyStats;
+	class UEnemyStatsComponent* enemyStats;
+
+	float moveSpeedMultiplier = 1.0f;
+
+	void ChangeSpeedMultiplier(float multiplier);
 
 private:
 	float timeToReload = 2.0f;

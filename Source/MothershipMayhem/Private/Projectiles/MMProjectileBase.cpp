@@ -5,6 +5,8 @@
 #include "Components/SphereComponent.h"
 #include "Projectiles/ProjectilePool.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Enemy/AICharacter.h"
+#include "Enemy/EnemyStatsComponent.h"
 
 // Sets default values
 AMMProjectileBase::AMMProjectileBase()
@@ -88,12 +90,12 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 				}
 				else
 				{
-					UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
 				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 			}
 		}
 		else {//will use this to test on enemies -Nathan
@@ -105,12 +107,29 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 				}
 				else
 				{
-					UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
 				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+			}
+
+			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
+			if (enemy != nullptr)
+			{
+				UEnemyStatsComponent* enemyStats = enemy->enemyStats;
+				if (enemyStats != nullptr) {
+					enemyStats->ApplyStatusEffect(SHOCKING, 1);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 			}
 		}
 	}

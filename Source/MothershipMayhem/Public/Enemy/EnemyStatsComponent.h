@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "EnemyStatsComponent.generated.h"
 
+UENUM()
+enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MOTHERSHIPMAYHEM_API UEnemyStatsComponent : public UActorComponent
@@ -17,6 +19,7 @@ public:
 	UEnemyStatsComponent();
 
 protected:
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -27,11 +30,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		class UCharacterMovementComponent* movementComponent;
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-		bool TakeDamage(int damage);
+	void TakeDamage(int damage);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-		void ApplyDamageOverTime(int damage, float duration);
+	void ApplyDamageOverTime(int damage, float duration);
+
+	void ApplyStatusEffect(StatusEffects ailment);
+
+	void ApplyStatusEffect(StatusEffects ailment, int damage, float duration);
+	
+	void ApplyStatusEffect(StatusEffects ailment, int directDamage, int DoTdamage, float duration);
+
+	void ApplyStatusEffect(StatusEffects ailment, int damage);
+
+	UFUNCTION()
+		void ApplyMovespeedMultiplier(float multiplier);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
@@ -43,4 +55,8 @@ private:
 	int DoTDamage = 0;
 
 	void RemoveDoT();
+
+	StatusEffects currentStatusAilment = NONE;
+
+	FTimerHandle DebuffTimer;
 };
