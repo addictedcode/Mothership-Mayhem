@@ -30,10 +30,12 @@ protected:
 
 	//Projectile lifespan
 	float lifespan = 0;
-	float currentLifePeriod = 0;
+	FTimerHandle projectileLifespanTimerHandle;
+	//float currentLifePeriod = 0;
 public:
+	//Move to timer function - Richmond
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -41,4 +43,8 @@ public:
 	//Object pooling implementation
 	void SetActorActivation(bool state);
 	AActor* parentPool;
+
+protected:
+	UFUNCTION()
+		void OnLifespanEnd();
 };

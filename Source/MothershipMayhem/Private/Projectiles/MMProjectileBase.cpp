@@ -10,7 +10,7 @@
 AMMProjectileBase::AMMProjectileBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Use a sphere as a simple collision representation
 	collisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("sphereComp"));
@@ -28,12 +28,11 @@ AMMProjectileBase::AMMProjectileBase()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("projectileComp"));
 	projectileMovement->UpdatedComponent = collisionComp;
-	projectileMovement->InitialSpeed = 3000.f;
 	projectileMovement->MaxSpeed = 3000.f;
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
 
-	// Die after 1.5 seconds by default
+	// Die after 20 seconds by default
 	this->lifespan = 20.0f;
 	
 }
@@ -45,31 +44,31 @@ void AMMProjectileBase::BeginPlay()
 }
 
 // Called every frame
-void AMMProjectileBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	this->currentLifePeriod += DeltaTime;
-	if (this->currentLifePeriod >= this->lifespan)
-	{
-		this->currentLifePeriod = 0;
-		if (parentPool != nullptr) {
-			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
-			if (pool != nullptr) {
-				pool->ReturnObject(this);
-				this->SetActorActivation(false);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
-		}
-	}
-}
+//void AMMProjectileBase::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//	this->currentLifePeriod += DeltaTime;
+//	if (this->currentLifePeriod >= this->lifespan)
+//	{
+//		this->currentLifePeriod = 0;
+//		if (parentPool != nullptr) {
+//			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+//			if (pool != nullptr) {
+//				pool->ReturnObject(this);
+//				this->SetActorActivation(false);
+//			}
+//			else
+//			{
+//				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+//			}
+//		}
+//		else
+//		{
+//			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+//		}
+//	}
+//}
 
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -120,14 +119,36 @@ void AMMProjectileBase::SetActorActivation(bool state)
 {
 	this->SetActorHiddenInGame(!state);
 	this->SetActorEnableCollision(state);
-	this->SetActorTickEnabled(state);
+	//this->SetActorTickEnabled(state);
 
 	if (state)
 	{
 		projectileMovement->UpdatedComponent = RootComponent;
 		projectileMovement->Velocity = FVector(GetActorForwardVector() * 3000.0f);
-		projectileMovement->SetComponentTickEnabled(true);
+		GetWorld()->GetTimerManager().SetTimer(projectileLifespanTimerHandle, this, &AMMProjectileBase::OnLifespanEnd, lifespan);
+		//projectileMovement->SetComponentTickEnabled(true);
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 	}
 }
 
-
+void AMMProjectileBase::OnLifespanEnd()
+{
+	if (parentPool != nullptr) {
+		AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+		if (pool != nullptr) {
+			pool->ReturnObject(this);
+			this->SetActorActivation(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+	}
+}

@@ -22,6 +22,7 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 		if (projectile != nullptr)
 		{
 			projectile->parentPool = this;
+			projectile->SetActorActivation(true);
 		}
 		
 		return projectile;
