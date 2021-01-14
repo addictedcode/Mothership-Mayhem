@@ -23,6 +23,7 @@ void UEnemyStatsComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	this->HP = this->MaxHP;
 }
 
 
@@ -50,7 +51,15 @@ void UEnemyStatsComponent::TakeDamage(int damage)
 
 	if (this->HP <= 0)
 	{
-		this->GetOwner()->Destroy();
+		AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
+		if (parent != nullptr)
+		{
+			parent->SetActorActivation(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
+		}
 		this->GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 	}
 }
@@ -156,7 +165,7 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int directDa
 {
 	this->TakeDamage(directDamage);
 
-	if (!this->GetOwner()->IsPendingKillPending())
+	if (!this->GetOwner()->IsHidden())
 	{
 		this->ApplyStatusEffect(ailment, DoTdamage, duration);
 	}
@@ -177,7 +186,7 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 		break;
 	}
 
-	if (!this->GetOwner()->IsPendingKillPending())
+	if (!this->GetOwner()->IsHidden())
 		this->ApplyStatusEffect(ailment);
 }
 
@@ -217,5 +226,13 @@ void UEnemyStatsComponent::ApplyStun(bool stunned)
 	{
 		UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
 	}
+}
+
+void UEnemyStatsComponent::ResetComponent()
+{
+	this->HP = this->MaxHP;
+	this->timeSinceLastDoTTick = 0;
+	this->DoTDamage = 0;
+	this->ApplyMovespeedMultiplier(1.0f);
 }
 

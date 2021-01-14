@@ -50,12 +50,16 @@ public:
 	UFUNCTION()
 		void ApplyStun(bool stunned);
 
+	void ResetComponent();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
-		int HP = 10;
+		int MaxHP = 10;
+
+	int HP;
 
 	FTimerHandle DoTTimer;
-	float DoTTickRate = 1.0f;
+	float const DoTTickRate = 1.0f;
 	float timeSinceLastDoTTick = 0;
 	int DoTDamage = 0;
 

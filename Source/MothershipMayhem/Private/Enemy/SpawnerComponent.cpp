@@ -83,7 +83,7 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 		//Unhide the actor when reused
 		if (spawnedEnemy != nullptr)
 		{
-			
+			spawnedEnemy->SetActorActivation(true);
 		}
 		else
 		{

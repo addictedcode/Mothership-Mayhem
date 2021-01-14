@@ -125,3 +125,17 @@ void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 	}
 }
 
+void AAICharacter::SetActorActivation(bool state)
+{
+	this->SetActorHiddenInGame(!state);
+	this->SetActorEnableCollision(state);
+	this->SetActorTickEnabled(state);
+
+	if (state)
+	{
+		this->isStunned = false;
+		this->currentReloadTime = 0;
+		this->enemyStats->ResetComponent();
+	}
+}
+

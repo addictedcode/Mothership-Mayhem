@@ -48,6 +48,8 @@ public:
 
 	bool isStunned = false;
 
+	void SetActorActivation(bool state);
+
 private:
 	float timeToReload = 2.0f;
 	float currentReloadTime = 0;
