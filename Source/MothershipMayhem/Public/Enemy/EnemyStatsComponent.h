@@ -33,37 +33,40 @@ public:
 	void TakeDamage(int damage);
 
 	void ApplyDamageOverTime(int damage, float duration);
-
+	
+	#pragma region ApplyStatusEffect Function overloads
 	void ApplyStatusEffect(StatusEffects ailment);
-	
 	void ApplyStatusEffect(StatusEffects ailment, FVector knockbackStrength);
-
 	void ApplyStatusEffect(StatusEffects ailment, int damage, float duration);
-	
 	void ApplyStatusEffect(StatusEffects ailment, int directDamage, int DoTdamage, float duration);
-
 	void ApplyStatusEffect(StatusEffects ailment, int damage);
-
+	#pragma endregion
+	
 	UFUNCTION()
 		void ApplyMovespeedMultiplier(float multiplier);
 
 	UFUNCTION()
 		void ApplyStun(bool stunned);
 
+	void ResetComponent();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
-		int HP = 10;
+		int MaxHP = 10;
 
-	FTimerHandle DoTTimer;
-	float DoTTickRate = 1.0f;
+	int HP;
+
+	float const DoTTickRate = 1.0f;
 	float timeSinceLastDoTTick = 0;
 	int DoTDamage = 0;
 
 	void RemoveDoT();
 
 	StatusEffects currentStatusAilment = NONE;
-
+	
+	#pragma region FTimerHandles
+	FTimerHandle DoTTimer;
 	FTimerHandle DebuffTimer;
-
 	FTimerHandle StunTimer;
+	#pragma endregion 
 };

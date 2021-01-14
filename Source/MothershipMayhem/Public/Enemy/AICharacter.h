@@ -25,7 +25,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
+	#pragma region BehaviorTree variables and functions
 	UPROPERTY(EditAnywhere, Category = "AI")
 		class UBehaviorTree* BehaviorTree;
 
@@ -34,12 +35,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void AttackTarget(AActor* target);
+	#pragma endregion
 
+	#pragma region Projectile shooting
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		AActor* bulletPool;
-
+	#pragma endregion
+	
 	class UEnemyStatsComponent* enemyStats;
 
 	float moveSpeedMultiplier = 1.0f;
@@ -48,7 +52,9 @@ public:
 
 	bool isStunned = false;
 
+	void SetActorActivation(bool state);
+
 private:
-	float timeToReload = 2.0f;
+	float const timeToReload = 2.0f;
 	float currentReloadTime = 0;
 };

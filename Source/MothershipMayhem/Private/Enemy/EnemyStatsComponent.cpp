@@ -23,6 +23,7 @@ void UEnemyStatsComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	this->HP = this->MaxHP;
 }
 
 
@@ -37,30 +38,38 @@ void UEnemyStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		this->timeSinceLastDoTTick += DeltaTime;
 		if (this->timeSinceLastDoTTick >= this->DoTTickRate)
 		{
-			this->timeSinceLastDoTTick = 0;
+			this->timeSinceLastDoTTick -= this->DoTTickRate;
 			this->TakeDamage(DoTDamage);
 		}
 	}
 }
 
-//Take damage and return whether the enemy reached 0 HP or not
+//Take x damage
 void UEnemyStatsComponent::TakeDamage(int damage)
 {
 	this->HP -= damage;
 
 	if (this->HP <= 0)
 	{
-		this->GetOwner()->Destroy();
+		AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
+		if (parent != nullptr)
+		{
+			parent->SetActorActivation(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
+		}
 		this->GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 	}
 }
-
+//Starts the flag for taking damage over time
 void UEnemyStatsComponent::ApplyDamageOverTime(int damage, float duration)
 {
 	this->DoTDamage = damage;
 	GetWorld()->GetTimerManager().SetTimer(DoTTimer, this, &UEnemyStatsComponent::RemoveDoT, duration, false);
 }
-
+//Function for just applying a status effect
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 {
 	FTimerDelegate timerDelegate;
@@ -139,29 +148,29 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 	this->currentStatusAilment = ailment;
 	
 }
-
+//Function for applying a status effect with a knockback
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, FVector knockbackStrength)
 {
 	this->movementComponent->Launch(knockbackStrength);
 	this->ApplyStatusEffect(ailment);
 }
-
+//Function for inflicting a damage over time status effect
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage, float duration)
 {
 	this->ApplyDamageOverTime(damage, duration);
 	this->ApplyStatusEffect(ailment);
 }
-
+//Function for inflicting a damage over time status effect that also does direct damage
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int directDamage, int DoTdamage, float duration)
 {
 	this->TakeDamage(directDamage);
 
-	if (!this->GetOwner()->IsPendingKillPending())
+	if (!this->GetOwner()->IsHidden())
 	{
 		this->ApplyStatusEffect(ailment, DoTdamage, duration);
 	}
 }
-
+//Function for applying a status effect with direct damage
 void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 {
 	switch (ailment)
@@ -177,15 +186,16 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 		break;
 	}
 
-	if (!this->GetOwner()->IsPendingKillPending())
+	if (!this->GetOwner()->IsHidden())
 		this->ApplyStatusEffect(ailment);
 }
 
 void UEnemyStatsComponent::RemoveDoT()
 {
 	this->DoTDamage = 0;
+	this->currentStatusAilment = NONE;
 }
-
+//Changes the movespeed multiplier in AICharacter while disabling the movement component tick function if the multiplier is 0 (rooted or stunned)
 void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
 {
 	AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
@@ -205,7 +215,7 @@ void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
 		UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
 	}
 }
-
+//Sets the AICharacter isStunned bool
 void UEnemyStatsComponent::ApplyStun(bool stunned)
 {
 	AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
@@ -217,5 +227,13 @@ void UEnemyStatsComponent::ApplyStun(bool stunned)
 	{
 		UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
 	}
+}
+//Reinitializes the variables in the component when reused in object pooling
+void UEnemyStatsComponent::ResetComponent()
+{
+	this->HP = this->MaxHP;
+	this->timeSinceLastDoTTick = 0;
+	this->DoTDamage = 0;
+	this->ApplyMovespeedMultiplier(1.0f);
 }
 
