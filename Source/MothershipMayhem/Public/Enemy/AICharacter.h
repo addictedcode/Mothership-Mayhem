@@ -46,6 +46,8 @@ public:
 
 	void ChangeSpeedMultiplier(float multiplier);
 
+	bool isStunned = false;
+
 private:
 	float timeToReload = 2.0f;
 	float currentReloadTime = 0;

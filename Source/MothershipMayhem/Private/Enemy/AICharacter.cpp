@@ -56,7 +56,7 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 
 void AAICharacter::AttackTarget(AActor* target)
 {
-	if (this->currentReloadTime >= this->timeToReload) {
+	if (this->currentReloadTime >= this->timeToReload && !this->isStunned) {
 		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)

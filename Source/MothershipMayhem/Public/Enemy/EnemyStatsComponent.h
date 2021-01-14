@@ -7,7 +7,7 @@
 #include "EnemyStatsComponent.generated.h"
 
 UENUM()
-enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5};
+enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5, DANCE = 6};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MOTHERSHIPMAYHEM_API UEnemyStatsComponent : public UActorComponent
@@ -47,6 +47,9 @@ public:
 	UFUNCTION()
 		void ApplyMovespeedMultiplier(float multiplier);
 
+	UFUNCTION()
+		void ApplyStun(bool stunned);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
 		int HP = 10;
@@ -61,4 +64,6 @@ private:
 	StatusEffects currentStatusAilment = NONE;
 
 	FTimerHandle DebuffTimer;
+
+	FTimerHandle StunTimer;
 };

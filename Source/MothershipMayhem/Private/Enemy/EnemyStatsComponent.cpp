@@ -102,14 +102,36 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 		break;
 	case SHOCKING:
 		this->ApplyMovespeedMultiplier(0.0f);
+		this->ApplyStun(true);
 
 		timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
 
 		GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
 		GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 2.0f, false);
+
+		timerDelegate.Unbind();
+		timerDelegate.BindUFunction(this, FName("ApplyStun"), false);
+		
+		GetWorld()->GetTimerManager().ClearTimer(StunTimer);
+		GetWorld()->GetTimerManager().SetTimer(StunTimer, timerDelegate, 2.0f, false);
 		break;
 	case DISORIENTED:
 		Cast<AEnemyController>(Cast<AAICharacter>(this->GetOwner())->Controller)->OnCharacterDisoriented(10.0f);
+		break;
+	case DANCE:
+		this->ApplyMovespeedMultiplier(0.0f);
+		this->ApplyStun(true);
+
+		timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
+
+		GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
+		GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 2.0f, false);
+
+		timerDelegate.Unbind();
+		timerDelegate.BindUFunction(this, FName("ApplyStun"), false);
+
+		GetWorld()->GetTimerManager().ClearTimer(StunTimer);
+		GetWorld()->GetTimerManager().SetTimer(StunTimer, timerDelegate, 2.0f, false);
 		break;
 	default:
 		break;
@@ -177,6 +199,19 @@ void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
 			if (multiplier == 1.0f)
 				this->currentStatusAilment = NONE;
 		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("WHY IS ENEMYSTATS NOT ATTACHED TO AN AICHARACTER"));
+	}
+}
+
+void UEnemyStatsComponent::ApplyStun(bool stunned)
+{
+	AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
+	if (parent != nullptr)
+	{
+		parent->isStunned = stunned;
 	}
 	else
 	{
