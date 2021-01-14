@@ -76,8 +76,26 @@ void AEnemyController::OnTargetSightLost()
 	}
 }
 
+void AEnemyController::OnCharacterDisoriented(float duration)
+{
+	if (BlackboardComp)
+	{
+		GetWorld()->GetTimerManager().SetTimer(disorientationTimer, this, &AEnemyController::ClearDisorientation, duration, false);
+		BlackboardComp->SetValueAsBool(BlackboardIsDisoriented, true);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
+	}
+}
+
 void AEnemyController::OnLostTarget()
 {
 	BlackboardComp->SetValueAsObject(BlackboardTarget, nullptr);
 	BlackboardComp->SetValueAsBool(BlackboardChasingTarget, false);
+}
+
+void AEnemyController::ClearDisorientation()
+{
+	BlackboardComp->SetValueAsBool(BlackboardIsDisoriented, false);
 }

@@ -40,6 +40,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		AActor* bulletPool;
 
+	class UEnemyStatsComponent* enemyStats;
+
+	float moveSpeedMultiplier = 1.0f;
+
+	void ChangeSpeedMultiplier(float multiplier);
+
+	bool isStunned = false;
+
 private:
 	float timeToReload = 2.0f;
 	float currentReloadTime = 0;
