@@ -40,7 +40,7 @@ void AAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
+//Changes MaxWalkSpeed of movement component
 void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 {
 	UCharacterMovementComponent* CharaMovement = GetCharacterMovement();
@@ -53,7 +53,7 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 		UE_LOG(LogTemp, Error, TEXT("Player has no character movement component"));
 	}
 }
-
+//Checks if AICharacter is not stunned and is not reloading then shoots at target
 void AAICharacter::AttackTarget(AActor* target)
 {
 	if (this->currentReloadTime >= this->timeToReload && !this->isStunned) {
@@ -109,7 +109,7 @@ void AAICharacter::AttackTarget(AActor* target)
 		}
 	}
 }
-
+//Changes multiplier applied to movement component MaxWalkSpeed and applies the net change to current setting if new multiplier is different from old one
 void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 {
 	UCharacterMovementComponent* CharaMovement = GetCharacterMovement();
@@ -124,7 +124,7 @@ void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 		UE_LOG(LogTemp, Error, TEXT("Player has no character movement component"));
 	}
 }
-
+//Function for object pooling implementation
 void AAICharacter::SetActorActivation(bool state)
 {
 	this->SetActorHiddenInGame(!state);
