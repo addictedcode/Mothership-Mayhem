@@ -4,6 +4,7 @@
 #include "Projectiles/MMProjectileBase.h"
 #include "Components/SphereComponent.h"
 #include "Projectiles/ProjectilePool.h"
+#include "Projectiles/MMProjectileEffectBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyStatsComponent.h"
@@ -33,6 +34,7 @@ AMMProjectileBase::AMMProjectileBase()
 	projectileMovement->MaxSpeed = 3000.f;
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
+	projectileMovement->ProjectileGravityScale = 1;
 
 	// Die after 20 seconds by default
 	this->lifespan = 20.0f;
@@ -72,6 +74,15 @@ void AMMProjectileBase::BeginPlay()
 //	}
 //}
 
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects)
+{
+	damage = newDamage;
+	projectileSpeed = newProjectileSpeed;
+	projectileEffects = newProjectileEffects;
+	projectileMovement->bShouldBounce = isProjectileBounce;
+	projectileMovement->ProjectileGravityScale = gravityScale;
+}
+
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
@@ -98,7 +109,16 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		{
 			UEnemyStatsComponent* enemyStats = enemy->enemyStats;
 			if (enemyStats != nullptr) {
-				enemyStats->ApplyStatusEffect(DISORIENTED);
+				enemyStats->TakeDamage(damage);
+				//enemyStats->ApplyStatusEffect(DISORIENTED);
+
+				//Calls all ApplyEffects (MMProjectileEffectBase) from a pointer to the MMGunBase class, projectileEffects TArray
+				if (projectileEffects != nullptr) {
+					for (UMMProjectileEffectBase* effect : *projectileEffects)
+					{
+						effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
+					}
+				}
 			}
 			else
 			{
@@ -121,9 +141,10 @@ void AMMProjectileBase::SetActorActivation(bool state)
 	if (state)
 	{
 		projectileMovement->UpdatedComponent = RootComponent;
-		projectileMovement->Velocity = FVector(GetActorForwardVector() * 3000.0f);
+		projectileMovement->Velocity = FVector(GetActorForwardVector() * projectileSpeed);
+		projectileMovement->MaxSpeed = projectileSpeed;
 		GetWorld()->GetTimerManager().SetTimer(projectileLifespanTimerHandle, this, &AMMProjectileBase::OnLifespanEnd, lifespan);
-		//projectileMovement->SetComponentTickEnabled(true);
+		projectileMovement->SetComponentTickEnabled(true);
 	}
 	else
 	{

@@ -185,8 +185,11 @@ bool AMMGunBase::ShootProjectile()
 		AProjectilePool* pool = Cast<AProjectilePool>(*bulletPool);
 		if (pool != nullptr)
 		{
-			if (!pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams))
+			AMMProjectileBase* projectile = pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			if (!projectile)
 				return false;
+			projectile->InitializeProjectile(gunStats.damage.GetFinalValue(), gunStats.projectileSpeed.GetFinalValue(), 
+				gunStats.isBouncingProjectile, gunStats.projectileGravityScale, &projectileEffects);
 		}
 		else
 		{
