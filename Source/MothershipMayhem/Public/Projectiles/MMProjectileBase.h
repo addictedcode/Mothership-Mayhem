@@ -32,6 +32,12 @@ protected:
 	float lifespan = 0;
 	FTimerHandle projectileLifespanTimerHandle;
 	//float currentLifePeriod = 0;
+
+	//Projectile Stats
+	float damage = 0;
+	float projectileSpeed = 3000.0f;
+
+	TArray<class UMMProjectileEffectBase*>* projectileEffects;
 public:
 	//Move to timer function - Richmond
 	// Called every frame
@@ -44,6 +50,7 @@ public:
 	void SetActorActivation(bool state);
 	AActor* parentPool;
 
+	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects);
 protected:
 	UFUNCTION()
 		void OnLifespanEnd();

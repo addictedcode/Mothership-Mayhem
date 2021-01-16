@@ -71,7 +71,11 @@ namespace GunFactory
             gunStats.isAutomatic = gunData->isAutomatic;
             gunStats.accuracy.SetBaseValue(gunData->accuracy);
             gunStats.numberOfProjectilesToShoot.SetBaseValue(gunData->numberOfProjectilesToShoot);
-
+            gunStats.damage.SetBaseValue(gunData->damage);
+            gunStats.projectileSpeed.SetBaseValue(gunData->projectileSpeed);
+            gunStats.isBouncingProjectile = gunData->isBouncingProjectile;
+            gunStats.projectileGravityScale = gunData->projectileGravityScale;
+        	
             return newGun;
         }
         return NULL;

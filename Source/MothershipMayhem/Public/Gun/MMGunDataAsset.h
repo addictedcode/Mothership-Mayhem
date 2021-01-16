@@ -41,4 +41,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float numberOfProjectilesToShoot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float projectileSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		bool isBouncingProjectile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float projectileGravityScale;
 };

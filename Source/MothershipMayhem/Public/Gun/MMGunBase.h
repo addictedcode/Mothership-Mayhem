@@ -21,6 +21,8 @@ struct TGunStats
 	//Affect Projectile
 	TMMStatsBase damage;
 	TMMStatsBase projectileSpeed;
+	bool isBouncingProjectile;
+	float projectileGravityScale;
 };
 
 
@@ -71,6 +73,8 @@ protected:
 	
 	TGunStats gunStats;
 
+	TArray<class UMMProjectileEffectBase*> projectileEffects;
+	
 	FTimerHandle primaryShootTimerHandle;
 	bool isShooting = false;
 
