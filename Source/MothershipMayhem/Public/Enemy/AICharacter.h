@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "AICharacter.generated.h"
 
+
+
 UCLASS()
 class MOTHERSHIPMAYHEM_API AAICharacter : public ACharacter
 {
@@ -53,6 +55,8 @@ public:
 	bool isStunned = false;
 
 	void SetActorActivation(bool state);
+
+	
 
 private:
 	float const timeToReload = 2.0f;

@@ -127,7 +127,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
+			//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 		}
 	}
 }

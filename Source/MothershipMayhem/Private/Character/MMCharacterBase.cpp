@@ -56,8 +56,8 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	//Character Movement
-	PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterBase::MoveX);
-	PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterBase::MoveY);
+	/*PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterBase::MoveX);
+	PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterBase::MoveY);*/
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -66,14 +66,14 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterBase::EndCrouch);
 	
 	//Mouse Movement
-	PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
-	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);
+	/*PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
+	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);*/
 
 	//Gun Controls
-	PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AMMCharacterBase::OnPrimaryShootPressed);
+	/*PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AMMCharacterBase::OnPrimaryShootPressed);
 	PlayerInputComponent->BindAction("PrimaryFire", IE_Released, this, &AMMCharacterBase::OnPrimaryShootReleased);
 	PlayerInputComponent->BindAxis("SwapGunWheel", this, &AMMCharacterBase::OnSwapWheel);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMMCharacterBase::OnReload);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMMCharacterBase::OnReload);*/
 
 }
 

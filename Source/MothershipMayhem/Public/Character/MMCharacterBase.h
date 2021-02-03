@@ -19,6 +19,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:
+
 	//Keyboard
 	void MoveX(float value);
 	void MoveY(float value);
@@ -35,8 +37,6 @@ protected:
 	void OnPrimaryShootReleased();
 	void OnSwapWheel(float value);
 	void OnReload();
-
-public:	
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

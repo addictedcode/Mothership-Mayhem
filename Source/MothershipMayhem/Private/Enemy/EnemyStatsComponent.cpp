@@ -54,7 +54,9 @@ void UEnemyStatsComponent::TakeDamage(int damage)
 		AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
 		if (parent != nullptr)
 		{
+			this->OnDeath.Broadcast();
 			parent->SetActorActivation(false);
+			
 		}
 		else
 		{
