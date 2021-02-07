@@ -38,6 +38,6 @@ private:
 	float TimeSinceLastSpawn = 0.0f;
 	float currentTime = 0.0f;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		void SpawnObject(FVector loc, FRotator rot);
 };

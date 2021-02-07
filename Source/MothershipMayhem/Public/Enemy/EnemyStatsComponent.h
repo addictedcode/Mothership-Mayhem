@@ -55,6 +55,7 @@ public:
 	// this is an event called when the Enemy dies;
 	UPROPERTY(BlueprintAssignable)
 		FOnDeathDelegate OnDeath;
+	
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")

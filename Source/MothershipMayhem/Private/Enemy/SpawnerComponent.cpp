@@ -31,7 +31,7 @@ void USpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	this->TimeSinceLastSpawn += DeltaTime;
+	/*this->TimeSinceLastSpawn += DeltaTime;
 	this->currentTime += DeltaTime;
 	if (this->TimeSinceLastSpawn >= this->SpawnCooldown)
 	{
@@ -46,7 +46,7 @@ void USpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 		{
 			UE_LOG(LogTemp, Error, TEXT("No reference to actor"));
 		}
-	}
+	}*/
 
 	for (int i = 0; i < SpawnedPool.size(); i++)
 	{
@@ -64,13 +64,17 @@ void USpawnerComponent::SpawnObject(FVector loc, FRotator rot)
 {
 	if (this->DisabledSpawns.empty()) {
 		FActorSpawnParameters SpawnParams;
-		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, loc, rot, SpawnParams);
-		AAICharacter* spawnedEnemy = Cast<AAICharacter>(SpawnedActorRef);
-		if (spawnedEnemy != nullptr)
-		{
-			spawnedEnemy->bulletPool = this->bulletPool;
+		SpawnParams.SpawnCollisionHandlingOverride = 
+				ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		if (this->ActorToSpawn != NULL) {
+			AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(ActorToSpawn, loc, rot, SpawnParams);
+			AAICharacter* spawnedEnemy = Cast<AAICharacter>(SpawnedActorRef);
+			if (spawnedEnemy != nullptr)
+			{
+				spawnedEnemy->bulletPool = this->bulletPool;
+			}
+			this->SpawnedPool.push_back(SpawnedActorRef);
 		}
-		this->SpawnedPool.push_back(SpawnedActorRef);
 	}
 	else
 	{
