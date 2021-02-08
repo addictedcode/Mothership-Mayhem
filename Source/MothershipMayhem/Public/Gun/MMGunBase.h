@@ -22,7 +22,7 @@ struct TGunStats
 	TMMStatsBase damage;
 	TMMStatsBase projectileSpeed;
 	bool isBouncingProjectile;
-	TMMStatsBase projectileGravityScale;
+	float projectileGravityScale;
 };
 
 
@@ -73,7 +73,6 @@ protected:
 	
 	TGunStats gunStats;
 
-	UPROPERTY(BlueprintReadOnly) TArray<class UMMModBase*> modList;
 	TArray<class UMMProjectileEffectBase*> projectileEffects;
 	
 	FTimerHandle primaryShootTimerHandle;
@@ -109,10 +108,6 @@ public:
 	
 	void OnReload();
 
-	UFUNCTION(BlueprintCallable) void AddMod(class UMMModBase* newMod);
-	UFUNCTION(BlueprintCallable) void RemoveModByMod(class UMMModBase* mod);
-	UFUNCTION(BlueprintCallable) class UMMModBase* RemoveModByIndex(int index);
-
 protected:
 
 	UFUNCTION()
@@ -130,7 +125,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
 
-	UFUNCTION(BlueprintPure) TArray<class UMMModBase*>& GetModList();
+	
 
 	TGunStats& GetGunStats() { return gunStats; };
 	

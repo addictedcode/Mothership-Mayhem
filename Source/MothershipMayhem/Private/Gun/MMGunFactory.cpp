@@ -38,7 +38,7 @@ namespace GunFactory
         UAssetManager& assetManager = UAssetManager::Get();
         TArray<FAssetData> gunList;
         assetManager.GetPrimaryAssetDataList("Guns", gunList);
-        
+
         //if index outside of gunlist, return null
         if (index < 0 || index >= gunList.Num())
         {
@@ -74,7 +74,7 @@ namespace GunFactory
             gunStats.damage.SetBaseValue(gunData->damage);
             gunStats.projectileSpeed.SetBaseValue(gunData->projectileSpeed);
             gunStats.isBouncingProjectile = gunData->isBouncingProjectile;
-            gunStats.projectileGravityScale.SetBaseValue(gunData->projectileGravityScale);
+            gunStats.projectileGravityScale = gunData->projectileGravityScale;
         	
             return newGun;
         }
