@@ -30,6 +30,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<AMMGunBase*> getGuns();
 
+	UFUNCTION(BlueprintCallable)
+		void UpdateGunStats(int index, 
+							int attack,
+							float fireRate, 
+							float reloadSpeed, 
+							int magazineSize, 
+							float accuracy);
+
 	//object pool for the bullets
 	AActor** bulletPool;
 

@@ -125,7 +125,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
 
-	
+	void UpdateStats(int index,
+		int attack,
+		float fireRate,
+		float reloadSpeed,
+		int magazineSize,
+		float accuracy);
 
 	TGunStats& GetGunStats() { return gunStats; };
 	
