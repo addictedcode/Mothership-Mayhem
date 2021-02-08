@@ -4,6 +4,7 @@
 #include "MothershipMayhem/Public/Gun/MMGunBase.h"
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
+#include "Mod/MMModBase.h"
 #include "Character/MMCharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -52,6 +53,11 @@ FGunStats AMMGunBase::GetStats()
 	statsToReturn.projectileSpeed = gunStats.projectileSpeed.GetBaseValue();
 
 	return statsToReturn;
+}
+
+TArray<UMMModBase*>& AMMGunBase::GetModList()
+{
+	return modList;
 }
 
 void AMMGunBase::SetMesh(UStaticMesh* newStaticMesh)
@@ -107,6 +113,25 @@ void AMMGunBase::OnReload()
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
+}
+
+void AMMGunBase::AddMod(UMMModBase* newMod)
+{
+	newMod->AddToGun(this);
+	modList.Add(newMod);
+}
+
+void AMMGunBase::RemoveModByMod(UMMModBase* mod)
+{
+	const int index = modList.Find(mod);
+	RemoveModByIndex(index);
+}
+
+UMMModBase* AMMGunBase::RemoveModByIndex(int index)
+{
+	UMMModBase* removedMod = modList[index];
+	modList.RemoveAt(index);
+	return removedMod;
 }
 
 void AMMGunBase::OnDraw()
@@ -202,7 +227,7 @@ bool AMMGunBase::ShootProjectile()
 			if (!projectile)
 				return false;
 			projectile->InitializeProjectile(gunStats.damage.GetFinalValue(), gunStats.projectileSpeed.GetFinalValue(), 
-				gunStats.isBouncingProjectile, gunStats.projectileGravityScale, &projectileEffects);
+				gunStats.isBouncingProjectile, gunStats.projectileGravityScale.GetFinalValue(), &projectileEffects);
 		}
 		else
 		{
