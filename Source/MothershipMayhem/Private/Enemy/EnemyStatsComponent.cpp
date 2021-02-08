@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Enemy/EnemyStatsComponent.h"
@@ -54,9 +54,8 @@ void UEnemyStatsComponent::TakeDamage(int damage)
 		AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
 		if (parent != nullptr)
 		{
-			this->OnDeath.Broadcast();
+			parent->DeathGang();
 			parent->SetActorActivation(false);
-			
 		}
 		else
 		{

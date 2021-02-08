@@ -44,6 +44,10 @@ public:
 	//Projectile pool reference
 	AActor* bulletPool = nullptr;
 
+	// for playing gun sounds (to be called in gunbase)
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayShootingSound();
+
 protected:
 	/** TempMesh */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
@@ -56,5 +60,7 @@ protected:
 	/**Gun Loadout */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMMGunLoadout* gunLoadoutComponent;
+
+	
 	
 };

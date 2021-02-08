@@ -130,7 +130,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
 
+
 	UFUNCTION(BlueprintPure) TArray<class UMMModBase*>& GetModList();
+
+	void UpdateStats(int index,
+		int attack,
+		float fireRate,
+		float reloadSpeed,
+		int magazineSize,
+		float accuracy);
 
 	TGunStats& GetGunStats() { return gunStats; };
 	

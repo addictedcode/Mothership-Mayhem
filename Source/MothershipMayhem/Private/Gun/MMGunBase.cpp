@@ -5,6 +5,8 @@
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
 #include "Mod/MMModBase.h"
+#include "Character/MMCharacterBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMMGunBase::AMMGunBase()
@@ -162,7 +164,18 @@ void AMMGunBase::PrimaryShoot()
 			GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
 		}
 		for (int i = 0; i < gunStats.numberOfProjectilesToShoot.GetFinalValue(); ++i) {
-		        ShootProjectile();
+			//UE_LOG(LogTemp, Error, TEXT("Bang!"));
+		    ShootProjectile();
+			// play sound ===
+			AMMCharacterBase* characterParent = 
+					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			if (characterParent != NULL) {
+				characterParent->PlayShootingSound();
+			}
+			else {
+				UE_LOG(LogTemp, Error, TEXT("No Character"));
+			}
+				
 		}
 		gunStats.currentAmmo--;
 	}
@@ -238,3 +251,15 @@ void AMMGunBase::Reload()
 		OnPrimaryShootPressed();
 	}
 }
+
+void AMMGunBase::UpdateStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
+
+	this->gunStats.damage.AddAdditionModifier(attack);
+	this->gunStats.fireRate.AddMultiplicativeModifier(fireRate);
+	this->gunStats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
+	this->gunStats.maxAmmo.AddAdditionModifier(magazineSize);
+	//this->gunStats.accuracy.AddMultiplicativeModifier(accuracy);
+	this->Reload();
+	UE_LOG(LogTemp, Error, TEXT("Gun Updated"));
+}
+

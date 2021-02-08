@@ -138,6 +138,23 @@ TArray<AMMGunBase*> UMMGunLoadout::getGuns()
 	return gunsToReturn;
 }
 
+void UMMGunLoadout::UpdateGunStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
+	if (gun[index] != NULL)
+	{
+		gun[index]->UpdateStats(index, attack, fireRate, reloadSpeed, magazineSize, accuracy);
+		/*TGunStats stats = gun[index]->GetGunStats();
+		stats.damage.AddAdditionModifier(attack);
+		stats.fireRate.AddMultiplicativeModifier(fireRate);
+		stats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
+		stats.maxAmmo.AddAdditionModifier(magazineSize);
+		stats.accuracy.AddMultiplicativeModifier(accuracy);
+		UE_LOG(LogTemp, Error, TEXT("Gun Updated"));*/
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No Gun"));
+	}
+}
+
 
 
 

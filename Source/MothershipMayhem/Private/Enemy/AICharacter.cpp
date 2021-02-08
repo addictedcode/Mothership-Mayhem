@@ -26,7 +26,7 @@ void AAICharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-// Called every frame
+// Called every frameda
 void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

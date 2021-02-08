@@ -56,7 +56,8 @@ public:
 
 	void SetActorActivation(bool state);
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+		void DeathGang();
 
 private:
 	float const timeToReload = 2.0f;
