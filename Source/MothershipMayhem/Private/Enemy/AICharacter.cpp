@@ -56,7 +56,7 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 //Checks if AICharacter is not stunned and is not reloading then shoots at target
 void AAICharacter::AttackTarget(AActor* target)
 {
-	if (this->currentReloadTime >= this->timeToReload && !this->isStunned) {
+	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden()) {
 		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
