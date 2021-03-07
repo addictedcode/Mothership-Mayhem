@@ -5,6 +5,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "Enemy/AICharacter.h"
 #include "Perception/AISense_Sight.h"
+#include "Enemy/EnemyFactory.h"
 
 void AEnemyController::OnPossess(APawn *InPawn) {
 	Super::OnPossess(InPawn);
@@ -17,6 +18,14 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 		{
 			BlackboardComp->InitializeBlackboard(*(AICharacter->BehaviorTree->BlackboardAsset));
 			BehaviorTreeComp->StartTree(*AICharacter->BehaviorTree);
+
+			BlackboardComp->SetValueAsFloat(BlackboardWalkSpeed, 125.0f);
+			BlackboardComp->SetValueAsFloat(BlackboardRunSpeed, 500.0f);
+			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 800.0f);
+
+			EnemyFactory::SetCurrentFame(0);
+			EnemyFactory::SetMaxFame(10);
+			EnemyFactory::InitializeEnemy("baseEnemy", AICharacter, this);
 		}
 
 		AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::UpdateSeenTarget);
@@ -82,6 +91,43 @@ void AEnemyController::OnCharacterDisoriented(float duration)
 	{
 		GetWorld()->GetTimerManager().SetTimer(disorientationTimer, this, &AEnemyController::ClearDisorientation, duration, false);
 		BlackboardComp->SetValueAsBool(BlackboardIsDisoriented, true);
+		UpdateWalkSpeed(BlackboardComp->GetValueAsFloat(BlackboardWalkSpeed) * 3);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
+	}
+}
+
+void AEnemyController::UpdateAttackRange(float newRange)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsFloat(BlackboardAttackRange, newRange);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
+	}
+}
+
+void AEnemyController::UpdateRunSpeed(float newSpeed)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsFloat(BlackboardRunSpeed, newSpeed);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
+	}
+}
+
+void AEnemyController::UpdateWalkSpeed(float newSpeed)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsFloat(BlackboardWalkSpeed, newSpeed);
 	}
 	else
 	{
@@ -98,4 +144,5 @@ void AEnemyController::OnLostTarget()
 void AEnemyController::ClearDisorientation()
 {
 	BlackboardComp->SetValueAsBool(BlackboardIsDisoriented, false);
+	UpdateWalkSpeed(BlackboardComp->GetValueAsFloat(BlackboardWalkSpeed) / 3);
 }

@@ -238,3 +238,8 @@ void UEnemyStatsComponent::ResetComponent()
 	this->ApplyMovespeedMultiplier(1.0f);
 }
 
+void UEnemyStatsComponent::SetMaxHP(int newHP)
+{
+	this->MaxHP = newHP;
+}
+

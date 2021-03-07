@@ -96,7 +96,12 @@ void AAICharacter::AttackTarget(AActor* target)
 			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
 			if (pool != nullptr)
 			{
-				pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				AMMProjectileBase* projectile = pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				if (projectile)
+				{
+					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack, 
+						this->projectileGravityScale, nullptr);
+				}
 			}
 			else
 			{
@@ -124,6 +129,20 @@ void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 		UE_LOG(LogTemp, Error, TEXT("Player has no character movement component"));
 	}
 }
+
+void AAICharacter::UpdateReloadTime(float newSecPerShot)
+{
+	this->timeToReload = newSecPerShot;
+}
+
+void AAICharacter::UpdateProjectileStats(float damage, float speed, bool isBouncing, float gravityScale)
+{
+	this->attackDamage = damage;
+	this->projectileSpeed = speed;
+	this->hasBouncingAttack = isBouncing;
+	this->projectileGravityScale = gravityScale;
+}
+
 //Function for object pooling implementation
 void AAICharacter::SetActorActivation(bool state)
 {

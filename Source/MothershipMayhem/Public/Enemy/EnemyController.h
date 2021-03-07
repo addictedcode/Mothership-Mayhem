@@ -37,12 +37,22 @@ public:
 		FName BlackboardChasingTarget = "IsChasingTarget";
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 		FName BlackboardIsDisoriented = "IsDisoriented";
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName BlackboardRunSpeed = "RunSpeed";
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName BlackboardWalkSpeed = "WalkSpeed";
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		FName BlackboardAttackRange = "AttackRange";
 
 	UFUNCTION() void UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus);
 
 	void OnTargetSightLost();
 
 	void OnCharacterDisoriented(float duration);
+
+	void UpdateAttackRange(float newRange);
+	void UpdateRunSpeed(float newSpeed);
+	void UpdateWalkSpeed(float newSpeed);
 
 private:
 	FTimerHandle StartEnemyTimer;

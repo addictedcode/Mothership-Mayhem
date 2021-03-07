@@ -48,9 +48,11 @@ public:
 	
 	class UEnemyStatsComponent* enemyStats;
 
-	float moveSpeedMultiplier = 1.0f;
-
 	void ChangeSpeedMultiplier(float multiplier);
+
+	void UpdateReloadTime(float newSecPerShot);
+
+	void UpdateProjectileStats(float damage, float speed, bool isBouncing, float gravityScale);
 
 	bool isStunned = false;
 
@@ -60,6 +62,12 @@ public:
 		void DeathGang();
 
 private:
-	float const timeToReload = 2.0f;
+	float moveSpeedMultiplier = 1.0f;
+	float timeToReload = 2.0f;
 	float currentReloadTime = 0;
+
+	float attackDamage;
+	float projectileSpeed;
+	bool hasBouncingAttack;
+	float projectileGravityScale;
 };

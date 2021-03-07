@@ -55,7 +55,8 @@ public:
 	// this is an event called when the Enemy dies;
 	UPROPERTY(BlueprintAssignable)
 		FOnDeathDelegate OnDeath;
-	
+
+	void SetMaxHP(int newHP);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")
