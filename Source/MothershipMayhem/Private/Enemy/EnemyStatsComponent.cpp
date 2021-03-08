@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Enemy/EnemyStatsComponent.h"
@@ -54,6 +54,7 @@ void UEnemyStatsComponent::TakeDamage(int damage)
 		AAICharacter* parent = Cast<AAICharacter>(this->GetOwner());
 		if (parent != nullptr)
 		{
+			parent->DeathGang();
 			parent->SetActorActivation(false);
 		}
 		else
@@ -235,5 +236,10 @@ void UEnemyStatsComponent::ResetComponent()
 	this->timeSinceLastDoTTick = 0;
 	this->DoTDamage = 0;
 	this->ApplyMovespeedMultiplier(1.0f);
+}
+
+void UEnemyStatsComponent::SetMaxHP(int newHP)
+{
+	this->MaxHP = newHP;
 }
 

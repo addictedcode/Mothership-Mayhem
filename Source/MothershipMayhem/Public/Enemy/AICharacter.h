@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "AICharacter.generated.h"
 
+
+
 UCLASS()
 class MOTHERSHIPMAYHEM_API AAICharacter : public ACharacter
 {
@@ -46,15 +48,26 @@ public:
 	
 	class UEnemyStatsComponent* enemyStats;
 
-	float moveSpeedMultiplier = 1.0f;
-
 	void ChangeSpeedMultiplier(float multiplier);
+
+	void UpdateReloadTime(float newSecPerShot);
+
+	void UpdateProjectileStats(float damage, float speed, bool isBouncing, float gravityScale);
 
 	bool isStunned = false;
 
 	void SetActorActivation(bool state);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void DeathGang();
+
 private:
-	float const timeToReload = 2.0f;
+	float moveSpeedMultiplier = 1.0f;
+	float timeToReload = 2.0f;
 	float currentReloadTime = 0;
+
+	float attackDamage;
+	float projectileSpeed;
+	bool hasBouncingAttack;
+	float projectileGravityScale;
 };

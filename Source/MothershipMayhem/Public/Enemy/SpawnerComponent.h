@@ -18,8 +18,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		TSubclassOf<AActor> ActorToSpawn;
-	UPROPERTY(EditAnywhere, Category = "Projectile")
-		AActor* bulletPool;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		class AEnemyPool* enemyPool;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -31,13 +32,10 @@ public:
 private:
 	AActor* SpawnPoint;
 
-	std::vector<AActor*> SpawnedPool;
-	std::vector<AActor*> DisabledSpawns;
-
 	float SpawnCooldown = 10.0f;
 	float TimeSinceLastSpawn = 0.0f;
 	float currentTime = 0.0f;
 
-	UFUNCTION()
-		void SpawnObject(FVector loc, FRotator rot);
+	UFUNCTION(BlueprintCallable)
+		void SpawnEnemy();
 };

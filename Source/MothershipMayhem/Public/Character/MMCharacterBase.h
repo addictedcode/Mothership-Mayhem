@@ -19,6 +19,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:
+
 	//Keyboard
 	void MoveX(float value);
 	void MoveY(float value);
@@ -36,13 +38,15 @@ protected:
 	void OnSwapWheel(float value);
 	void OnReload();
 
-public:	
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//Projectile pool reference
 	AActor* bulletPool = nullptr;
+
+	// for playing gun sounds (to be called in gunbase)
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayShootingSound();
 
 protected:
 	/** TempMesh */
@@ -56,5 +60,7 @@ protected:
 	/**Gun Loadout */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UMMGunLoadout* gunLoadoutComponent;
+
+	
 	
 };

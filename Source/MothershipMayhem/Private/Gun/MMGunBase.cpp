@@ -4,6 +4,9 @@
 #include "MothershipMayhem/Public/Gun/MMGunBase.h"
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
+#include "Mod/MMModBase.h"
+#include "Character/MMCharacterBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMMGunBase::AMMGunBase()
@@ -50,6 +53,11 @@ FGunStats AMMGunBase::GetStats()
 	statsToReturn.projectileSpeed = gunStats.projectileSpeed.GetBaseValue();
 
 	return statsToReturn;
+}
+
+TArray<UMMModBase*>& AMMGunBase::GetModList()
+{
+	return modList;
 }
 
 void AMMGunBase::SetMesh(UStaticMesh* newStaticMesh)
@@ -107,6 +115,25 @@ void AMMGunBase::OnReload()
 	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
 }
 
+void AMMGunBase::AddMod(UMMModBase* newMod)
+{
+	newMod->AddToGun(this);
+	modList.Add(newMod);
+}
+
+void AMMGunBase::RemoveModByMod(UMMModBase* mod)
+{
+	const int index = modList.Find(mod);
+	RemoveModByIndex(index);
+}
+
+UMMModBase* AMMGunBase::RemoveModByIndex(int index)
+{
+	UMMModBase* removedMod = modList[index];
+	modList.RemoveAt(index);
+	return removedMod;
+}
+
 void AMMGunBase::OnDraw()
 {
 	
@@ -137,7 +164,18 @@ void AMMGunBase::PrimaryShoot()
 			GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
 		}
 		for (int i = 0; i < gunStats.numberOfProjectilesToShoot.GetFinalValue(); ++i) {
-		        ShootProjectile();
+			//UE_LOG(LogTemp, Error, TEXT("Bang!"));
+		    ShootProjectile();
+			// play sound ===
+			AMMCharacterBase* characterParent = 
+					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			if (characterParent != NULL) {
+				characterParent->PlayShootingSound();
+			}
+			else {
+				UE_LOG(LogTemp, Error, TEXT("No Character"));
+			}
+				
 		}
 		gunStats.currentAmmo--;
 	}
@@ -189,7 +227,7 @@ bool AMMGunBase::ShootProjectile()
 			if (!projectile)
 				return false;
 			projectile->InitializeProjectile(gunStats.damage.GetFinalValue(), gunStats.projectileSpeed.GetFinalValue(), 
-				gunStats.isBouncingProjectile, gunStats.projectileGravityScale, &projectileEffects);
+				gunStats.isBouncingProjectile, gunStats.projectileGravityScale.GetFinalValue(), &projectileEffects);
 		}
 		else
 		{
@@ -213,3 +251,15 @@ void AMMGunBase::Reload()
 		OnPrimaryShootPressed();
 	}
 }
+
+void AMMGunBase::UpdateStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
+
+	this->gunStats.damage.AddAdditionModifier(attack);
+	this->gunStats.fireRate.AddMultiplicativeModifier(fireRate);
+	this->gunStats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
+	this->gunStats.maxAmmo.AddAdditionModifier(magazineSize);
+	//this->gunStats.accuracy.AddMultiplicativeModifier(accuracy);
+	this->Reload();
+	UE_LOG(LogTemp, Error, TEXT("Gun Updated"));
+}
+

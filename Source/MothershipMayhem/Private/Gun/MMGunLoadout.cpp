@@ -27,6 +27,7 @@ void UMMGunLoadout::BeginPlay()
 	
 	ChangeGun(GunFactory::CreateGun("Pistol", world), 0);
 	ChangeGun(GunFactory::CreateGun("MachineGun", world), 1);
+	ChangeGun(GunFactory::CreateGun("Sniper", world), 2);
 }
 
 void UMMGunLoadout::OnPrimaryShootPressed()
@@ -135,6 +136,23 @@ TArray<AMMGunBase*> UMMGunLoadout::getGuns()
 		gunsToReturn.Emplace(gun[i]);
 	}
 	return gunsToReturn;
+}
+
+void UMMGunLoadout::UpdateGunStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
+	if (gun[index] != NULL)
+	{
+		gun[index]->UpdateStats(index, attack, fireRate, reloadSpeed, magazineSize, accuracy);
+		/*TGunStats stats = gun[index]->GetGunStats();
+		stats.damage.AddAdditionModifier(attack);
+		stats.fireRate.AddMultiplicativeModifier(fireRate);
+		stats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
+		stats.maxAmmo.AddAdditionModifier(magazineSize);
+		stats.accuracy.AddMultiplicativeModifier(accuracy);
+		UE_LOG(LogTemp, Error, TEXT("Gun Updated"));*/
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No Gun"));
+	}
 }
 
 

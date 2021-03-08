@@ -15,7 +15,7 @@ void TMMStatsBase::UpdateFinalValue()
 {
 	float tempValue = baseValue;
 
-	for (float value : addictionModifiers)
+	for (float value : additionModifiers)
 	{
 		tempValue += value;
 	}

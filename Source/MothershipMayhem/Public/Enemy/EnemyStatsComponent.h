@@ -9,6 +9,8 @@
 UENUM()
 enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5, DANCE = 6};
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathDelegate);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MOTHERSHIPMAYHEM_API UEnemyStatsComponent : public UActorComponent
 {
@@ -49,6 +51,12 @@ public:
 		void ApplyStun(bool stunned);
 
 	void ResetComponent();
+
+	// this is an event called when the Enemy dies;
+	UPROPERTY(BlueprintAssignable)
+		FOnDeathDelegate OnDeath;
+
+	void SetMaxHP(int newHP);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")

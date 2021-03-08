@@ -127,9 +127,27 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
+			//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 		}
 	}
+	else{
+		if (parentPool != nullptr) {
+			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+			if (pool != nullptr) {
+				pool->ReturnObject(this);
+				this->SetActorActivation(false);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+		}
+	}
+	
 }
 
 void AMMProjectileBase::SetActorActivation(bool state)

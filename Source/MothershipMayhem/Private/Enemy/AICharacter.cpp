@@ -26,7 +26,7 @@ void AAICharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-// Called every frame
+// Called every frameda
 void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -56,7 +56,7 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 //Checks if AICharacter is not stunned and is not reloading then shoots at target
 void AAICharacter::AttackTarget(AActor* target)
 {
-	if (this->currentReloadTime >= this->timeToReload && !this->isStunned) {
+	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden()) {
 		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
@@ -96,7 +96,12 @@ void AAICharacter::AttackTarget(AActor* target)
 			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
 			if (pool != nullptr)
 			{
-				pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				AMMProjectileBase* projectile = pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				if (projectile)
+				{
+					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack, 
+						this->projectileGravityScale, nullptr);
+				}
 			}
 			else
 			{
@@ -124,6 +129,20 @@ void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 		UE_LOG(LogTemp, Error, TEXT("Player has no character movement component"));
 	}
 }
+
+void AAICharacter::UpdateReloadTime(float newSecPerShot)
+{
+	this->timeToReload = newSecPerShot;
+}
+
+void AAICharacter::UpdateProjectileStats(float damage, float speed, bool isBouncing, float gravityScale)
+{
+	this->attackDamage = damage;
+	this->projectileSpeed = speed;
+	this->hasBouncingAttack = isBouncing;
+	this->projectileGravityScale = gravityScale;
+}
+
 //Function for object pooling implementation
 void AAICharacter::SetActorActivation(bool state)
 {
