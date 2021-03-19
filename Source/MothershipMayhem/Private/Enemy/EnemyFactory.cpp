@@ -7,12 +7,10 @@
 #include "Enemy/EnemyController.h"
 #include "Engine/AssetManager.h"
 #include "Enemy/EnemyDataAsset.h"
+#include "FameManager.h"
 
 namespace EnemyFactory
-{
-    float currentFame;
-    float maxFame;
-	
+{	
 	void InitializeEnemy(FString name, AAICharacter* character, AEnemyController* controller)
 	{
         UAssetManager& assetManager = UAssetManager::Get();
@@ -29,15 +27,17 @@ namespace EnemyFactory
                     character->GetMesh()->SetSkeletalMesh(enemyData->CharacterMesh);
                     character->projectileClass = enemyData->projectileClass;
 
-                    character->enemyStats->SetMaxHP(FMath::Lerp(enemyData->MaxHP, enemyData->MaxFameMaxHP, currentFame / maxFame));
-                    character->UpdateReloadTime(FMath::Lerp(enemyData->SecPerShot, enemyData->MaxFameSecPerShot, currentFame / maxFame));
-                    character->UpdateProjectileStats(FMath::Lerp(enemyData->AttackDamage, enemyData->MaxFameAttackDamage, currentFame / maxFame), 
+                    float fameScaling = (FameManager::GetCurrentRank() - 1) / (FameManager::GetMaxRank() - 1);
+                	
+                    character->enemyStats->SetMaxHP(FMath::Lerp(enemyData->MaxHP, enemyData->MaxFameMaxHP, fameScaling));
+                    character->UpdateReloadTime(FMath::Lerp(enemyData->SecPerShot, enemyData->MaxFameSecPerShot, fameScaling));
+                    character->UpdateProjectileStats(FMath::Lerp(enemyData->AttackDamage, enemyData->MaxFameAttackDamage, fameScaling),
                         enemyData->projectileSpeed,
                         enemyData->isBouncingProjectile, enemyData->projectileGravityScale);
 
-                    controller->UpdateAttackRange(FMath::Lerp(enemyData->AttackRange, enemyData->MaxFameAttackRange, currentFame / maxFame));
-                    controller->UpdateRunSpeed(FMath::Lerp(enemyData->RunSpeed, enemyData->MaxFameRunSpeed, currentFame / maxFame));
-                    controller->UpdateWalkSpeed(FMath::Lerp(enemyData->WalkSpeed, enemyData->MaxFameWalkSpeed, currentFame / maxFame));
+                    controller->UpdateAttackRange(FMath::Lerp(enemyData->AttackRange, enemyData->MaxFameAttackRange, fameScaling));
+                    controller->UpdateRunSpeed(FMath::Lerp(enemyData->RunSpeed, enemyData->MaxFameRunSpeed, fameScaling));
+                    controller->UpdateWalkSpeed(FMath::Lerp(enemyData->WalkSpeed, enemyData->MaxFameWalkSpeed, fameScaling));
                     return;
                 }
             }
@@ -76,15 +76,5 @@ namespace EnemyFactory
         {
             UE_LOG(LogTemp, Warning, TEXT("EnemyData does not exist"));
         }
-    }
-
-    void SetCurrentFame(float fame)
-    {
-        currentFame = fame;
-    }
-
-    void SetMaxFame(float fame)
-    {
-        maxFame = fame;
     }
 }
