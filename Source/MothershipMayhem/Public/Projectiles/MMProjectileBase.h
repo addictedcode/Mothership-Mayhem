@@ -34,7 +34,8 @@ protected:
 	//float currentLifePeriod = 0;
 
 	//Projectile Stats
-	float damage = 0;
+	UPROPERTY(BlueprintReadOnly)
+		float damage = 0;
 	float projectileSpeed = 3000.0f;
 
 	TArray<class UMMProjectileEffectBase*>* projectileEffects;
