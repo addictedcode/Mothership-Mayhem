@@ -254,6 +254,11 @@ void AMMGunBase::Reload()
 
 void AMMGunBase::UpdateStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
 
+	this->gunStats.damage.RemoveAllAdditionModifiers();
+	this->gunStats.fireRate.RemoveAllMultiplicativeModifiers();
+	this->gunStats.reloadTime.RemoveAllMultiplicativeModifiers();
+	this->gunStats.maxAmmo.RemoveAllAdditionModifiers();
+
 	this->gunStats.damage.AddAdditionModifier(attack);
 	this->gunStats.fireRate.AddMultiplicativeModifier(fireRate);
 	this->gunStats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
