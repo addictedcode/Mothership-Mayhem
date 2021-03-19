@@ -7,7 +7,7 @@
 #include "Enemy/EnemyController.h"
 #include "Engine/AssetManager.h"
 #include "Enemy/EnemyDataAsset.h"
-#include "FameManager.h"
+#include "FameSystem/FameManager.h"
 
 namespace EnemyFactory
 {	
