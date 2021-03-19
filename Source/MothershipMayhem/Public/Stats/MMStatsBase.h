@@ -14,7 +14,7 @@ protected:
 	float baseValue; //base value to be added / times to final value
 	float finalValue; //total value of the base value added / times with the modifiers
 
-	TArray<float> addictionModifiers; //Modifiers to be added to the baseValue
+	TArray<float> additionModifiers; //Modifiers to be added to the baseValue
 	TArray<float> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
 
 public:
@@ -24,8 +24,8 @@ public:
 	float GetBaseValue() const { return baseValue; };
 	void SetBaseValue(float& newValue) { baseValue = newValue; UpdateFinalValue(); };
 
-	void AddAdditionModifier(float newValue) { addictionModifiers.Add(newValue); UpdateFinalValue(); };
-	void RemoveAddictionModifier(float& value) { addictionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
+	void AddAdditionModifier(float newValue) { additionModifiers.Add(newValue); UpdateFinalValue(); };
+	void RemoveAdditionModifier(float& value) { additionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 	
 	void AddMultiplicativeModifier(float newValue) { multiplicativeModifiers.Add(newValue); UpdateFinalValue(); };
 	void RemoveMultiplicativeModifier(float& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
