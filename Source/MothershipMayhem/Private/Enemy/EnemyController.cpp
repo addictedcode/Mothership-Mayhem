@@ -23,8 +23,6 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 			BlackboardComp->SetValueAsFloat(BlackboardRunSpeed, 500.0f);
 			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 800.0f);
 
-			EnemyFactory::SetCurrentFame(0);
-			EnemyFactory::SetMaxFame(10);
 			EnemyFactory::InitializeEnemy("baseEnemy", AICharacter, this);
 		}
 
