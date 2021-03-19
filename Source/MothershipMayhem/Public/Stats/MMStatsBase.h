@@ -31,7 +31,7 @@ public:
 	void RemoveMultiplicativeModifier(float& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 
 	void RemoveAllMultiplicativeModifiers() { multiplicativeModifiers.Empty(); UpdateFinalValue(); }
-	void RemoveAllAdditionModifiers() { addictionModifiers.Empty(); UpdateFinalValue(); }
+	void RemoveAllAdditionModifiers() { additionModifiers.Empty(); UpdateFinalValue(); }
 protected:
 	//Add the additionModifiers first to the baseValue then multiply with multiplicativeModifiers, then set finalValue with the result
 	void UpdateFinalValue();
