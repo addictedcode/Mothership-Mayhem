@@ -24,7 +24,6 @@ namespace EnemyFactory
             UEnemyDataAsset* enemyData = Cast<UEnemyDataAsset>(data.GetAsset());
             if (enemyData) {
                 if (enemyData->name == name) {
-                    character->GetMesh()->SetSkeletalMesh(enemyData->CharacterMesh);
                     character->projectileClass = enemyData->projectileClass;
 
                     float fameScaling = (FameManager::GetCurrentRank() - 1) / (FameManager::GetMaxRank() - 1);
@@ -60,7 +59,6 @@ namespace EnemyFactory
         UEnemyDataAsset* enemyData = Cast<UEnemyDataAsset>(enemyList[index].GetAsset());
 
         if (enemyData) {
-            character->GetMesh()->SetSkeletalMesh(enemyData->CharacterMesh);
             character->projectileClass = enemyData->projectileClass;
 
             character->enemyStats->SetMaxHP(enemyData->MaxHP);

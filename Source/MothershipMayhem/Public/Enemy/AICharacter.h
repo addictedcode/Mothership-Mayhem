@@ -44,6 +44,8 @@ public:
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		AActor* bulletPool;
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		UChildActorComponent* ProjectileLaunchArea;
 	#pragma endregion
 	
 	class UEnemyStatsComponent* enemyStats;
