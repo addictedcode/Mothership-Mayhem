@@ -18,6 +18,11 @@ AAICharacter::AAICharacter()
 	enemyStats = CreateDefaultSubobject<UEnemyStatsComponent>(TEXT("StatsComponent"));
 	enemyStats->movementComponent = GetCharacterMovement();
 	#pragma  endregion
+
+	#pragma region ProjectileLaunchArea
+	ProjectileLaunchArea = CreateDefaultSubobject<UChildActorComponent>(TEXT("ProjectileLaunchArea"));
+	ProjectileLaunchArea->SetupAttachment(GetMesh());
+	#pragma endregion
 }
 
 // Called when the game starts or when spawned
@@ -63,28 +68,12 @@ void AAICharacter::AttackTarget(AActor* target)
 		{
 			return;
 		}
-
-		AActor* owner = this;
-		//Get Spawn Location and Rotation for the projectile to spawn
-		FRotator SpawnRotation = owner->GetActorRotation();
-		FVector SpawnLocation = owner->GetActorLocation();
-		FVector lineToTarget = target->GetActorLocation() - GetMesh()->GetComponentLocation();
 		
-		if (GetMesh() != nullptr)
-		{
-			//SpawnRotation = GetMesh()->GetRelativeRotation();
-			lineToTarget.Z = 0;
-			lineToTarget.Normalize();
-			FVector spawnPoint = FVector(100 * lineToTarget.X, 100 * lineToTarget.Y, 100);
-			SpawnLocation = GetMesh()->GetComponentLocation() + spawnPoint;
-		}
+		//Get Spawn Location and Rotation for the projectile to spawn
+		FVector SpawnLocation = this->ProjectileLaunchArea->GetComponentLocation();
+		FVector lineToTarget = target->GetActorLocation() - ProjectileLaunchArea->GetComponentLocation();
 
-		//Apply Weapon Spread
-		const FRotator weaponSpread = FRotator(0,
-			0, 0);
-		FVector spreadVector = SpawnRotation.Vector();;
-		spreadVector = weaponSpread.RotateVector(spreadVector);
-		SpawnRotation = lineToTarget.Rotation();
+		FRotator SpawnRotation = lineToTarget.Rotation();
 
 		//Set Spawn Collision Handling Override
 		FActorSpawnParameters ActorSpawnParams;
