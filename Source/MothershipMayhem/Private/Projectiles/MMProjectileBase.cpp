@@ -109,6 +109,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		{
 			UEnemyStatsComponent* enemyStats = enemy->enemyStats;
 			if (enemyStats != nullptr) {
+				UE_LOG(LogTemp, Display, TEXT("%f"), damage);
 				enemyStats->TakeDamage(damage);
 				//enemyStats->ApplyStatusEffect(DISORIENTED);
 

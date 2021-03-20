@@ -18,9 +18,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Description")
 		FString name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
-		USkeletalMesh* CharacterMesh;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 
