@@ -2,15 +2,24 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "MMGunFactory.generated.h"
+
 class AMMGunBase;
 class UMMGunDataAsset;
-
-namespace GunFactory
+/**
+ * 
+ */
+UCLASS()
+class MOTHERSHIPMAYHEM_API UMMGunFactory : public UBlueprintFunctionLibrary
 {
+	GENERATED_BODY()
+public:
 	//Creates the gun with name or index
-	AMMGunBase* CreateGun(FString name, UWorld* const world);
-	AMMGunBase* CreateGun(int index, UWorld* const world);
+	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateGunWithName(FString name, UWorld* const world);
+	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateGunWithIndex(int index, UWorld* const world);
 
 	//Instantiate gun object to world
-	AMMGunBase* SpawnGun(UMMGunDataAsset* gunData, UWorld* const world);
-}
+	UFUNCTION(BlueprintCallable) static AMMGunBase* SpawnGun(UMMGunDataAsset* gunData, UWorld* const world);
+};

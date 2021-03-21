@@ -3,7 +3,6 @@
 
 #include "Mod/MMModFactory.h"
 #include "Engine/AssetManager.h"
-#include "Gun/MMGunFactory.h"
 #include "Mod/MMModBase.h"
 #include "Mod/MMModDataAsset.h"
 
