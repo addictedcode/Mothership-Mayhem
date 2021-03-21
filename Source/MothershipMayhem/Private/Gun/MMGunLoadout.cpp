@@ -25,9 +25,9 @@ void UMMGunLoadout::BeginPlay()
 	// ...
 	UWorld* world = this->GetWorld();
 	
-	ChangeGun(GunFactory::CreateGun("Pistol", world), 0);
-	ChangeGun(GunFactory::CreateGun("MachineGun", world), 1);
-	ChangeGun(GunFactory::CreateGun("Sniper", world), 2);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Pistol", world), 0);
+	ChangeGun(UMMGunFactory::CreateGunWithName("MachineGun", world), 1);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Sniper", world), 2);
 }
 
 void UMMGunLoadout::OnPrimaryShootPressed()
