@@ -6,6 +6,13 @@
 #include "Engine/DataAsset.h"
 #include "MMModDataAsset.generated.h"
 
+UENUM(BlueprintType)
+enum class MMModType : uint8
+{
+	Basic = 0 UMETA(DisplayName = "Basic"),
+	ProjectileEffect = 1 UMETA(DisplayName = "ProjectileEffect"),
+};
+
 /**
  * 
  */
@@ -15,6 +22,9 @@ class MOTHERSHIPMAYHEM_API UMMModDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		TEnumAsByte<MMModType> modType;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
 
