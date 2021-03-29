@@ -20,6 +20,12 @@ public:
 		TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		class AEnemyPool* enemyPool;
+
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		int EnemiesToSpawn = 1;
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+		float SpawnCooldown = 10.0f;
+
 	
 protected:
 	// Called when the game starts
@@ -32,7 +38,7 @@ public:
 private:
 	AActor* SpawnPoint;
 
-	float SpawnCooldown = 10.0f;
+	int EnemiesSpawned = 0;
 	float TimeSinceLastSpawn = 0.0f;
 	float currentTime = 0.0f;
 

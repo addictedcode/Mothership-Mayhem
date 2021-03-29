@@ -34,11 +34,13 @@ void USpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 	this->TimeSinceLastSpawn += DeltaTime;
 	this->currentTime += DeltaTime;
-	if (this->TimeSinceLastSpawn >= this->SpawnCooldown)
+	if (this->TimeSinceLastSpawn >= this->SpawnCooldown &&
+			this->EnemiesToSpawn > this->EnemiesSpawned)
 	{
 		if (this->SpawnPoint != nullptr) {
 			this->TimeSinceLastSpawn = 0.0f;
 			SpawnEnemy();
+			this->EnemiesSpawned++;
 		}
 		else
 		{
