@@ -2,7 +2,7 @@
 
 
 #include "FameSystem/FameSystemCommunicator.h"
-#include "FameSystem/FameManager.h"
+#include "Enemy/EnemyFactory.h"
 
 // Sets default values
 AFameSystemCommunicator::AFameSystemCommunicator()
@@ -19,38 +19,8 @@ void AFameSystemCommunicator::BeginPlay()
 	
 }
 
-void AFameSystemCommunicator::GainFame(int increase)
+void AFameSystemCommunicator::SetRankScaling(float currentRank, float maxRank)
 {
-	FameManager::GainFame(increase);
-}
-
-bool AFameSystemCommunicator::CanRankUp()
-{
-	return FameManager::CanRankUp();
-}
-
-void AFameSystemCommunicator::RankUp()
-{
-	FameManager::RankUp();
-}
-
-float AFameSystemCommunicator::GetCurrentRank()
-{
-	return FameManager::GetCurrentRank();
-}
-
-float AFameSystemCommunicator::GetMaxRank()
-{
-	return FameManager::GetMaxRank();
-}
-
-void AFameSystemCommunicator::ResetRank()
-{
-	FameManager::ResetRank();
-}
-
-void AFameSystemCommunicator::SetRank(int rank, int points)
-{
-	FameManager::SetRank(rank, points);
+	EnemyFactory::SetFameScaling(currentRank, maxRank);
 }
 

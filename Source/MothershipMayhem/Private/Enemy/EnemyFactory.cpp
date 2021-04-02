@@ -7,16 +7,15 @@
 #include "Enemy/EnemyController.h"
 #include "Engine/AssetManager.h"
 #include "Enemy/EnemyDataAsset.h"
-#include "FameSystem/FameManager.h"
 
 namespace EnemyFactory
-{	
+{
+    float fameScaling;
 	void InitializeEnemy(FString name, AAICharacter* character, AEnemyController* controller)
 	{
         UAssetManager& assetManager = UAssetManager::Get();
         TArray<FAssetData> enemyList;
         assetManager.GetPrimaryAssetDataList("Enemies", enemyList);
-
         
         //find enemy data with name
         for (FAssetData data : enemyList)
@@ -25,8 +24,6 @@ namespace EnemyFactory
             if (enemyData) {
                 if (enemyData->name == name) {
                     character->projectileClass = enemyData->projectileClass;
-
-                    float fameScaling = (FameManager::GetCurrentRank() - 1) / (FameManager::GetMaxRank() - 1);
                 	
                     character->enemyStats->SetMaxHP(FMath::Lerp(enemyData->MaxHP, enemyData->MaxFameMaxHP, fameScaling));
                     character->UpdateReloadTime(FMath::Lerp(enemyData->SecPerShot, enemyData->MaxFameSecPerShot, fameScaling));
@@ -75,4 +72,9 @@ namespace EnemyFactory
             UE_LOG(LogTemp, Warning, TEXT("EnemyData does not exist"));
         }
     }
+
+	void SetFameScaling(float currentRank, float maxRank)
+	{
+        fameScaling = (currentRank - 1) / (maxRank - 1);
+	}
 }
