@@ -9,4 +9,5 @@ namespace EnemyFactory
 {
 	void InitializeEnemy(FString name, AAICharacter* character, AEnemyController* controller);
 	void InitializeEnemy(int index, AAICharacter* character, AEnemyController* controller);
+	void SetFameScaling(float currentRank, float maxRank);
 }

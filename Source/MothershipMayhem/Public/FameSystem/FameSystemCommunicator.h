@@ -21,19 +21,5 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void GainFame(int increase);
-	UFUNCTION(BlueprintCallable)
-		bool CanRankUp();
-	UFUNCTION(BlueprintCallable)
-		void RankUp();
-
-	UFUNCTION(BlueprintCallable)
-		float GetCurrentRank();
-	UFUNCTION(BlueprintCallable)
-		float GetMaxRank();
-
-	UFUNCTION(BlueprintCallable)
-		void ResetRank();
-	UFUNCTION(BlueprintCallable)
-		void SetRank(int rank, int points);
+		void SetRankScaling(float currentRank, float maxRank);
 };
