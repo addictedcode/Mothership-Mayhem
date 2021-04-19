@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	UPROPERTY(EditAnywhere, Category = "Spawning")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 		TSubclassOf<AActor> ActorToSpawn;
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 		class AEnemyPool* enemyPool;
