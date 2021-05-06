@@ -6,10 +6,11 @@
 
 #include "Mod/MMModFactory.h"
 
-void UMMModBase::InitializeMod(FModStats& newAdditiveModStats, FModStats& newMultiplicativeModStats)
+UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, FModStats newMultiplicativeModStats)
 {
 	additiveModStats = newAdditiveModStats;
 	multiplicativeModStats = newMultiplicativeModStats;
+	return this;
 }
 
 void UMMModBase::AddToGun(AMMGunBase* gun)

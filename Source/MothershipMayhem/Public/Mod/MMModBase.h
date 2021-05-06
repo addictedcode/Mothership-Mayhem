@@ -11,14 +11,14 @@ struct FModStats
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly) float fireRate;
-	UPROPERTY(BlueprintReadOnly) float reloadTime;
-	UPROPERTY(BlueprintReadOnly) float maxAmmo;
-	UPROPERTY(BlueprintReadOnly) float accuracy;
-	UPROPERTY(BlueprintReadOnly) float numberOfProjectilesToShoot;
-	UPROPERTY(BlueprintReadOnly) float damage;
-	UPROPERTY(BlueprintReadOnly) float projectileSpeed;
-	UPROPERTY(BlueprintReadOnly) float projectileGravityScale;
+	UPROPERTY(BlueprintReadWrite) float fireRate;
+	UPROPERTY(BlueprintReadWrite) float reloadTime;
+	UPROPERTY(BlueprintReadWrite) float maxAmmo;
+	UPROPERTY(BlueprintReadWrite) float accuracy;
+	UPROPERTY(BlueprintReadWrite) float numberOfProjectilesToShoot;
+	UPROPERTY(BlueprintReadWrite) float damage;
+	UPROPERTY(BlueprintReadWrite) float projectileSpeed;
+	UPROPERTY(BlueprintReadWrite) float projectileGravityScale;
 };
 
 /**
@@ -37,9 +37,9 @@ protected:
 
 public:
 	//Called when creating a mod
-	UFUNCTION(BlueprintCallable) virtual void InitializeMod(
-		UPARAM(DisplayName = "Additive Mod Stats") FModStats& newAdditiveModStats,
-		UPARAM(DisplayName = "Multiplicative Mod Stats") FModStats& newMultiplicativeModStats);
+	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
+		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,
+		UPARAM(DisplayName = "New Multiplicative Mod Stats") FModStats newMultiplicativeModStats);
 
 	//Called when added a mod to a gun
 	UFUNCTION(BlueprintCallable) virtual void AddToGun(
