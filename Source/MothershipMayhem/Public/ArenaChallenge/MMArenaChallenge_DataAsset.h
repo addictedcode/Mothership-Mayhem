@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class MOTHERSHIPMAYHEM_API UMMArenaChallenge_DataAsset : public UDataAsset
 {
 	GENERATED_BODY()
@@ -25,5 +25,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawns")
 		TArray<class UMMEnemyWave_DataAsset*> spawnList;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rewards")
+		int money;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rewards")
+		int famePoints;
 
 };
