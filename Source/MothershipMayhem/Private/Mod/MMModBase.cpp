@@ -6,10 +6,12 @@
 
 #include "Mod/MMModFactory.h"
 
-UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, FModStats newMultiplicativeModStats)
+UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, FModStats newMultiplicativeModStats, FString newName)
 {
 	additiveModStats = newAdditiveModStats;
 	multiplicativeModStats = newMultiplicativeModStats;
+	name = newName;
+	UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *name, *newName);
 	return this;
 }
 
