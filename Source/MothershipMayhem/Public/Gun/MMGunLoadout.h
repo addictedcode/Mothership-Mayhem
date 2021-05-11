@@ -40,6 +40,8 @@ public:
 
 	//object pool for the bullets
 	AActor** bulletPool;
+	UPROPERTY(BlueprintReadWrite)
+		TArray<class AMMGunBase*> gunList;
 
 protected:
 	/**Gun */

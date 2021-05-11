@@ -129,7 +129,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
-
+	UFUNCTION(BlueprintCallable)
+		FGunStats GetFinalStats();
 
 	UFUNCTION(BlueprintPure) TArray<class UMMModBase*>& GetModList();
 
