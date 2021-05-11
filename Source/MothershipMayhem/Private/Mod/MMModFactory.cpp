@@ -7,7 +7,7 @@
 #include "Mod/MMModDataAsset.h"
 
 
-UMMModBase* UMMModFactory::CreateModWithName(FString name)
+UMMModBase* UMMModFactory::CreateModWithName(FString name) 
 {
     //Get mod list from asset manager
     UAssetManager& assetManager = UAssetManager::Get();
@@ -69,6 +69,7 @@ UMMModBase* UMMModFactory::InstantiateMod(UMMModDataAsset* modData)
     newMultiplicativeStats.reloadTime = modData->multiply_reloadTime;
 	
     UMMModBase* newMod = NewObject<UMMModBase>();
-    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats);
+
+    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->name);
     return newMod;
 }

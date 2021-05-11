@@ -36,10 +36,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly) FModStats multiplicativeModStats;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
+		FString name;
 	//Called when creating a mod
 	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
 		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,
-		UPARAM(DisplayName = "New Multiplicative Mod Stats") FModStats newMultiplicativeModStats);
+		UPARAM(DisplayName = "New Multiplicative Mod Stats") FModStats newMultiplicativeModStats,
+		FString newName);
 
 	//Called when added a mod to a gun
 	UFUNCTION(BlueprintCallable) virtual void AddToGun(
