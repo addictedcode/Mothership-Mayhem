@@ -54,6 +54,29 @@ FGunStats AMMGunBase::GetStats()
 
 	return statsToReturn;
 }
+FGunStats AMMGunBase::GetFinalStats()
+{
+	// make sure to include the final values later on
+
+	FGunStats statsToReturn;
+
+	statsToReturn.fireRate = gunStats.fireRate.GetFinalValue();
+	statsToReturn.reloadTime = gunStats.reloadTime.GetFinalValue();
+
+	statsToReturn.maxAmmo = gunStats.maxAmmo.GetFinalValue();
+	//statsToReturn.currentAmmo = gunStats.accuracy.GetBaseValue();
+	statsToReturn.currentAmmo = gunStats.currentAmmo; // THIS IS ONLY FOR TESTING
+
+	statsToReturn.accuracy = gunStats.accuracy.GetFinalValue();
+	statsToReturn.isAutomatic = gunStats.isAutomatic;
+
+	statsToReturn.numberOfProjectilesToShoot = gunStats.numberOfProjectilesToShoot.GetBaseValue();
+
+	statsToReturn.damage = gunStats.damage.GetFinalValue();
+	statsToReturn.projectileSpeed = gunStats.projectileSpeed.GetFinalValue();
+
+	return statsToReturn;
+}
 
 TArray<UMMModBase*>& AMMGunBase::GetModList()
 {
