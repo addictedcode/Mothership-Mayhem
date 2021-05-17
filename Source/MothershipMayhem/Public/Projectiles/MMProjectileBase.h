@@ -6,6 +6,13 @@
 #include "GameFramework/Actor.h"
 #include "MMProjectileBase.generated.h"
 
+UENUM(BlueprintType)
+enum class owningFaction : uint8
+{
+	Player UMETA(DisplayName="Player"),
+	Enemy UMETA(DisplayName="Enemy")
+};
+
 UCLASS()
 class MOTHERSHIPMAYHEM_API AMMProjectileBase : public AActor
 {
@@ -51,7 +58,10 @@ public:
 	void SetActorActivation(bool state);
 	AActor* parentPool;
 
-	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects);
+	UPROPERTY(BlueprintReadOnly)
+		owningFaction faction;
+
+	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction);
 protected:
 	UFUNCTION()
 		void OnLifespanEnd();
