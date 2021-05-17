@@ -74,13 +74,14 @@ void AMMProjectileBase::BeginPlay()
 //	}
 //}
 
-void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects)
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction)
 {
 	damage = newDamage;
 	projectileSpeed = newProjectileSpeed;
 	projectileEffects = newProjectileEffects;
 	projectileMovement->bShouldBounce = isProjectileBounce;
 	projectileMovement->ProjectileGravityScale = gravityScale;
+	faction = newFaction;
 }
 
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -103,31 +104,32 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		{
 			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 		}
+		if (faction == owningFaction::Player) {
+			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
+			if (enemy != nullptr)
+			{
+				UEnemyStatsComponent* enemyStats = enemy->enemyStats;
+				if (enemyStats != nullptr) {
+					enemyStats->TakeDamage(damage);
+					//enemyStats->ApplyStatusEffect(DISORIENTED);
 
-		AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
-		if (enemy != nullptr)
-		{
-			UEnemyStatsComponent* enemyStats = enemy->enemyStats;
-			if (enemyStats != nullptr) {
-				enemyStats->TakeDamage(damage);
-				//enemyStats->ApplyStatusEffect(DISORIENTED);
-
-				//Calls all ApplyEffects (MMProjectileEffectBase) from a pointer to the MMGunBase class, projectileEffects TArray
-				if (projectileEffects != nullptr) {
-					for (UMMProjectileEffectBase* effect : *projectileEffects)
-					{
-						effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
+					//Calls all ApplyEffects (MMProjectileEffectBase) from a pointer to the MMGunBase class, projectileEffects TArray
+					if (projectileEffects != nullptr) {
+						for (UMMProjectileEffectBase* effect : *projectileEffects)
+						{
+							effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
+						}
 					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
 				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
+				//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 			}
-		}
-		else
-		{
-			//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 		}
 	}
 	else{

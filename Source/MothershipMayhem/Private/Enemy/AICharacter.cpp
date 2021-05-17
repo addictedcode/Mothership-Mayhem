@@ -89,7 +89,7 @@ void AAICharacter::AttackTarget(AActor* target)
 				if (projectile)
 				{
 					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack, 
-						this->projectileGravityScale, nullptr);
+						this->projectileGravityScale, nullptr, owningFaction::Enemy);
 				}
 			}
 			else
