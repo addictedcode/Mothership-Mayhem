@@ -11,7 +11,6 @@ UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, FModStats n
 	additiveModStats = newAdditiveModStats;
 	multiplicativeModStats = newMultiplicativeModStats;
 	name = newName;
-	UE_LOG(LogTemp, Warning, TEXT("%s, %s"), *name, *newName);
 	return this;
 }
 
@@ -87,6 +86,8 @@ void UMMModBase::AddToGun(AMMGunBase* gun)
 	{
 		gunStats.maxAmmo.AddMultiplicativeModifier(multiplicativeModStats.maxAmmo);
 	}
+
+	//
 	//End Multiplicative Stats
 }
 

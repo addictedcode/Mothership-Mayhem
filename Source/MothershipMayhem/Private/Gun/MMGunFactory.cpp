@@ -49,6 +49,49 @@ AMMGunBase* UMMGunFactory::CreateGunWithIndex(int index, UWorld* const world)
     return UMMGunFactory::SpawnGun(gunData, world);
 
 }
+AMMGunBase* UMMGunFactory::CreateBPGunWithName(FString name, UWorld* const world)
+{
+    //Get gun list from asset manager
+    UAssetManager& assetManager = UAssetManager::Get();
+    TArray<FAssetData> gunList;
+    assetManager.GetPrimaryAssetDataList("Guns", gunList);
+
+    //find gun data with name
+    UMMGunDataAsset* foundGunData = NULL;
+    for (FAssetData data : gunList)
+    {
+        UMMGunDataAsset* gunData = Cast<UMMGunDataAsset>(data.GetAsset());
+        if (gunData->name == name) {
+            foundGunData = gunData;
+            break;
+        }
+    }
+
+    //Spawn gun
+    return UMMGunFactory::SpawnBPGun(foundGunData, world);
+}
+
+//Spawns the gun actor to world with the index found the in asset manager type "Guns"
+AMMGunBase* UMMGunFactory::CreateBPGunWithIndex(int index, UWorld* const world)
+{
+    //Get gun list from asset manager
+    UAssetManager& assetManager = UAssetManager::Get();
+    TArray<FAssetData> gunList;
+    assetManager.GetPrimaryAssetDataList("Guns", gunList);
+
+    //if index outside of gunlist, return null
+    if (index < 0 || index >= gunList.Num())
+    {
+        return NULL;
+    }
+
+    UMMGunDataAsset* gunData = Cast<UMMGunDataAsset>(gunList[index].GetAsset());
+
+    //Spawn Gun
+    return UMMGunFactory::SpawnBPGun(gunData, world);
+
+}
+
 
 //Instantiate gun object to world
 AMMGunBase* UMMGunFactory::SpawnGun(UMMGunDataAsset* gunData, UWorld* const world)
@@ -57,8 +100,45 @@ AMMGunBase* UMMGunFactory::SpawnGun(UMMGunDataAsset* gunData, UWorld* const worl
         AActor* newObject = world->SpawnActor<AMMGunBase>();
         AMMGunBase* newGun = Cast<AMMGunBase>(newObject);
 
+        
+
         //set gun stats
         newGun->SetMesh(gunData->gunMesh);
+        newGun->SetSkeletalMesh(gunData->gunSkeletalMesh);
+        newGun->SetRecoilAnimation(gunData->recoilAnim);
+        newGun->SetProjectile(gunData->projectileClass);
+
+        TGunStats& gunStats = newGun->GetGunStats();
+        gunStats.fireRate.SetBaseValue(gunData->fireRate);
+        gunStats.maxAmmo.SetBaseValue(gunData->maxAmmo);
+        gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
+        gunStats.reloadTime.SetBaseValue(gunData->reloadTime);
+        gunStats.isAutomatic = gunData->isAutomatic;
+        gunStats.accuracy.SetBaseValue(gunData->accuracy);
+        gunStats.numberOfProjectilesToShoot.SetBaseValue(gunData->numberOfProjectilesToShoot);
+        gunStats.damage.SetBaseValue(gunData->damage);
+        gunStats.projectileSpeed.SetBaseValue(gunData->projectileSpeed);
+        gunStats.isBouncingProjectile = gunData->isBouncingProjectile;
+        gunStats.projectileGravityScale.SetBaseValue(gunData->projectileGravityScale);
+
+        return newGun;
+    }
+    return NULL;
+}
+
+AMMGunBase* UMMGunFactory::SpawnBPGun(UMMGunDataAsset* gunData, UWorld* const world)
+{
+    if (world != NULL || gunData != NULL) {
+        /*AActor* newObject = world->SpawnActor<AMMGunBase>();
+        AMMGunBase* newGun = Cast<AMMGunBase>(newObject);*/
+
+        AActor* newObject = world->SpawnActor<AActor>(gunData->gunBP);
+        AMMGunBase* newGun = Cast<AMMGunBase>(newObject);
+
+        //set gun stats
+        //newGun->SetMesh(gunData->gunMesh);
+        //newGun->SetSkeletalMesh(gunData->gunSkeletalMesh);
+        //newGun->SetRecoilAnimation(gunData->recoilAnim);
         newGun->SetProjectile(gunData->projectileClass);
 
         TGunStats& gunStats = newGun->GetGunStats();

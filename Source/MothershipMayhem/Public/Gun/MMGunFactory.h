@@ -20,6 +20,13 @@ public:
 	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateGunWithName(FString name, UWorld* const world);
 	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateGunWithIndex(int index, UWorld* const world);
 
+	//Creates the gun based on BP with name or index
+	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateBPGunWithName(FString name, UWorld* const world);
+	UFUNCTION(BlueprintCallable) static AMMGunBase* CreateBPGunWithIndex(int index, UWorld* const world);
+
 	//Instantiate gun object to world
 	UFUNCTION(BlueprintCallable) static AMMGunBase* SpawnGun(UMMGunDataAsset* gunData, UWorld* const world);
+
+	//Instantiate gun object to world
+	UFUNCTION(BlueprintCallable) static AMMGunBase* SpawnBPGun(UMMGunDataAsset* gunData, UWorld* const world);
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Mod/MMModDataAsset.h"
 #include "MMModBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -38,6 +39,9 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		TEnumAsByte<MMModType> modType;
+
 	//Called when creating a mod
 	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
 		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,

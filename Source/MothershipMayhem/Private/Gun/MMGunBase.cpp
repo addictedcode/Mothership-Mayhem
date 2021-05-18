@@ -16,11 +16,24 @@ AMMGunBase::AMMGunBase()
 
 	#pragma region Gun Mesh
 	// Create a gun mesh component
-	gunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("gunMesh"));
+	/*gunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("gunMesh"));
 	gunMesh->bCastDynamicShadow = false;
 	gunMesh->CastShadow = false;
 	gunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	RootComponent = gunMesh;
+	RootComponent = gunMesh;*/
+
+	skeletalGunMesh = 
+			CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("skeletalGunMesh"));
+	skeletalGunMesh->bCastDynamicShadow = false;
+	skeletalGunMesh->CastShadow = false;
+	skeletalGunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RootComponent = skeletalGunMesh;
+
+	/*static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT
+			("AnimSequence'/Game/Assets/Animations/pistolSkeletal_2_Skeleton_Sequence.pistolSkeletal_2_Skeleton_Sequence'"));
+	
+	recoilAnimation = anim.Object;*/
+
 	#pragma endregion 
 }
 
@@ -91,6 +104,21 @@ void AMMGunBase::SetMesh(UStaticMesh* newStaticMesh)
 	}
 }
 
+void AMMGunBase::SetSkeletalMesh(USkeletalMesh* newSkeletalMesh)
+{
+	if (skeletalGunMesh != NULL)
+	{
+		skeletalGunMesh->SetSkeletalMesh(newSkeletalMesh);
+	}
+}
+
+void AMMGunBase::SetRecoilAnimation(UAnimSequence* newRecoilAnim)
+{
+	if (recoilAnimation != NULL)
+	{
+		recoilAnimation = newRecoilAnim;
+	}
+}
 void AMMGunBase::SetProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass)
 {
 	projectileClass = newProjectileClass;
@@ -115,8 +143,6 @@ void AMMGunBase::OnPrimaryShootPressed()
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(primaryShootTimerHandle, this, &AMMGunBase::PrimaryShoot, gunStats.fireRate.GetFinalValue(), gunStats.isAutomatic, 0.0f);
-
-	
 
 }
 
@@ -194,6 +220,7 @@ void AMMGunBase::PrimaryShoot()
 					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 			if (characterParent != NULL) {
 				characterParent->PlayShootingSound();
+				this->PlayRecoilAnimation();
 			}
 			else {
 				UE_LOG(LogTemp, Error, TEXT("No Character"));
@@ -208,6 +235,18 @@ void AMMGunBase::PrimaryShoot()
 		GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
 		OnReload();
 	}
+
+	/*bool bLoop = false;
+	if (skeletalGunMesh != NULL) {
+		if (recoilAnimation != NULL) {
+			skeletalGunMesh->PlayAnimation(recoilAnimation, bLoop);
+			UE_LOG(LogTemp, Error, TEXT("Recoil! %s"), *recoilAnimation->GetFName().ToString());
+		}
+		else {
+			UE_LOG(LogTemp, Error, TEXT("No Recoil!"));
+		}
+	}*/
+	
 }
 
 
@@ -220,14 +259,22 @@ bool AMMGunBase::ShootProjectile()
 		return false;
 	}
 
-	if (!gunMesh->DoesSocketExist("MuzzlePoint"))
+	/*if (!gunMesh->DoesSocketExist("MuzzlePoint"))
+	{
+		return false;
+	}*/
+
+	if (!skeletalGunMesh->DoesSocketExist("MuzzlePoint"))
 	{
 		return false;
 	}
 
 	//Get Spawn Location and Rotation for the projectile to spawn
-	FRotator SpawnRotation = gunMesh->GetSocketRotation("MuzzlePoint");
-	const FVector SpawnLocation = gunMesh->GetSocketLocation("MuzzlePoint");
+	/*FRotator SpawnRotation = gunMesh->GetSocketRotation("MuzzlePoint");
+	const FVector SpawnLocation = gunMesh->GetSocketLocation("MuzzlePoint");*/
+
+	FRotator SpawnRotation = skeletalGunMesh->GetSocketRotation("MuzzlePoint");
+	const FVector SpawnLocation = skeletalGunMesh->GetSocketLocation("MuzzlePoint");
 
 	//Apply Weapon Spread
 	const FRotator weaponSpread = FRotator(FMath::RandRange(-accuracyAngle, accuracyAngle), 
