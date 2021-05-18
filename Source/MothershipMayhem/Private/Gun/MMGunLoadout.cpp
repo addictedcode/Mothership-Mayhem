@@ -25,9 +25,9 @@ void UMMGunLoadout::BeginPlay()
 	// ...
 	UWorld* world = this->GetWorld();
 	
-	ChangeGun(UMMGunFactory::CreateBPGunWithName("Pistol", world), 0);
-	ChangeGun(UMMGunFactory::CreateBPGunWithName("MachineGun", world), 1);
-	ChangeGun(UMMGunFactory::CreateBPGunWithName("Sniper", world), 2);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Pistol", world), 0);
+	ChangeGun(UMMGunFactory::CreateGunWithName("MachineGun", world), 1);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Sniper", world), 2);
 }
 
 void UMMGunLoadout::OnPrimaryShootPressed()
@@ -138,13 +138,6 @@ void UMMGunLoadout::UpdateGunStats(int index, int attack, float fireRate, float 
 	if (gunList.IsValidIndex(index))
 	{
 		gunList[index]->UpdateStats(index, attack, fireRate, reloadSpeed, magazineSize, accuracy);
-		/*TGunStats stats = gun[index]->GetGunStats();
-		stats.damage.AddAdditionModifier(attack);
-		stats.fireRate.AddMultiplicativeModifier(fireRate);
-		stats.reloadTime.AddMultiplicativeModifier(reloadSpeed);
-		stats.maxAmmo.AddAdditionModifier(magazineSize);
-		stats.accuracy.AddMultiplicativeModifier(accuracy);
-		UE_LOG(LogTemp, Error, TEXT("Gun Updated"));*/
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("No Gun"));

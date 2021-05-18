@@ -91,14 +91,9 @@ public:
 //UE Visible Variables
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */
-	UPROPERTY(VisibleAnywhere, Category = Mesh)
-		class UStaticMeshComponent* gunMesh;
 
 	UPROPERTY(BlueprintReadWrite, Category = Mesh)
 		class USkeletalMeshComponent* skeletalGunMesh;
-
-	UPROPERTY(VisibleAnywhere, Category = Animation)
-		class UAnimSequence* recoilAnimation;
 
 	// Projectile class to shoot
 	UPROPERTY(EditAnywhere, Category = Projectile)
@@ -152,8 +147,6 @@ public:
 
 	TGunStats& GetGunStats() { return gunStats; };
 	
-	void SetMesh(class UStaticMesh*);
 	void SetSkeletalMesh(class USkeletalMesh*);
-	void SetRecoilAnimation(class UAnimSequence*);
 	void SetProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
 };

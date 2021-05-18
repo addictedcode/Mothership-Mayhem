@@ -43,9 +43,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		TArray<class AMMGunBase*> gunList;
 
-	UPROPERTY(BlueprintReadWrite)
-		TArray<TSubclassOf<class AMMGunBase>> BPgunList;
-
 protected:
 	/**Gun */
 	
