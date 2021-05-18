@@ -21,16 +21,7 @@ public:
 		FString name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
-		UStaticMesh* gunMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
-		USkeletalMesh* gunSkeletalMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
 		TSubclassOf<class AMMGunBase> gunBP;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-		UAnimSequence* recoilAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FX")
 		UNiagaraSystem* muzzleFlash;

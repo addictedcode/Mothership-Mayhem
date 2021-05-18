@@ -14,14 +14,6 @@ AMMGunBase::AMMGunBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	#pragma region Gun Mesh
-	// Create a gun mesh component
-	/*gunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("gunMesh"));
-	gunMesh->bCastDynamicShadow = false;
-	gunMesh->CastShadow = false;
-	gunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	RootComponent = gunMesh;*/
-
 	skeletalGunMesh = 
 			CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("skeletalGunMesh"));
 	skeletalGunMesh->bCastDynamicShadow = false;
@@ -96,27 +88,11 @@ TArray<UMMModBase*>& AMMGunBase::GetModList()
 	return modList;
 }
 
-void AMMGunBase::SetMesh(UStaticMesh* newStaticMesh)
-{
-	if (gunMesh != NULL)
-	{
-		gunMesh->SetStaticMesh(newStaticMesh);
-	}
-}
-
 void AMMGunBase::SetSkeletalMesh(USkeletalMesh* newSkeletalMesh)
 {
 	if (skeletalGunMesh != NULL)
 	{
 		skeletalGunMesh->SetSkeletalMesh(newSkeletalMesh);
-	}
-}
-
-void AMMGunBase::SetRecoilAnimation(UAnimSequence* newRecoilAnim)
-{
-	if (recoilAnimation != NULL)
-	{
-		recoilAnimation = newRecoilAnim;
 	}
 }
 void AMMGunBase::SetProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass)
@@ -235,17 +211,6 @@ void AMMGunBase::PrimaryShoot()
 		GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
 		OnReload();
 	}
-
-	/*bool bLoop = false;
-	if (skeletalGunMesh != NULL) {
-		if (recoilAnimation != NULL) {
-			skeletalGunMesh->PlayAnimation(recoilAnimation, bLoop);
-			UE_LOG(LogTemp, Error, TEXT("Recoil! %s"), *recoilAnimation->GetFName().ToString());
-		}
-		else {
-			UE_LOG(LogTemp, Error, TEXT("No Recoil!"));
-		}
-	}*/
 	
 }
 
@@ -259,20 +224,10 @@ bool AMMGunBase::ShootProjectile()
 		return false;
 	}
 
-	/*if (!gunMesh->DoesSocketExist("MuzzlePoint"))
-	{
-		return false;
-	}*/
-
 	if (!skeletalGunMesh->DoesSocketExist("MuzzlePoint"))
 	{
 		return false;
 	}
-
-	//Get Spawn Location and Rotation for the projectile to spawn
-	/*FRotator SpawnRotation = gunMesh->GetSocketRotation("MuzzlePoint");
-	const FVector SpawnLocation = gunMesh->GetSocketLocation("MuzzlePoint");*/
-
 	FRotator SpawnRotation = skeletalGunMesh->GetSocketRotation("MuzzlePoint");
 	const FVector SpawnLocation = skeletalGunMesh->GetSocketLocation("MuzzlePoint");
 
