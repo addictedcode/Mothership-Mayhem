@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Gun/MMGunBase.h"
+#include "NiagaraSystem.h"
 #include "MMGunDataAsset.generated.h"
 
 /**
@@ -20,6 +22,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
 		UStaticMesh* gunMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
+		USkeletalMesh* gunSkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
+		TSubclassOf<class AMMGunBase> gunBP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+		UAnimSequence* recoilAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FX")
+		UNiagaraSystem* muzzleFlash;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
