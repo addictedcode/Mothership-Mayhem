@@ -42,10 +42,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		TEnumAsByte<MMModType> modType;
 
+	//MOD Projectile for Projectile effect mods ===============
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		TSubclassOf<class AMMProjectileBase> projectileClass;
+
 	//Called when creating a mod
 	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
 		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,
 		UPARAM(DisplayName = "New Multiplicative Mod Stats") FModStats newMultiplicativeModStats,
+		TSubclassOf<class AMMProjectileBase> newProjectileClass,
 		FString newName);
 
 	//Called when added a mod to a gun

@@ -28,6 +28,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
 
+	//PROJECTILE
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+		TSubclassOf<class AMMProjectileBase> projectileClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
 		float add_fireRate;
 

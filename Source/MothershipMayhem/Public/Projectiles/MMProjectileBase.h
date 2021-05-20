@@ -44,9 +44,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		float damage = 0;
 	float projectileSpeed = 3000.0f;
-
-	TArray<class UMMProjectileEffectBase*>* projectileEffects;
 public:
+	TArray<class UMMProjectileEffectBase*>* projectileEffects;
+
 	//Move to timer function - Richmond
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;

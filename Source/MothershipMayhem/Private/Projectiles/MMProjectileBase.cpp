@@ -42,7 +42,7 @@ AMMProjectileBase::AMMProjectileBase()
 }
 
 // Called when the game starts or when spawned
-void AMMProjectileBase::BeginPlay()
+void AMMProjectileBase::BeginPlay() 
 {
 	Super::BeginPlay();
 }
