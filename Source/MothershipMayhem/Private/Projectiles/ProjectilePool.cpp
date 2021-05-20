@@ -15,9 +15,15 @@ AProjectilePool::AProjectilePool()
 
 AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc, FRotator rot, FActorSpawnParameters spawnParams)
 {
-	if (this->DisabledSpawns.empty()) {
+	if (this->DisabledSpawns.find(objectClass) == this->DisabledSpawns.end() || this->DisabledSpawns[objectClass].empty()) {
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(objectClass, loc, rot, spawnParams);
-		this->SpawnedPool.push_back(SpawnedActorRef);
+		
+		if (this->SpawnedPool.find(objectClass) == this->SpawnedPool.end()) {
+			std::vector<AActor*> newList;
+			this->SpawnedPool.insert(std::pair<UClass*, std::vector<AActor*>>(objectClass, newList));
+		}
+		
+		this->SpawnedPool[objectClass].push_back(SpawnedActorRef);
 		AMMProjectileBase* projectile = Cast<AMMProjectileBase>(SpawnedActorRef);
 		if (projectile != nullptr)
 		{
@@ -29,8 +35,8 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 	}
 	else
 	{
-		AActor* ReusedActorRef = this->DisabledSpawns.back();
-		this->DisabledSpawns.pop_back();
+		AActor* ReusedActorRef = this->DisabledSpawns[objectClass].back();
+		this->DisabledSpawns[objectClass].pop_back();
 
 		ReusedActorRef->SetActorLocation(loc);
 		ReusedActorRef->SetActorRotation(rot);
@@ -45,7 +51,7 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 			UE_LOG(LogTemp, Warning, TEXT("Actor is not a projectile"));
 		}
 
-		this->SpawnedPool.push_back(ReusedActorRef);
+		this->SpawnedPool[objectClass].push_back(ReusedActorRef);
 
 		return Cast<AMMProjectileBase>(ReusedActorRef);
 	}
@@ -53,8 +59,13 @@ AMMProjectileBase* AProjectilePool::SpawnObject(UClass* objectClass, FVector loc
 
 void AProjectilePool::ReturnObject(AActor* returnedObject)
 {
-	DisabledSpawns.push_back(returnedObject);
-	SpawnedPool.erase(std::find(SpawnedPool.begin(), SpawnedPool.end(), returnedObject));
+	if (this->DisabledSpawns.find(returnedObject->GetClass()) == this->DisabledSpawns.end()) {
+		std::vector<AActor*> newList;
+		this->DisabledSpawns.insert(std::pair<UClass*, std::vector<AActor*>>(returnedObject->GetClass(), newList));
+	}
+	this->DisabledSpawns[returnedObject->GetClass()].push_back(returnedObject);
+	this->SpawnedPool[returnedObject->GetClass()].erase(std::find(
+		this->SpawnedPool[returnedObject->GetClass()].begin(), this->SpawnedPool[returnedObject->GetClass()].end(), returnedObject));
 }
 
 // Called when the game starts or when spawned

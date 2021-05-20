@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "unordered_map"
 #include "ProjectilePool.generated.h"
 
 UCLASS()
@@ -29,6 +30,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	std::vector<AActor*> SpawnedPool;
-	std::vector<AActor*> DisabledSpawns;
+	std::unordered_map<UClass*, std::vector<AActor*>> SpawnedPool;
+	std::unordered_map<UClass*, std::vector<AActor*>> DisabledSpawns;
 };
