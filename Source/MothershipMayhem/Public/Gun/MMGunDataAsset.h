@@ -24,7 +24,7 @@ public:
 		TSubclassOf<class AMMGunBase> gunBP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FX")
-		UNiagaraSystem* muzzleFlash;
+		UNiagaraSystem* muzzleFlashFX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;

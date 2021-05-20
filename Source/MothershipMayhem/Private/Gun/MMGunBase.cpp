@@ -98,6 +98,16 @@ void AMMGunBase::SetSkeletalMesh(USkeletalMesh* newSkeletalMesh)
 void AMMGunBase::SetProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass)
 {
 	projectileClass = newProjectileClass;
+	
+}
+void AMMGunBase::SetDefaultProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass)
+{
+	defaultProjectileClass = newProjectileClass;
+}
+
+void AMMGunBase::SetMuzzleFlash(UNiagaraSystem* newMuzzleFlashFX)
+{
+	muzzleFlashFX = newMuzzleFlashFX;
 }
 
 
@@ -144,6 +154,22 @@ void AMMGunBase::AddMod(UMMModBase* newMod)
 {
 	newMod->AddToGun(this);
 	modList.Add(newMod);
+	// if this is the first mod added, change the projectile class
+	if (modList.Num() == 1) {
+		this->SetProjectile(modList[0]->projectileClass);
+	}
+	//// if this is not the first mod added, add to projectile effects instead.
+	//else {
+	//	TArray<UMMProjectileEffectBase*> effectsList;
+	//	effectsList = *Cast<AMMProjectileBase>(newMod->projectileClass)->projectileEffects;
+	//	for (int i = 0;
+	//		i < Cast<AMMProjectileBase>(newMod->projectileClass)->projectileEffects->Num();
+	//		i++) {
+	//		projectileEffects.Add(
+	//			effectsList[i]
+	//		);
+	//	}
+	//}
 }
 
 void AMMGunBase::RemoveModByMod(UMMModBase* mod)
@@ -155,7 +181,32 @@ void AMMGunBase::RemoveModByMod(UMMModBase* mod)
 UMMModBase* AMMGunBase::RemoveModByIndex(int index)
 {
 	UMMModBase* removedMod = modList[index];
+	removedMod->RemoveFromGun(this);
 	modList.RemoveAt(index);
+	// if the mod at index 0 is removed, update new projectile with the new mod at index 0
+	if (modList.Num() > 0) {
+		if (index == 0) {
+			SetProjectile(modList[0]->projectileClass);
+		}
+	}
+	else if(modList.Num() == 0){
+		SetProjectile(defaultProjectileClass);
+		UE_LOG(LogTemp, Error, TEXT("Projectile reset!"));
+	}
+	UE_LOG(LogTemp, Error, TEXT("gamer!"));
+
+	////getting the index where the removedmod's effects start ==============
+	//int effectsIndex = 0;
+	//for (int i = 0; i < index; i++) {
+	//	effectsIndex += Cast<AMMProjectileBase>(modList[i]->projectileClass)->projectileEffects->Num();
+	//}
+
+	////removing the removed mod's projectile effects from the TArray=============
+	//TArray<UMMProjectileEffectBase*> effectsList;
+	//effectsList = *Cast<AMMProjectileBase>(removedMod->projectileClass)->projectileEffects;
+	//for (int i = 0; i < effectsList.Num(); i++) {
+	//	projectileEffects.RemoveAt(effectsIndex);
+	//}
 	return removedMod;
 }
 

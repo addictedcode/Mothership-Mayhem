@@ -62,9 +62,13 @@ AMMGunBase* UMMGunFactory::SpawnGun(UMMGunDataAsset* gunData, UWorld* const worl
         AActor* newObject = world->SpawnActor<AActor>(gunData->gunBP);
         AMMGunBase* newGun = Cast<AMMGunBase>(newObject);
 
-        //set gun stats
-        newGun->SetProjectile(gunData->projectileClass);
+        //setting attached objects/components
 
+        newGun->SetProjectile(gunData->projectileClass);
+        newGun->SetDefaultProjectile(gunData->projectileClass);
+        newGun->SetMuzzleFlash(gunData->muzzleFlashFX);
+
+        //set gun stats
         TGunStats& gunStats = newGun->GetGunStats();
         gunStats.fireRate.SetBaseValue(gunData->fireRate);
         gunStats.maxAmmo.SetBaseValue(gunData->maxAmmo);

@@ -70,6 +70,6 @@ UMMModBase* UMMModFactory::InstantiateMod(UMMModDataAsset* modData)
 	
     UMMModBase* newMod = NewObject<UMMModBase>();
 
-    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->name);
+    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
     return newMod;
 }

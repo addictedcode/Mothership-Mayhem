@@ -6,11 +6,15 @@
 
 #include "Mod/MMModFactory.h"
 
-UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, FModStats newMultiplicativeModStats, FString newName)
+UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, 
+									FModStats newMultiplicativeModStats,
+									TSubclassOf<class AMMProjectileBase> newProjectileClass,
+									FString newName)
 {
 	additiveModStats = newAdditiveModStats;
 	multiplicativeModStats = newMultiplicativeModStats;
 	name = newName;
+	projectileClass = newProjectileClass;
 	return this;
 }
 

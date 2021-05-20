@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Stats/MMStatsBase.h"
+#include "NiagaraSystem.h"
 #include "MMGunBase.generated.h"
 
 struct TGunStats
@@ -95,9 +96,14 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = Mesh)
 		class USkeletalMeshComponent* skeletalGunMesh;
 
+	UPROPERTY(BlueprintReadWrite, Category = Mesh)
+		class UNiagaraSystem* muzzleFlashFX;
+
 	// Projectile class to shoot
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		TSubclassOf<class AMMProjectileBase> defaultProjectileClass;
 	
 //Functions
 public:	
@@ -148,5 +154,7 @@ public:
 	TGunStats& GetGunStats() { return gunStats; };
 	
 	void SetSkeletalMesh(class USkeletalMesh*);
+	void SetMuzzleFlash(class UNiagaraSystem*);
 	void SetProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
+	void SetDefaultProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
 };
