@@ -18,8 +18,11 @@ public:
 	
 	//request an object from the pool
 	class AMMProjectileBase* SpawnObject(UClass* objectClass, FVector loc, FRotator rot, FActorSpawnParameters spawnParams);
+	UFUNCTION(BlueprintCallable)
+		class AMMProjectileBase* SpawnObjectWDefaultSpawnParams(UClass* objectClass, FVector loc, FRotator rot);
 	//return an object to the pool
 	void ReturnObject(AActor* returnedObject);
+
 
 protected:
 	// Called when the game starts or when spawned

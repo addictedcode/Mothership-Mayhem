@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileEffectBase.h"
+#include "Projectiles/MM_ProjectileEffectBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyStatsComponent.h"
@@ -74,7 +75,7 @@ void AMMProjectileBase::BeginPlay()
 //	}
 //}
 
-void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction)
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMM_ProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction)
 {
 	damage = newDamage;
 	projectileSpeed = newProjectileSpeed;
@@ -115,7 +116,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 
 					//Calls all ApplyEffects (MMProjectileEffectBase) from a pointer to the MMGunBase class, projectileEffects TArray
 					if (projectileEffects != nullptr) {
-						for (UMMProjectileEffectBase* effect : *projectileEffects)
+						for (UMM_ProjectileEffectBase* effect : *projectileEffects)
 						{
 							effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
 						}
