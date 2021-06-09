@@ -45,7 +45,7 @@ protected:
 		float damage = 0;
 	float projectileSpeed = 3000.0f;
 public:
-	TArray<class UMMProjectileEffectBase*>* projectileEffects;
+	TArray<class UMM_ProjectileEffectBase*>* projectileEffects;
 
 	//Move to timer function - Richmond
 	// Called every frame
@@ -56,12 +56,14 @@ public:
 
 	//Object pooling implementation
 	void SetActorActivation(bool state);
-	AActor* parentPool;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* parentPool;
 
 	UPROPERTY(BlueprintReadOnly)
 		owningFaction faction;
 
-	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction);
+	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMM_ProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction);
 protected:
 	UFUNCTION()
 		void OnLifespanEnd();

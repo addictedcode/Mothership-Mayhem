@@ -75,7 +75,7 @@ protected:
 	TGunStats gunStats;
 
 	UPROPERTY(BlueprintReadOnly) TArray<class UMMModBase*> modList;
-	TArray<class UMMProjectileEffectBase*> projectileEffects;
+	TArray<class UMM_ProjectileEffectBase*> projectileEffects;
 	
 	FTimerHandle primaryShootTimerHandle;
 	bool isShooting = false;

@@ -4,6 +4,7 @@
 #include "MothershipMayhem/Public/Gun/MMGunBase.h"
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileBase.h"
+#include "Projectiles/MM_ProjectileEffectBase.h"
 #include "Mod/MMModBase.h"
 #include "Character/MMCharacterBase.h"
 #include "Kismet/GameplayStatics.h"
