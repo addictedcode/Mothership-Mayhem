@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Enemy/EnemyStatsComponent.h"
+#include "Projectiles/MMProjectileOnHitEffect.h"
 #include "MMModDataAsset.generated.h"
 
 UENUM(BlueprintType)
@@ -13,6 +15,12 @@ enum class MMModType : uint8
 	ProjectileEffect = 1 UMETA(DisplayName = "ProjectileEffect"),
 };
 
+UENUM(BlueprintType)
+enum class MMProjectOnHitEffectType : uint8
+{
+	None UMETA(DisplayName = "None"),
+	StatusEffect UMETA(DisplayName = "StatusEffect"),
+};
 /**
  * 
  */
@@ -29,9 +37,10 @@ public:
 		FString name;
 
 	//PROJECTILE
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 
+	#pragma region Additive Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
 		float add_fireRate;
 
@@ -55,7 +64,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
 		float add_projectileGravityScale;
+	#pragma endregion 
 
+	#pragma region Multiplicative Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Multiplicative Stats")
 		float multiply_fireRate = 1;
 
@@ -79,5 +90,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Multiplicative Stats")
 		float multiply_projectileGravityScale = 1;
-	
+	#pragma endregion
+
+	#pragma region Projectile On Hit Effect
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+		MMProjectOnHitEffectType projectileOnHitEffectType = MMProjectOnHitEffectType::None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+		TEnumAsByte<StatusEffects> projectileStatusEffect = StatusEffects::NONE;
+	#pragma endregion 
 };

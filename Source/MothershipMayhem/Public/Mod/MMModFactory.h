@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Mod/MMModBase.h"
 #include "MMModFactory.generated.h"
 
-class UMMModBase;
 class UMMModDataAsset;
 
 /**
@@ -25,4 +25,15 @@ public:
 	
 	UFUNCTION(BlueprintCallable) static UMMModBase* InstantiateMod(
 		UPARAM(DisplayName = "Mod Data") UMMModDataAsset* modData);
+
+	//For Different Mods
+	UFUNCTION(BlueprintCallable) static UMMModBase* InstantiateModBasic(
+		UPARAM(DisplayName = "Mod Data") UMMModDataAsset* modData,
+		UPARAM(DisplayName = "Additive Stats") const FModStats& newAdditiveStats,
+		UPARAM(DisplayName = "Multiplicative Stats") const  FModStats& newMultiplicativeStats);
+	
+	UFUNCTION(BlueprintCallable) static UMMModBase* InstantiateModProjectileOnHitEffect(
+		UPARAM(DisplayName = "Mod Data") UMMModDataAsset* modData,
+		UPARAM(DisplayName = "Additive Stats") const FModStats& newAdditiveStats,
+		UPARAM(DisplayName = "Multiplicative Stats") const FModStats& newMultiplicativeStats);
 };

@@ -45,7 +45,7 @@ protected:
 		float damage = 0;
 	float projectileSpeed = 3000.0f;
 public:
-	TArray<class UMM_ProjectileEffectBase*>* projectileEffects;
+	TArray<class UMMProjectileOnHitEffect*>* projectileOnHitEffects;
 
 	//Move to timer function - Richmond
 	// Called every frame
@@ -63,7 +63,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		owningFaction faction;
 
-	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMM_ProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction);
+	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction);
 protected:
 	UFUNCTION()
 		void OnLifespanEnd();

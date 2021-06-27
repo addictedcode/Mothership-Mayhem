@@ -40,7 +40,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
-		TEnumAsByte<MMModType> modType;
+		MMModType modType;
 
 	//MOD Projectile for Projectile effect mods ===============
 	UPROPERTY(EditAnywhere, Category = Projectile)
