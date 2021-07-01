@@ -3,8 +3,9 @@
 
 #include "Mod/MMModFactory.h"
 #include "Engine/AssetManager.h"
-#include "Mod/MMModBase.h"
 #include "Mod/MMModDataAsset.h"
+#include "Mod/MMModProjectileOnHitEffect.h"
+#include "Projectiles/MMProjectileOnHitStatusEffect.h"
 
 
 UMMModBase* UMMModFactory::CreateModWithName(FString name) 
@@ -67,9 +68,40 @@ UMMModBase* UMMModFactory::InstantiateMod(UMMModDataAsset* modData)
     newMultiplicativeStats.numberOfProjectilesToShoot = modData->multiply_numberOfProjectilesToShoot;
     newMultiplicativeStats.projectileGravityScale = modData->multiply_projectileGravityScale;
     newMultiplicativeStats.reloadTime = modData->multiply_reloadTime;
-	
-    UMMModBase* newMod = NewObject<UMMModBase>();
 
+    auto& type = modData->modType;
+	switch (type)
+	{
+    case MMModType::Basic: return InstantiateModBasic(modData, newAdditiveStats, newMultiplicativeStats); break;
+    case MMModType::ProjectileEffect: return InstantiateModProjectileOnHitEffect(modData, newAdditiveStats, newMultiplicativeStats); break;
+    default: return InstantiateModBasic(modData, newAdditiveStats, newMultiplicativeStats); break;
+	}
+
+    return nullptr;
+}
+
+UMMModBase* UMMModFactory::InstantiateModBasic(UMMModDataAsset* modData, const FModStats& newAdditiveStats,
+    const FModStats& newMultiplicativeStats)
+{
+    UMMModBase* newMod = NewObject<UMMModBase>();
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
     return newMod;
 }
+
+UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* modData, const FModStats& newAdditiveStats,
+    const FModStats& newMultiplicativeStats)
+{
+    UMMModProjectileOnHitEffect* newMod = NewObject<UMMModProjectileOnHitEffect>();
+    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
+    auto& onHitEffectType = modData->projectileOnHitEffectType;
+	switch(onHitEffectType)
+	{
+    case MMProjectOnHitEffectType::StatusEffect:
+        auto* statusEffect = NewObject<UMMProjectileOnHitStatusEffect>();
+        statusEffect->statusEffect = modData->projectileStatusEffect;
+        newMod->projectileOnHitEffect = statusEffect;
+        break;
+	}
+    return newMod;
+}
+

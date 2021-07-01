@@ -4,8 +4,7 @@
 #include "Projectiles/MMProjectileBase.h"
 #include "Components/SphereComponent.h"
 #include "Projectiles/ProjectilePool.h"
-#include "Projectiles/MMProjectileEffectBase.h"
-#include "Projectiles/MM_ProjectileEffectBase.h"
+#include "Projectiles/MMProjectileOnHitEffect.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyStatsComponent.h"
@@ -75,11 +74,11 @@ void AMMProjectileBase::BeginPlay()
 //	}
 //}
 
-void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMM_ProjectileEffectBase*>* newProjectileEffects, owningFaction newFaction)
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction)
 {
 	damage = newDamage;
 	projectileSpeed = newProjectileSpeed;
-	projectileEffects = newProjectileEffects;
+	projectileOnHitEffects = newProjectileOnHitEffects;
 	projectileMovement->bShouldBounce = isProjectileBounce;
 	projectileMovement->ProjectileGravityScale = gravityScale;
 	faction = newFaction;
@@ -114,9 +113,9 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 					enemyStats->TakeDamage(damage);
 					//enemyStats->ApplyStatusEffect(DISORIENTED);
 
-					//Calls all ApplyEffects (MMProjectileEffectBase) from a pointer to the MMGunBase class, projectileEffects TArray
-					if (projectileEffects != nullptr) {
-						for (UMM_ProjectileEffectBase* effect : *projectileEffects)
+					//Calls all ApplyEffects (UMMProjectileOnHitEffect) from a pointer to the MMGunBase class, projectileOnHitEffects TArray
+					if (projectileOnHitEffects != nullptr) {
+						for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
 						{
 							effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
 						}

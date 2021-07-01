@@ -76,7 +76,6 @@ protected:
 	TGunStats gunStats;
 
 	UPROPERTY(BlueprintReadOnly) TArray<class UMMModBase*> modList;
-	TArray<class UMM_ProjectileEffectBase*> projectileEffects;
 	
 	FTimerHandle primaryShootTimerHandle;
 	bool isShooting = false;
@@ -92,7 +91,10 @@ protected:
 public:
 	//object pool for the bullets
 	AActor** bulletPool;
+  
 	UBoxComponent* vacuumHitbox;
+  
+	TArray<class UMMProjectileOnHitEffect*> projectileOnHitEffects;
 	
 //UE Visible Variables
 protected:
