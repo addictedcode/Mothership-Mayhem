@@ -60,6 +60,8 @@ public:
 
 	void SetActorActivation(bool state);
 
+	void SuckIntoVacuum(AActor* playerPtr, int executeThreshold);
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void DeathGang();
 
@@ -72,4 +74,7 @@ private:
 	float projectileSpeed;
 	bool hasBouncingAttack;
 	float projectileGravityScale;
+
+	AActor* player;
+	bool isBeingSucked = false;
 };

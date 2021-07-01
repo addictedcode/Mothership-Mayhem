@@ -11,6 +11,7 @@ enum class MMModType : uint8
 {
 	Basic = 0 UMETA(DisplayName = "Basic"),
 	ProjectileEffect = 1 UMETA(DisplayName = "ProjectileEffect"),
+	Legendary = 2 UMETA(DisplayName = "Legendary"),
 };
 
 /**

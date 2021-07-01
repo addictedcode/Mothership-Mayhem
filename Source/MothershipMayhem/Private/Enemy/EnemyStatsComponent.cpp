@@ -243,3 +243,8 @@ void UEnemyStatsComponent::SetMaxHP(int newHP)
 	this->MaxHP = newHP;
 }
 
+int UEnemyStatsComponent::getCurrentHP()
+{
+	return this->HP;
+}
+

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "Components/BoxComponent.h"
 #include "MMGunLoadout.generated.h"
 
 
@@ -40,6 +41,9 @@ public:
 
 	//object pool for the bullets
 	AActor** bulletPool;
+
+	void setVacuumHitbox(UBoxComponent* hitbox);
+
 	UPROPERTY(BlueprintReadWrite)
 		TArray<class AMMGunBase*> gunList;
 
