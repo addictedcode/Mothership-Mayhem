@@ -7,11 +7,12 @@
 #include "Projectiles/ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Projectiles/MMProjectileBase.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	#pragma region StatsComponent
@@ -37,6 +38,15 @@ void AAICharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	this->currentReloadTime += DeltaTime;
+
+	if (isBeingSucked) {
+		this->SetActorLocation(UKismetMathLibrary::VInterpTo(this->GetActorLocation(), player->GetActorLocation(), DeltaTime, 1.0f), false,
+			nullptr, ETeleportType::TeleportPhysics);
+
+		if (FVector::Dist(player->GetActorLocation(), this->GetActorLocation()) < 100.0f) {
+			this->enemyStats->TakeDamage(999999);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -144,6 +154,18 @@ void AAICharacter::SetActorActivation(bool state)
 		this->isStunned = false;
 		this->currentReloadTime = 0;
 		this->enemyStats->ResetComponent();
+	}
+}
+
+void AAICharacter::SuckIntoVacuum(AActor* playerPtr, int executeThreshold)
+{
+	if (this->enemyStats->getCurrentHP() <= executeThreshold) {
+		GetCharacterMovement()->SetComponentTickEnabled(false);
+
+		player = playerPtr;
+		this->bSimGravityDisabled = true;
+		this->isStunned = true;
+		isBeingSucked = true;
 	}
 }
 

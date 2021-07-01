@@ -107,6 +107,7 @@ void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
 	if (this->bulletPool != nullptr) {
 		newGun->bulletPool = this->bulletPool;
 	}
+	
 	// old gun
 	if (gunList.IsValidIndex(index))
 	{
@@ -141,6 +142,15 @@ void UMMGunLoadout::UpdateGunStats(int index, int attack, float fireRate, float 
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("No Gun"));
+	}
+}
+
+void UMMGunLoadout::setVacuumHitbox(UBoxComponent* hitbox)
+{
+	if (hitbox != nullptr) {
+		for (int i = 0; i < gunList.Num(); i++) {
+			gunList[i]->vacuumHitbox = hitbox;
+		}
 	}
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "Stats/MMStatsBase.h"
 #include "NiagaraSystem.h"
 #include "MMGunBase.generated.h"
@@ -84,9 +85,15 @@ protected:
 
 	float accuracyAngle;
 
+	bool isVacuum = false;
+	bool isVacuumShooting = false;
+
 public:
 	//object pool for the bullets
 	AActor** bulletPool;
+  
+	UBoxComponent* vacuumHitbox;
+  
 	TArray<class UMMProjectileOnHitEffect*> projectileOnHitEffects;
 	
 //UE Visible Variables
@@ -157,4 +164,5 @@ public:
 	void SetMuzzleFlash(class UNiagaraSystem*);
 	void SetProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
 	void SetDefaultProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
+	void SetVacuumMod(bool isVacuumModded);
 };

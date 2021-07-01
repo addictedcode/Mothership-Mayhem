@@ -5,6 +5,7 @@
 #include "Gun/MMGunLoadout.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AMMCharacterBase::AMMCharacterBase()
@@ -39,6 +40,18 @@ AMMCharacterBase::AMMCharacterBase()
 void AMMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<UActorComponent*> children;
+	this->GetComponents(children, true);
+	for (int i = 0; i < children.Num(); i++)
+	{
+		UActorComponent* child = children[i];
+		FString name = child->GetName();
+		if (child->GetName() == "VacuumHitbox")
+		{
+			gunLoadoutComponent->setVacuumHitbox(Cast<UBoxComponent>(child));
+		}
+	}
 
 	if (tempMesh->DoesSocketExist("GripPoint")) {
 		const FRotator gunRotation = tempMesh->GetSocketRotation("GripPoint");

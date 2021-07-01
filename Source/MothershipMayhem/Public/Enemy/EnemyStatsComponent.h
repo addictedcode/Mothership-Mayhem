@@ -57,6 +57,7 @@ public:
 		FOnDeathDelegate OnDeath;
 
 	void SetMaxHP(int newHP);
+	int getCurrentHP();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stats")

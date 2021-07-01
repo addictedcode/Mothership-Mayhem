@@ -7,6 +7,8 @@
 #include "Mod/MMModBase.h"
 #include "Character/MMCharacterBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Enemy/AICharacter.h"
+#include "Enemy/EnemyStatsComponent.h"
 
 // Sets default values
 AMMGunBase::AMMGunBase()
@@ -103,6 +105,22 @@ void AMMGunBase::SetProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass
 void AMMGunBase::SetDefaultProjectile(TSubclassOf<AMMProjectileBase> newProjectileClass)
 {
 	defaultProjectileClass = newProjectileClass;
+}
+
+void AMMGunBase::SetVacuumMod(bool isVacuumModded)
+{
+	isVacuum = isVacuumModded;
+	isVacuumShooting = false;
+
+	if (isVacuumModded) {
+		gunStats.currentAmmo = 0;
+		gunStats.damage.AddMultiplicativeModifier(2);
+	}
+	else {
+		gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
+		float x = 2;
+		gunStats.damage.RemoveMultiplicativeModifier(x);
+	}
 }
 
 void AMMGunBase::SetMuzzleFlash(UNiagaraSystem* newMuzzleFlashFX)
@@ -234,33 +252,57 @@ void AMMGunBase::PrimaryShoot()
 		return;
 	}
 
-	if (gunStats.currentAmmo > 0) {
+	if (gunStats.currentAmmo > 0 || isVacuum) {
 		if (isReloading)
 		{
 			GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
 		}
-		for (int i = 0; i < gunStats.numberOfProjectilesToShoot.GetFinalValue(); ++i) {
-			//UE_LOG(LogTemp, Error, TEXT("Bang!"));
-		    ShootProjectile();
-			// play sound ===
-			AMMCharacterBase* characterParent = 
+		if (!isVacuum || isVacuumShooting) {
+			for (int i = 0; i < gunStats.numberOfProjectilesToShoot.GetFinalValue(); ++i) {
+				//UE_LOG(LogTemp, Error, TEXT("Bang!"));
+				ShootProjectile();
+				// play sound ===
+				AMMCharacterBase* characterParent =
 					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-			if (characterParent != NULL) {
-				characterParent->PlayShootingSound();
-				this->PlayRecoilAnimation();
+				if (characterParent != NULL) {
+					characterParent->PlayShootingSound();
+					this->PlayRecoilAnimation();
+				}
+				else {
+					UE_LOG(LogTemp, Error, TEXT("No Character"));
+				}
+
 			}
-			else {
-				UE_LOG(LogTemp, Error, TEXT("No Character"));
-			}
-				
+			gunStats.currentAmmo--;
 		}
-		gunStats.currentAmmo--;
+		else {//vacuum gun behavior
+			if (vacuumHitbox != nullptr) {
+				TArray<AActor*> actors;
+				vacuumHitbox->GetOverlappingActors(actors);
+				for (int i = 0; i < actors.Num(); i++) {
+					AAICharacter* enemyInRange = Cast<AAICharacter>(actors[i]);
+					if (enemyInRange) {
+						enemyInRange->SuckIntoVacuum(Cast<AActor>(GetWorld()->GetFirstPlayerController()->GetPawn()), 10);//execute anyone at or below 10 hp
+						gunStats.currentAmmo++;
+					}
+				}
+
+				if (gunStats.currentAmmo >= gunStats.maxAmmo.GetFinalValue()) {
+					isVacuumShooting = true;
+				}
+			}
+		}
 	}
 	
 	if (gunStats.currentAmmo <= 0)
 	{
-		GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
-		OnReload();
+		if (!isVacuum) {
+			GetWorld()->GetTimerManager().ClearTimer(primaryShootTimerHandle);
+			OnReload();
+		}
+		else {
+			isVacuumShooting = false;
+		}
 	}
 	
 }
