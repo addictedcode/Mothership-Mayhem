@@ -65,9 +65,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void DeathGang();
 
-private:
+protected:
 	float moveSpeedMultiplier = 1.0f;
-	float timeToReload = 2.0f;
+	float timeToReload;
 	float currentReloadTime = 0;
 
 	float attackDamage;

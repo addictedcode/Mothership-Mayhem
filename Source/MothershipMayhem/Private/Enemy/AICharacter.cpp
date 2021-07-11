@@ -30,6 +30,8 @@ AAICharacter::AAICharacter()
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	this->timeToReload = 2.0f;
 }
 
 // Called every frameda
