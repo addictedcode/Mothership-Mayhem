@@ -11,11 +11,26 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class MMChallengeType : uint8
+{
+	Survival = 0 UMETA(DisplayName = "Survival"),
+	Defense = 1 UMETA(DisplayName = "Defense"),
+	Extermination = 2 UMETA(DisplayName = "Extermination"),
+};
+
 UCLASS(BlueprintType)
 class MOTHERSHIPMAYHEM_API UMMArenaChallenge_DataAsset : public UDataAsset
 {
 	GENERATED_BODY()
 public: 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		TEnumAsByte<MMChallengeType> challengeType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Time Limit")
+		int timeLimitSeconds;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Description")
 		FString challengeTitle;
 
@@ -24,6 +39,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawns")
 		TArray<class UMMEnemyWave_DataAsset*> spawnList;
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rewards")
 		int money;
