@@ -53,6 +53,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 		bool GetJumping();
+	
+	UFUNCTION(BlueprintCallable)
+		bool GetWindingUp();
 
 private:
 	void ChargeTarget(AActor* target);
@@ -66,4 +69,9 @@ private:
 		BossStates currentState = BossStates::Idle;
 
 	bool isJumping = false;
+
+	FTimerHandle WindupTimer;
+	bool isWindingUp = false;
+
+	UFUNCTION() void OnFinishWindup();
 };

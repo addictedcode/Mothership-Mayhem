@@ -84,6 +84,11 @@ bool ABossCharacter::GetJumping()
 	return this->isJumping;
 }
 
+bool ABossCharacter::GetWindingUp()
+{
+	return this->isWindingUp;
+}
+
 void ABossCharacter::ChargeTarget(AActor* target)
 {
 	this->attackDestination = target->GetActorLocation();
@@ -97,6 +102,8 @@ void ABossCharacter::JumpSmashTarget(AActor* target)
 	this->player = target;
 	this->isJumping = true;
 	this->currentState = BossStates::JumpAttack;
+	this->isWindingUp = true;
+	GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 2.0f, false);
 }
 
 void ABossCharacter::JumpSmashInPlace()
@@ -104,4 +111,11 @@ void ABossCharacter::JumpSmashInPlace()
 	this->attackDestination = this->GetActorLocation();
 	this->isJumping = true;
 	this->currentState = BossStates::GroundSlam;
+	this->isWindingUp = true;
+	GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 5.0f, false);
+}
+
+void ABossCharacter::OnFinishWindup()
+{
+	this->isWindingUp = false;
 }
