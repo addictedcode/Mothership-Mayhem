@@ -104,7 +104,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		{
 			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 		}
-		if (faction == owningFaction::Player) {
+		if (faction != owningFaction::Enemy) {
 			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
 			if (enemy != nullptr)
 			{
@@ -131,6 +131,8 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 				//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 			}
 		}
+
+		onHitSpecialEffect();
 	}
 	else{
 		if (parentPool != nullptr) {
@@ -150,6 +152,11 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 	}
 	
+}
+
+void AMMProjectileBase::onHitSpecialEffect()
+{
+
 }
 
 void AMMProjectileBase::SetActorActivation(bool state)
