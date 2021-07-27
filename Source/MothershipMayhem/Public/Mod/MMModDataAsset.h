@@ -17,10 +17,11 @@ enum class MMModType : uint8
 };
 
 UENUM(BlueprintType)
-enum class MMProjectOnHitEffectType : uint8
+enum class MMProjectileOnHitEffectType : uint8
 {
 	None UMETA(DisplayName = "None"),
 	StatusEffect UMETA(DisplayName = "StatusEffect"),
+	SpawnEffect UMETA(DisplayName = "SpawnEffect"),
 };
 /**
  * 
@@ -32,7 +33,7 @@ class MOTHERSHIPMAYHEM_API UMMModDataAsset : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
-		TEnumAsByte<MMModType> modType;
+		MMModType modType;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
@@ -95,9 +96,13 @@ public:
 
 	#pragma region Projectile On Hit Effect
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
-		MMProjectOnHitEffectType projectileOnHitEffectType = MMProjectOnHitEffectType::None;
+		MMProjectileOnHitEffectType projectileOnHitEffectType = MMProjectileOnHitEffectType::None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
-		TEnumAsByte<StatusEffects> projectileStatusEffect = StatusEffects::NONE;
-	#pragma endregion 
+		StatusEffects projectileStatusEffect = StatusEffects::NONE;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+		TSubclassOf<AActor> projectileOnHitSpawnClass;
+	#pragma endregion
+
 };

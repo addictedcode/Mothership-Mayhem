@@ -7,7 +7,8 @@
 #include "EnemyStatsComponent.generated.h"
 
 UENUM()
-enum StatusEffects{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5, DANCE = 6};
+enum class StatusEffects : uint8
+{NONE = 0, BURN = 1, FREEZE = 2, WET = 3, SHOCKING = 4, DISORIENTED = 5, DANCE = 6};
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathDelegate);
 
@@ -71,7 +72,7 @@ private:
 
 	void RemoveDoT();
 
-	StatusEffects currentStatusAilment = NONE;
+	StatusEffects currentStatusAilment = StatusEffects::NONE;
 	
 	#pragma region FTimerHandles
 	FTimerHandle DoTTimer;

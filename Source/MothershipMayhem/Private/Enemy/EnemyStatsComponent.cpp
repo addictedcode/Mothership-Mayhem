@@ -76,23 +76,23 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 	FTimerDelegate timerDelegate;
 	switch (ailment)
 	{
-	case BURN:
-		if (this->currentStatusAilment == FREEZE)
+	case StatusEffects::BURN:
+		if (this->currentStatusAilment == StatusEffects::FREEZE)
 		{
 			GetWorld()->GetTimerManager().ClearTimer(DebuffTimer);
 			this->ApplyMovespeedMultiplier(1.0f);
 		}
 		break;
-	case WET:
-		if (this->currentStatusAilment == BURN)
+	case StatusEffects::WET:
+		if (this->currentStatusAilment == StatusEffects::BURN)
 		{
 			this->GetWorld()->GetTimerManager().ClearTimer(DoTTimer);
 			this->RemoveDoT();
 		}
 		break;
-	case FREEZE:
-		if (this->currentStatusAilment != WET) {
-			if (this->currentStatusAilment != FREEZE)
+	case StatusEffects::FREEZE:
+		if (this->currentStatusAilment != StatusEffects::WET) {
+			if (this->currentStatusAilment != StatusEffects::FREEZE)
 				this->ApplyMovespeedMultiplier(0.5f);
 
 			timerDelegate.BindUFunction(this, FName("ApplyMovespeedMultiplier"), 1.0f);
@@ -110,7 +110,7 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 			GetWorld()->GetTimerManager().SetTimer(DebuffTimer, timerDelegate, 5.0f, false);
 		}
 		break;
-	case SHOCKING:
+	case StatusEffects::SHOCKING:
 		this->ApplyMovespeedMultiplier(0.0f);
 		this->ApplyStun(true);
 
@@ -125,10 +125,10 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment)
 		GetWorld()->GetTimerManager().ClearTimer(StunTimer);
 		GetWorld()->GetTimerManager().SetTimer(StunTimer, timerDelegate, 2.0f, false);
 		break;
-	case DISORIENTED:
+	case StatusEffects::DISORIENTED:
 		Cast<AEnemyController>(Cast<AAICharacter>(this->GetOwner())->Controller)->OnCharacterDisoriented(10.0f);
 		break;
-	case DANCE:
+	case StatusEffects::DANCE:
 		this->ApplyMovespeedMultiplier(0.0f);
 		this->ApplyStun(true);
 
@@ -176,8 +176,8 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 {
 	switch (ailment)
 	{
-	case SHOCKING:
-		if (this->currentStatusAilment == WET)
+	case StatusEffects::SHOCKING:
+		if (this->currentStatusAilment == StatusEffects::WET)
 			TakeDamage(damage * 2);
 		else
 			TakeDamage(damage);
@@ -194,7 +194,7 @@ void UEnemyStatsComponent::ApplyStatusEffect(StatusEffects ailment, int damage)
 void UEnemyStatsComponent::RemoveDoT()
 {
 	this->DoTDamage = 0;
-	this->currentStatusAilment = NONE;
+	this->currentStatusAilment = StatusEffects::NONE;
 }
 //Changes the movespeed multiplier in AICharacter while disabling the movement component tick function if the multiplier is 0 (rooted or stunned)
 void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
@@ -208,7 +208,7 @@ void UEnemyStatsComponent::ApplyMovespeedMultiplier(float multiplier)
 			this->movementComponent->SetComponentTickEnabled(true);
 			parent->ChangeSpeedMultiplier(multiplier);
 			if (multiplier == 1.0f)
-				this->currentStatusAilment = NONE;
+				this->currentStatusAilment = StatusEffects::NONE;
 		}
 	}
 	else
