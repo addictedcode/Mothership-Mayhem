@@ -6,6 +6,7 @@
 #include "Enemy/AICharacter.h"
 #include "Perception/AISense_Sight.h"
 #include "Enemy/EnemyFactory.h"
+#include "Character/MMCharacterBase.h"
 
 void AEnemyController::OnPossess(APawn *InPawn) {
 	Super::OnPossess(InPawn);
@@ -24,6 +25,14 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 800.0f);
 
 			EnemyFactory::InitializeEnemy("baseEnemy", AICharacter, this);
+
+			AMMCharacterBase* player = Cast<AMMCharacterBase>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			if (player != nullptr)
+			{
+				BlackboardComp->SetValueAsObject(BlackboardTarget, player);
+				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
+				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
+			}
 		}
 
 		AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::UpdateSeenTarget);
@@ -52,7 +61,7 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 		{
 			if (InActor->ActorHasTag("Player")) {
 				if (Stimulus.WasSuccessfullySensed()) {
-					GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
+					//GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
 					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
 					BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
 					BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
@@ -74,7 +83,7 @@ void AEnemyController::OnTargetSightLost()
 {
 	if (BlackboardComp)
 	{
-		GetWorld()->GetTimerManager().SetTimer(StartEnemyTimer, this, &AEnemyController::OnLostTarget, LineOfSightTimer, false);
+		//GetWorld()->GetTimerManager().SetTimer(StartEnemyTimer, this, &AEnemyController::OnLostTarget, LineOfSightTimer, false);
 		BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 	}
 	else

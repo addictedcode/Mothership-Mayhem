@@ -10,7 +10,8 @@ UENUM(BlueprintType)
 enum class owningFaction : uint8
 {
 	Player UMETA(DisplayName="Player"),
-	Enemy UMETA(DisplayName="Enemy")
+	Enemy UMETA(DisplayName="Enemy"),
+	Neutral UMETA(DisplayName="Neutral")
 };
 
 UCLASS()
@@ -53,6 +54,8 @@ public:
 	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	virtual void onHitSpecialEffect();
 
 	//Object pooling implementation
 	void SetActorActivation(bool state);
