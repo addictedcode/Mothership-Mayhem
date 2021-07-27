@@ -55,8 +55,8 @@ private:
 	const float activeTime = 20.0f;
 	float currentActiveTime = 0;
 
-	float attackDamage;
-	float projectileSpeed;
-	bool hasBouncingAttack;
-	float projectileGravityScale;
+	float attackDamage = 5.0f;
+	float projectileSpeed = 3000.0f;
+	bool hasBouncingAttack = false;
+	float projectileGravityScale = 0.0f;
 };
