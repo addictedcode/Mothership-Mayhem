@@ -17,11 +17,21 @@ enum class MMModType : uint8
 };
 
 UENUM(BlueprintType)
+enum class MMModSlot : uint8
+{
+	Barrel		UMETA(DisplayName = "Barrel"),
+	Projectile	UMETA(DisplayName = "Projectile"),
+	Magazine	UMETA(DisplayName = "Magazine"),
+	Stock		UMETA(DisplayName = "Stock"),
+	Legendary	UMETA(DisplayName = "Legendary"),
+};
+
+UENUM(BlueprintType)
 enum class MMProjectileOnHitEffectType : uint8
 {
-	None UMETA(DisplayName = "None"),
-	StatusEffect UMETA(DisplayName = "StatusEffect"),
-	SpawnEffect UMETA(DisplayName = "SpawnEffect"),
+	None			UMETA(DisplayName = "None"),
+	StatusEffect	UMETA(DisplayName = "StatusEffect"),
+	SpawnEffect		UMETA(DisplayName = "SpawnEffect"),
 };
 /**
  * 
@@ -34,6 +44,9 @@ class MOTHERSHIPMAYHEM_API UMMModDataAsset : public UDataAsset
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMModType modType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		MMModSlot modSlot;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;

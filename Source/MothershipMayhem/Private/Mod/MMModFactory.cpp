@@ -69,7 +69,7 @@ UMMModBase* UMMModFactory::InstantiateMod(UMMModDataAsset* modData)
     newMultiplicativeStats.numberOfProjectilesToShoot = modData->multiply_numberOfProjectilesToShoot;
     newMultiplicativeStats.projectileGravityScale = modData->multiply_projectileGravityScale;
     newMultiplicativeStats.reloadTime = modData->multiply_reloadTime;
-
+	
     auto& type = modData->modType;
 	switch (type)
 	{
@@ -86,6 +86,8 @@ UMMModBase* UMMModFactory::InstantiateModBasic(UMMModDataAsset* modData, const F
 {
     UMMModBase* newMod = NewObject<UMMModBase>();
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
+    newMod->modType = modData->modType;
+    newMod->modSlot = modData->modSlot;
     return newMod;
 }
 
@@ -94,6 +96,8 @@ UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* 
 {
     UMMModProjectileOnHitEffect* newMod = NewObject<UMMModProjectileOnHitEffect>();
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
+    newMod->modType = modData->modType;
+    newMod->modSlot = modData->modSlot;
     const auto& onHitEffectType = modData->projectileOnHitEffectType;
 	switch(onHitEffectType)
 	{

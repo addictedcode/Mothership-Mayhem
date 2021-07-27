@@ -41,6 +41,8 @@ public:
 		FString name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMModType modType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		MMModSlot modSlot;
 
 	//MOD Projectile for Projectile effect mods ===============
 	UPROPERTY(EditAnywhere, Category = Projectile)
