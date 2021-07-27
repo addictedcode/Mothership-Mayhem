@@ -17,5 +17,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> m_Spawn_Class;
 	
-	virtual void ApplyEffect(const FHitResult& Hit) override;
+	virtual void ApplyEffect(UWorld* world, const FHitResult& Hit) override;
 };

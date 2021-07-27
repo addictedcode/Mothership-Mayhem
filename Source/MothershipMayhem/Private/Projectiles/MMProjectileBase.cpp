@@ -118,7 +118,6 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 						for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
 						{
 							effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
-							effect->ApplyEffect(Hit);
 						}
 					}
 				}
@@ -129,12 +128,6 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			}
 			else
 			{
-				if (projectileOnHitEffects != nullptr) {
-					for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
-					{
-						effect->ApplyEffect(Hit);
-					}
-				}
 				//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
 			}
 		}
@@ -157,6 +150,14 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 	}
 	onHitSpecialEffect();
+	if (projectileOnHitEffects != nullptr) {
+		for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
+		{
+			UWorld* world = GetWorld();
+			if (world != nullptr)
+				effect->ApplyEffect(world, Hit);
+		}
+	}
 }
 
 void AMMProjectileBase::onHitSpecialEffect()

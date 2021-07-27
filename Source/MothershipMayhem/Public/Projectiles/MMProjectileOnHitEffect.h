@@ -15,5 +15,5 @@ class MOTHERSHIPMAYHEM_API UMMProjectileOnHitEffect : public UObject
 	GENERATED_BODY()
 public:
 	virtual void ApplyEffect(class UEnemyStatsComponent* enemy, FVector position) {};
-	virtual void ApplyEffect(const FHitResult& Hit) {};
+	virtual void ApplyEffect(UWorld* world, const FHitResult& Hit) {};
 };
