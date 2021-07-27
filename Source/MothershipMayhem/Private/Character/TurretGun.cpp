@@ -11,6 +11,7 @@ ATurretGun::ATurretGun()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +34,12 @@ void ATurretGun::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	this->currentReloadTime += DeltaTime;
+	this->currentActiveTime += DeltaTime;
+
+	if (this->currentActiveTime >= this->activeTime)
+	{
+		SetActorActivation(false);
+	}
 
 	if (this->currentReloadTime >= this->timeToReload)
 	{
@@ -107,11 +114,17 @@ void ATurretGun::SetActorActivation(bool state)
 	if (state)
 	{
 		this->currentReloadTime = 0;
+		this->currentActiveTime = 0;
 	}
 }
 
 void ATurretGun::SetLaunchArea(UChildActorComponent* launchArea)
 {
 	this->ProjectileLaunchArea = launchArea;
+}
+
+AActor* ATurretGun::GetTarget()
+{
+	return this->target;
 }
 

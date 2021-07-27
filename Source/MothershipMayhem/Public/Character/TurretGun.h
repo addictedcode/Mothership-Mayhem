@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "TurretGun.generated.h"
 
 UCLASS()
@@ -32,7 +32,10 @@ public:
 	void SetActorActivation(bool state);
 
 	UFUNCTION(BlueprintCallable)
-	void SetLaunchArea(UChildActorComponent* launchArea);
+		void SetLaunchArea(UChildActorComponent* launchArea);
+	
+	UFUNCTION(BlueprintCallable)
+		AActor* GetTarget();
 
 	#pragma region Projectile shooting
 	UPROPERTY(EditAnywhere, Category = Projectile)
@@ -48,6 +51,9 @@ private:
 
 	float timeToReload;
 	float currentReloadTime = 0;
+
+	const float activeTime = 20.0f;
+	float currentActiveTime = 0;
 
 	float attackDamage;
 	float projectileSpeed;
