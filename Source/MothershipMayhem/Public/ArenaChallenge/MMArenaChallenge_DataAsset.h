@@ -26,7 +26,7 @@ class MOTHERSHIPMAYHEM_API UMMArenaChallenge_DataAsset : public UDataAsset
 public: 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
-		TEnumAsByte<MMChallengeType> challengeType;
+		MMChallengeType challengeType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Time Limit")
 		int timeLimitSeconds;
