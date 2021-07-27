@@ -123,7 +123,7 @@ public:
 	
 	void OnReload();
 
-	UFUNCTION(BlueprintCallable) void AddMod(class UMMModBase* newMod);
+	UFUNCTION(BlueprintCallable) bool AddMod(class UMMModBase* newMod);
 	UFUNCTION(BlueprintCallable) void RemoveModByMod(class UMMModBase* mod);
 	UFUNCTION(BlueprintCallable) class UMMModBase* RemoveModByIndex(int index);
 

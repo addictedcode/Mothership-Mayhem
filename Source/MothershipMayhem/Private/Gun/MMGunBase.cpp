@@ -168,14 +168,22 @@ void AMMGunBase::OnReload()
 	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
 }
 
-void AMMGunBase::AddMod(UMMModBase* newMod)
+bool AMMGunBase::AddMod(UMMModBase* newMod)
 {
+	for (auto& mod : modList)
+	{
+		if (newMod->modSlot == mod->modSlot)
+			return false;
+	}
+	
 	newMod->AddToGun(this);
 	modList.Add(newMod);
 	// if this is the first mod added, change the projectile class
 	if (modList.Num() == 1) {
 		this->SetProjectile(modList[0]->projectileClass);
 	}
+
+	return true;
 	//// if this is not the first mod added, add to projectile effects instead.
 	//else {
 	//	TArray<UMMProjectileEffectBase*> effectsList;
