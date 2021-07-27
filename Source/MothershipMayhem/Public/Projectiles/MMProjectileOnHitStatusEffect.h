@@ -16,6 +16,6 @@ class MOTHERSHIPMAYHEM_API UMMProjectileOnHitStatusEffect : public UMMProjectile
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TEnumAsByte<StatusEffects> statusEffect;
+		StatusEffects statusEffect;
 	virtual void ApplyEffect(class UEnemyStatsComponent* enemy, FVector position) override;
 };

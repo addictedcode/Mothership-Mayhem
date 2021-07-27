@@ -6,6 +6,7 @@
 #include "Mod/MMModDataAsset.h"
 #include "Mod/MMModProjectileOnHitEffect.h"
 #include "Projectiles/MMProjectileOnHitStatusEffect.h"
+#include "Projectiles/MMProjectileOnHitSpawnEffect.h"
 
 
 UMMModBase* UMMModFactory::CreateModWithName(FString name) 
@@ -93,14 +94,25 @@ UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* 
 {
     UMMModProjectileOnHitEffect* newMod = NewObject<UMMModProjectileOnHitEffect>();
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
-    auto& onHitEffectType = modData->projectileOnHitEffectType;
+    const auto& onHitEffectType = modData->projectileOnHitEffectType;
 	switch(onHitEffectType)
 	{
-    case MMProjectOnHitEffectType::StatusEffect:
+    case MMProjectileOnHitEffectType::None:
+        break;
+    case MMProjectileOnHitEffectType::StatusEffect:
+	{
         auto* statusEffect = NewObject<UMMProjectileOnHitStatusEffect>();
         statusEffect->statusEffect = modData->projectileStatusEffect;
         newMod->projectileOnHitEffect = statusEffect;
         break;
+	}
+    case MMProjectileOnHitEffectType::SpawnEffect:
+    {
+        auto* spawnEffect = NewObject<UMMProjectileOnHitSpawnEffect>();
+        spawnEffect->m_Spawn_Class = modData->projectileOnHitSpawnClass;
+        newMod->projectileOnHitEffect = spawnEffect;
+        break;
+    }
 	}
     return newMod;
 }
