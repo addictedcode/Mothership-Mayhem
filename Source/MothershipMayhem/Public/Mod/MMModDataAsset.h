@@ -40,7 +40,7 @@ UCLASS(BlueprintType)
 class MOTHERSHIPMAYHEM_API UMMModDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
-
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMModType modType;
@@ -52,7 +52,7 @@ public:
 		FString name;
 
 	//PROJECTILE
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 
 	#pragma region Additive Stats
@@ -108,13 +108,18 @@ public:
 	#pragma endregion
 
 	#pragma region Projectile On Hit Effect
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect", 
+		meta = (EditCondition = "modType == MMModType::ProjectileEffect", EditConditionHides))
+	
 		MMProjectileOnHitEffectType projectileOnHitEffectType = MMProjectileOnHitEffectType::None;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect", 
+		meta = (EditCondition = "modType == MMModType::ProjectileEffect && projectileOnHitEffectType == MMProjectileOnHitEffectType::StatusEffect", EditConditionHides))
+	
 		StatusEffects projectileStatusEffect = StatusEffects::NONE;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile On Hit Effect",
+		meta = (EditCondition = "modType == MMModType::ProjectileEffect && projectileOnHitEffectType == MMProjectileOnHitEffectType::SpawnEffect", EditConditionHides))
 		TSubclassOf<AActor> projectileOnHitSpawnClass;
 	#pragma endregion
 
