@@ -29,6 +29,9 @@ public:
 
 	void SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRotator rot, FActorSpawnParameters spawnParams);
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateEnemyTargets(AActor* newTarget);
+
 private:
 
 	std::map<TSubclassOf<AActor>, std::vector<AActor*>> SpawnedPool;
