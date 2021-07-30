@@ -3,6 +3,7 @@
 
 #include "Enemy/EnemyPool.h"
 #include "Enemy/AICharacter.h"
+#include "Enemy/EnemyController.h"
 
 // Sets default values
 AEnemyPool::AEnemyPool()
@@ -85,5 +86,21 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 		}
 
 		SpawnedPool[ActorToSpawn].push_back(ReusedActorRef);
+	}
+}
+
+void AEnemyPool::UpdateEnemyTargets(AActor* newTarget) {
+	std::map<TSubclassOf<AActor>, std::vector<AActor*>>::iterator iter;
+
+	for (iter = SpawnedPool.begin(); iter != SpawnedPool.end(); iter++)
+	{
+		for (int i = 0; i < iter->second.size(); i++)
+		{
+			AAICharacter* currentEnemy = Cast<AAICharacter>(iter->second[i]);
+			AEnemyController* currentController = Cast<AEnemyController>(currentEnemy->GetController());
+			if (currentController) {
+				currentController->SetNewTarget(newTarget);
+			}
+		}
 	}
 }

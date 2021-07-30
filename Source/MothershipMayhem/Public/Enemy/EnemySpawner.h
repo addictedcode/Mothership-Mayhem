@@ -17,7 +17,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 		TSubclassOf<AActor> ActorToSpawn;
-	UPROPERTY(EditAnywhere, Category = "Spawning")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 		class AEnemyPool* enemyPool;
 
 	UPROPERTY(EditAnywhere, Category = "Spawning")

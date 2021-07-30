@@ -45,6 +45,7 @@ public:
 		FName BlackboardAttackRange = "AttackRange";
 
 	UFUNCTION() void UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus);
+	UFUNCTION(BlueprintCallable) void SetNewTarget(AActor* newTarget);
 
 	void OnTargetSightLost();
 

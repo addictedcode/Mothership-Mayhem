@@ -34,7 +34,6 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 			}
 		}
-
 		AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::UpdateSeenTarget);
 	}
 }
@@ -59,7 +58,7 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 	{
 		if (InActor)
 		{
-			if (InActor->ActorHasTag("Player")) {
+			if (InActor == BlackboardComp->GetValueAsObject(BlackboardTarget)) {
 				if (Stimulus.WasSuccessfullySensed()) {
 					//GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
 					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
@@ -78,6 +77,25 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
 	}
 }
+
+void AEnemyController::SetNewTarget(AActor* newTarget)
+{
+	if (BlackboardComp)
+	{
+		if (newTarget)
+		{
+			if (newTarget->ActorHasTag("Player")) {
+				BlackboardComp->SetValueAsObject(BlackboardTarget, newTarget);
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO Blackboard assigned"));
+	}
+}
+
+
 
 void AEnemyController::OnTargetSightLost()
 {
