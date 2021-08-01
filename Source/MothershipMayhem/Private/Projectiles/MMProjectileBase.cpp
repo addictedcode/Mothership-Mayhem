@@ -31,7 +31,7 @@ AMMProjectileBase::AMMProjectileBase()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("projectileComp"));
 	projectileMovement->UpdatedComponent = collisionComp;
-	projectileMovement->MaxSpeed = 3000.f;
+	projectileMovement->MaxSpeed = 3000.0f;
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
 	projectileMovement->ProjectileGravityScale = 1;
@@ -79,6 +79,7 @@ void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectil
 	damage = newDamage;
 	projectileSpeed = newProjectileSpeed;
 	projectileOnHitEffects = newProjectileOnHitEffects;
+	projectileMovement->MaxSpeed = newProjectileSpeed;
 	projectileMovement->bShouldBounce = isProjectileBounce;
 	projectileMovement->ProjectileGravityScale = gravityScale;
 	faction = newFaction;

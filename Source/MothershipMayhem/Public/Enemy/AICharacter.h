@@ -50,6 +50,9 @@ public:
 	
 	class UEnemyStatsComponent* enemyStats;
 
+	UFUNCTION(BlueprintCallable)
+		UEnemyStatsComponent* getEnemyStats();
+
 	void ChangeSpeedMultiplier(float multiplier);
 
 	void UpdateReloadTime(float newSecPerShot);

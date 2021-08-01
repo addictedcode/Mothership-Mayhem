@@ -33,7 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		class UCharacterMovementComponent* movementComponent;
 
-	void TakeDamage(int damage);
+	UFUNCTION(BlueprintCallable)
+		void TakeDamage(int damage);
 
 	void ApplyDamageOverTime(int damage, float duration);
 	
