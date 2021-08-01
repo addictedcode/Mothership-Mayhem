@@ -115,6 +115,10 @@ void AAICharacter::AttackTarget(AActor* target)
 		}
 	}
 }
+UEnemyStatsComponent* AAICharacter::getEnemyStats()
+{
+	return this->enemyStats;
+}
 //Changes multiplier applied to movement component MaxWalkSpeed and applies the net change to current setting if new multiplier is different from old one
 void AAICharacter::ChangeSpeedMultiplier(float multiplier)
 {
