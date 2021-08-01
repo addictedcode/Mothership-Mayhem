@@ -11,6 +11,8 @@ void AMMProjectileObjectMaker::onHitSpecialEffect()
 	FRotator rot;
 
 	AActor* SpawnedActorRef = GetWorld()->SpawnActor<AActor>(actorBP, this->GetActorLocation() , rot, ActorSpawnParams);
-	if (Cast<ATurretGun>(SpawnedActorRef) != nullptr)
-		Cast<ATurretGun>(SpawnedActorRef)->bulletPool = this->parentPool;
+	if (needsProjectilePool) {
+		if (Cast<ATurretGun>(SpawnedActorRef) != nullptr)
+			Cast<ATurretGun>(SpawnedActorRef)->bulletPool = this->parentPool;
+	}
 }
