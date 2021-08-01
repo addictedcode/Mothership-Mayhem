@@ -61,7 +61,7 @@ void AEnemyController::UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus)
 			if (InActor == BlackboardComp->GetValueAsObject(BlackboardTarget)) {
 				if (Stimulus.WasSuccessfullySensed()) {
 					//GetWorld()->GetTimerManager().ClearTimer(StartEnemyTimer);
-					BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
+					//BlackboardComp->SetValueAsObject(BlackboardTarget, InActor);
 					BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
 					BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
 				}
@@ -86,6 +86,8 @@ void AEnemyController::SetNewTarget(AActor* newTarget)
 		{
 			if (newTarget->ActorHasTag("Player")) {
 				BlackboardComp->SetValueAsObject(BlackboardTarget, newTarget);
+				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
+				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 			}
 		}
 	}
