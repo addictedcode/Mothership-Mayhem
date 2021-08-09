@@ -19,6 +19,8 @@ public:
 		TSubclassOf<class AActor> actorBP;
 	UPROPERTY(EditAnywhere, Category = ObjectSpawn)
 		bool needsProjectilePool = false;
+	UPROPERTY(EditAnywhere, Category = ObjectSpawn)
+		bool sticksToSurface = false;
 
-	virtual void onHitSpecialEffect() override;
+	virtual void onHitSpecialEffect(FHitResult hit) override;
 };

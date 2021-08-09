@@ -90,26 +90,29 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
-		if (parentPool != nullptr) {
-			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
-			if (pool != nullptr) {
-				pool->ReturnObject(this);
-				this->SetActorActivation(false);
+		if (!isPiercing || (isPiercing && Cast<AAICharacter>(OtherActor) == nullptr))
+		{
+			if (parentPool != nullptr) {
+				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+				if (pool != nullptr) {
+					pool->ReturnObject(this);
+					this->SetActorActivation(false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
+				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 		}
 		if (faction != owningFaction::Enemy) {
 			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
 			if (enemy != nullptr)
 			{
-				UEnemyStatsComponent* enemyStats = enemy->enemyStats;
+				UEnemyStatsComponent* enemyStats = enemy->getEnemyStats();
 				if (enemyStats != nullptr) {
 					enemyStats->TakeDamage(damage);
 					//enemyStats->ApplyStatusEffect(DISORIENTED);
@@ -150,7 +153,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 		}
 	}
-	onHitSpecialEffect();
+	onHitSpecialEffect(Hit);
 	if (projectileOnHitEffects != nullptr) {
 		for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
 		{
@@ -161,9 +164,13 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	}
 }
 
-void AMMProjectileBase::onHitSpecialEffect()
+int AMMProjectileBase::getDamageValue()
 {
+	return this->damage;
+}
 
+void AMMProjectileBase::onHitSpecialEffect(FHitResult hit)
+{
 }
 
 void AMMProjectileBase::SetActorActivation(bool state)
