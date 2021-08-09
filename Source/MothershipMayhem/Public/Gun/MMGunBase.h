@@ -100,8 +100,11 @@ public:
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */
 
-	UPROPERTY(BlueprintReadWrite, Category = Mesh)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		class USkeletalMeshComponent* skeletalGunMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		class USkeletalMeshComponent* skeletalGunMesh2;
 
 	UPROPERTY(BlueprintReadWrite, Category = Mesh)
 		class UNiagaraSystem* muzzleFlashFX;
@@ -129,6 +132,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlayRecoilAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayReloadAnimation();
 
 protected:
 

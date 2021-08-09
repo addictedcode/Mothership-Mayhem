@@ -17,16 +17,13 @@ AMMGunBase::AMMGunBase()
 	PrimaryActorTick.bCanEverTick = false;
 
 	skeletalGunMesh = 
-			CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("skeletalGunMesh"));
+			CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal Gun Mesh"));
 	skeletalGunMesh->bCastDynamicShadow = false;
 	skeletalGunMesh->CastShadow = false;
 	skeletalGunMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RootComponent = skeletalGunMesh;
 
-	/*static ConstructorHelpers::FObjectFinder<UAnimSequence> anim(TEXT
-			("AnimSequence'/Game/Assets/Animations/pistolSkeletal_2_Skeleton_Sequence.pistolSkeletal_2_Skeleton_Sequence'"));
-	
-	recoilAnimation = anim.Object;*/
+
 
 	#pragma endregion 
 }
@@ -163,9 +160,11 @@ void AMMGunBase::OnReload()
 	}
 
 	isReloading = true;
+	this->PlayReloadAnimation();
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
+	
 }
 
 bool AMMGunBase::AddMod(UMMModBase* newMod)
@@ -193,6 +192,7 @@ void AMMGunBase::RemoveModByMod(UMMModBase* mod)
 	RemoveModByIndex(index);
 }
 
+
 UMMModBase* AMMGunBase::RemoveModByIndex(int index)
 {
 	UMMModBase* removedMod = modList[index];
@@ -210,18 +210,6 @@ UMMModBase* AMMGunBase::RemoveModByIndex(int index)
 	}
 	UE_LOG(LogTemp, Error, TEXT("gamer!"));
 
-	////getting the index where the removedmod's effects start ==============
-	//int effectsIndex = 0;
-	//for (int i = 0; i < index; i++) {
-	//	effectsIndex += Cast<AMMProjectileBase>(modList[i]->projectileClass)->projectileEffects->Num();
-	//}
-
-	////removing the removed mod's projectile effects from the TArray=============
-	//TArray<UMMProjectileEffectBase*> effectsList;
-	//effectsList = *Cast<AMMProjectileBase>(removedMod->projectileClass)->projectileEffects;
-	//for (int i = 0; i < effectsList.Num(); i++) {
-	//	projectileEffects.RemoveAt(effectsIndex);
-	//}
 	return removedMod;
 }
 
