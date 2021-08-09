@@ -150,7 +150,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
 		}
 	}
-	onHitSpecialEffect();
+	onHitSpecialEffect(Hit);
 	if (projectileOnHitEffects != nullptr) {
 		for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
 		{
@@ -161,9 +161,8 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	}
 }
 
-void AMMProjectileBase::onHitSpecialEffect()
+void AMMProjectileBase::onHitSpecialEffect(FHitResult hit)
 {
-
 }
 
 void AMMProjectileBase::SetActorActivation(bool state)

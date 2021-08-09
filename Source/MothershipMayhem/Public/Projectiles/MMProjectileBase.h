@@ -55,7 +55,7 @@ public:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	virtual void onHitSpecialEffect();
+	virtual void onHitSpecialEffect(FHitResult hit);
 
 	//Object pooling implementation
 	void SetActorActivation(bool state);
