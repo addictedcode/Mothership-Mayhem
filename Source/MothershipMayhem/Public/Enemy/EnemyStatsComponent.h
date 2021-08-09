@@ -39,7 +39,8 @@ public:
 	void ApplyDamageOverTime(int damage, float duration);
 	
 	#pragma region ApplyStatusEffect Function overloads
-	void ApplyStatusEffect(StatusEffects ailment);
+	UFUNCTION(BlueprintCallable)
+		void ApplyStatusEffect(StatusEffects ailment);
 	void ApplyStatusEffect(StatusEffects ailment, FVector knockbackStrength);
 	void ApplyStatusEffect(StatusEffects ailment, int damage, float duration);
 	void ApplyStatusEffect(StatusEffects ailment, int directDamage, int DoTdamage, float duration);
