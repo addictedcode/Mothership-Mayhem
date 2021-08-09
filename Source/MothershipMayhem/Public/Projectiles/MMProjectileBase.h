@@ -44,6 +44,8 @@ protected:
 	//Projectile Stats
 	UPROPERTY(BlueprintReadOnly)
 		float damage = 0;
+	UPROPERTY(EditAnywhere)
+		bool isPiercing = false;
 	float projectileSpeed = 3000.0f;
 public:
 	TArray<class UMMProjectileOnHitEffect*>* projectileOnHitEffects;
@@ -54,6 +56,9 @@ public:
 	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION(BlueprintCallable)
+		int getDamageValue();
 
 	virtual void onHitSpecialEffect(FHitResult hit);
 
