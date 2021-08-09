@@ -25,7 +25,7 @@ namespace EnemyFactory
                 if (enemyData->name == name) {
                     character->projectileClass = enemyData->projectileClass;
                 	
-                    character->enemyStats->SetMaxHP(FMath::Lerp(enemyData->MaxHP, enemyData->MaxFameMaxHP, fameScaling));
+                    character->getEnemyStats()->SetMaxHP(FMath::Lerp(enemyData->MaxHP, enemyData->MaxFameMaxHP, fameScaling));
                     character->UpdateReloadTime(FMath::Lerp(enemyData->SecPerShot, enemyData->MaxFameSecPerShot, fameScaling));
                     character->UpdateProjectileStats(FMath::Lerp(enemyData->AttackDamage, enemyData->MaxFameAttackDamage, fameScaling),
                         enemyData->projectileSpeed,
@@ -58,7 +58,7 @@ namespace EnemyFactory
         if (enemyData) {
             character->projectileClass = enemyData->projectileClass;
 
-            character->enemyStats->SetMaxHP(enemyData->MaxHP);
+            character->getEnemyStats()->SetMaxHP(enemyData->MaxHP);
             character->UpdateReloadTime(enemyData->SecPerShot);
             character->UpdateProjectileStats(enemyData->AttackDamage, enemyData->projectileSpeed,
                 enemyData->isBouncingProjectile, enemyData->projectileGravityScale);

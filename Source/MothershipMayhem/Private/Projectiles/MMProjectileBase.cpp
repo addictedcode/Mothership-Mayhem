@@ -109,7 +109,7 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
 			if (enemy != nullptr)
 			{
-				UEnemyStatsComponent* enemyStats = enemy->enemyStats;
+				UEnemyStatsComponent* enemyStats = enemy->getEnemyStats();
 				if (enemyStats != nullptr) {
 					enemyStats->TakeDamage(damage);
 					//enemyStats->ApplyStatusEffect(DISORIENTED);
