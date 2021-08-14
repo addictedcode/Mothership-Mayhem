@@ -51,13 +51,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
-		FString description;
-
 	//PROJECTILE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
 		TSubclassOf<class AMMProjectileBase> projectileClass;
-
 
 	#pragma region Additive Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")

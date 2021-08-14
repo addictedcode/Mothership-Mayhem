@@ -77,6 +77,7 @@ UMMModBase* UMMModFactory::InstantiateMod(UMMModDataAsset* modData)
     case MMModType::ProjectileEffect: return InstantiateModProjectileOnHitEffect(modData, newAdditiveStats, newMultiplicativeStats); break;
     default: return InstantiateModBasic(modData, newAdditiveStats, newMultiplicativeStats); break;
 	}
+
     return nullptr;
 }
 
@@ -87,7 +88,6 @@ UMMModBase* UMMModFactory::InstantiateModBasic(UMMModDataAsset* modData, const F
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
     newMod->modType = modData->modType;
     newMod->modSlot = modData->modSlot;
-    newMod->description = modData->description;
     return newMod;
 }
 
@@ -98,7 +98,6 @@ UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* 
     newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
     newMod->modType = modData->modType;
     newMod->modSlot = modData->modSlot;
-    newMod->description = modData->description;
     const auto& onHitEffectType = modData->projectileOnHitEffectType;
 	switch(onHitEffectType)
 	{
