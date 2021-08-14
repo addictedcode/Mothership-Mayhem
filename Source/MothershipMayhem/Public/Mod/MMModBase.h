@@ -39,6 +39,8 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
+		FString description;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMModType modType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
