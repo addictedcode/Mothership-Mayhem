@@ -56,6 +56,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 		bool GetWindingUp();
+	UFUNCTION(BlueprintCallable)
+		void OnFinishWindup();
 
 private:
 	void ChargeTarget(AActor* target);
@@ -72,6 +74,4 @@ private:
 
 	FTimerHandle WindupTimer;
 	bool isWindingUp = false;
-
-	UFUNCTION() void OnFinishWindup();
 };
