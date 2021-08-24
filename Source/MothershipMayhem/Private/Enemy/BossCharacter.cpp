@@ -103,7 +103,7 @@ void ABossCharacter::JumpSmashTarget(AActor* target)
 	this->isJumping = true;
 	this->currentState = BossStates::JumpAttack;
 	this->isWindingUp = true;
-	GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 2.0f, false);
+	//GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 2.0f, false);
 }
 
 void ABossCharacter::JumpSmashInPlace()
@@ -112,7 +112,7 @@ void ABossCharacter::JumpSmashInPlace()
 	this->isJumping = true;
 	this->currentState = BossStates::GroundSlam;
 	this->isWindingUp = true;
-	GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 5.0f, false);
+	//GetWorld()->GetTimerManager().SetTimer(WindupTimer, this, &ABossCharacter::OnFinishWindup, 5.0f, false);
 }
 
 void ABossCharacter::OnFinishWindup()
