@@ -71,6 +71,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		owningFaction faction;
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnFireEvent();
+
 	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction);
 protected:
 	UFUNCTION()
