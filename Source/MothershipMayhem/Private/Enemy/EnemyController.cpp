@@ -22,7 +22,7 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 
 			BlackboardComp->SetValueAsFloat(BlackboardWalkSpeed, 125.0f);
 			BlackboardComp->SetValueAsFloat(BlackboardRunSpeed, 500.0f);
-			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 800.0f);
+			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 2000.0f);
 
 			EnemyFactory::InitializeEnemy("baseEnemy", AICharacter, this);
 
@@ -87,7 +87,8 @@ void AEnemyController::SetNewTarget(AActor* newTarget)
 			if (newTarget->ActorHasTag("Player")) {
 				BlackboardComp->SetValueAsObject(BlackboardTarget, newTarget);
 				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
-				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
+				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
+				ChangeTarget(newTarget);
 			}
 		}
 	}
