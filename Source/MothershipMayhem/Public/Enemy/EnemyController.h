@@ -47,6 +47,8 @@ public:
 	UFUNCTION() void UpdateSeenTarget(AActor* InActor, FAIStimulus Stimulus);
 	UFUNCTION(BlueprintCallable) void SetNewTarget(AActor* newTarget);
 
+
+
 	void OnTargetSightLost();
 
 	void OnCharacterDisoriented(float duration);
@@ -54,6 +56,9 @@ public:
 	void UpdateAttackRange(float newRange);
 	void UpdateRunSpeed(float newSpeed);
 	void UpdateWalkSpeed(float newSpeed);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void ChangeTarget(AActor* newTarget);
 
 private:
 	FTimerHandle StartEnemyTimer;
