@@ -16,7 +16,7 @@ protected:
 	T finalValue; //total value of the base value added / times with the modifiers
 
 	TArray<T> additionModifiers; //Modifiers to be added to the baseValue
-	TArray<T> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
+	TArray<float> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
 
 public:
 	//Get / Set variables
@@ -36,18 +36,18 @@ public:
 protected:
 	//Add the additionModifiers first to the baseValue then multiply with multiplicativeModifiers, then set finalValue with the result
 	void UpdateFinalValue() {
-		T tempValue = baseValue;
+		float tempValue = (float)baseValue;
 
 		for (T value : additionModifiers)
 		{
 			tempValue += value;
 		}
 
-		for (T value : multiplicativeModifiers)
+		for (float value : multiplicativeModifiers)
 		{
 			tempValue *= value;
 		}
 
-		finalValue = tempValue;
+		finalValue = (T)tempValue;
 	}
 };
