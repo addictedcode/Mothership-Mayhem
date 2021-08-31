@@ -68,6 +68,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void DeathGang();
 
+	UFUNCTION(BlueprintCallable)
+		bool isKnockbackImmune();
+
 protected:
 	float moveSpeedMultiplier = 1.0f;
 	float timeToReload;
@@ -80,4 +83,6 @@ protected:
 
 	AActor* player;
 	bool isBeingSucked = false;
+
+	bool isImmuneToKnockback = false;
 };

@@ -175,3 +175,8 @@ void AAICharacter::SuckIntoVacuum(AActor* playerPtr, int executeThreshold)
 	}
 }
 
+bool AAICharacter::isKnockbackImmune()
+{
+	return this->isImmuneToKnockback;
+}
+
