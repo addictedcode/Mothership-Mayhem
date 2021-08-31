@@ -15,6 +15,9 @@ protected:
 	T baseValue; //base value to be added / times to final value
 	T finalValue; //total value of the base value added / times with the modifiers
 
+	T m_min = 0; //min value for finalValue; if 0 and equals to m_max \ m_min, no liumit
+	T m_max = 0; //max value for finalValue; if m_max < m_min, no max
+
 	TArray<T> additionModifiers; //Modifiers to be added to the baseValue
 	TArray<float> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
 
@@ -33,6 +36,8 @@ public:
 
 	void RemoveAllMultiplicativeModifiers() { multiplicativeModifiers.Empty(); UpdateFinalValue(); }
 	void RemoveAllAdditionModifiers() { additionModifiers.Empty(); UpdateFinalValue(); }
+
+	void SetMinMax(T min, T max) { m_min = min; m_max = max; }
 protected:
 	//Add the additionModifiers first to the baseValue then multiply with multiplicativeModifiers, then set finalValue with the result
 	void UpdateFinalValue() {
@@ -48,6 +53,12 @@ protected:
 			tempValue *= value;
 		}
 
+		if (!(m_min == m_max == 0)) {
+			tempValue = (float)std::max(m_min, (T)tempValue);
+			if (m_max > m_min)
+				tempValue = (float)std::min(m_max, (T)tempValue);
+		}
+		
 		finalValue = (T)tempValue;
 	}
 };

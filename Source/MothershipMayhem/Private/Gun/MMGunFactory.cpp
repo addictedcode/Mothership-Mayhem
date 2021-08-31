@@ -71,12 +71,17 @@ AMMGunBase* UMMGunFactory::SpawnGun(UMMGunDataAsset* gunData, UWorld* const worl
         //set gun stats
         TGunStats& gunStats = newGun->GetGunStats();
         gunStats.fireRate.SetBaseValue(gunData->fireRate);
+        gunStats.fireRate.SetMinMax(0.01f, 0.f);
         gunStats.maxAmmo.SetBaseValue(gunData->maxAmmo);
+        gunStats.maxAmmo.SetMinMax(0, -1);
         gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
         gunStats.reloadTime.SetBaseValue(gunData->reloadTime);
+        gunStats.reloadTime.SetMinMax(0.01f, 0.f);
         gunStats.isAutomatic = gunData->isAutomatic;
         gunStats.accuracy.SetBaseValue(gunData->accuracy);
+        gunStats.accuracy.SetMinMax(0.f, 100.f);
         gunStats.numberOfProjectilesToShoot.SetBaseValue(gunData->numberOfProjectilesToShoot);
+        gunStats.numberOfProjectilesToShoot.SetMinMax(1, 0);
         gunStats.damage.SetBaseValue(gunData->damage);
         gunStats.projectileSpeed.SetBaseValue(gunData->projectileSpeed);
         gunStats.isBouncingProjectile = gunData->isBouncingProjectile;
