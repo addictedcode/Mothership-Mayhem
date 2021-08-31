@@ -36,7 +36,7 @@ public:
 		void UpdateWalkSpeed(float newWalkSpeed);
 
 	UFUNCTION(BlueprintCallable)
-		void AttackTarget(AActor* target);
+		bool AttackTarget(AActor* target);
 	#pragma endregion
 
 	#pragma region Projectile shooting
