@@ -12,19 +12,19 @@
 struct TGunStats
 {
 	//Affect Gun
-	TMMStatsBase fireRate;
-	TMMStatsBase reloadTime;
-	TMMStatsBase maxAmmo;
-	float currentAmmo = 0;
-	TMMStatsBase accuracy;
+	TMMStatsBase<float> fireRate;
+	TMMStatsBase<float> reloadTime;
+	TMMStatsBase<int> maxAmmo;
+	int currentAmmo = 0;
+	TMMStatsBase<float> accuracy;
 	bool isAutomatic;
-	TMMStatsBase numberOfProjectilesToShoot;
+	TMMStatsBase<int> numberOfProjectilesToShoot;
 
 	//Affect Projectile
-	TMMStatsBase damage;
-	TMMStatsBase projectileSpeed;
+	TMMStatsBase<float> damage;
+	TMMStatsBase<float> projectileSpeed;
 	bool isBouncingProjectile;
-	TMMStatsBase projectileGravityScale;
+	TMMStatsBase<float> projectileGravityScale;
 };
 
 
@@ -40,7 +40,7 @@ struct FGunStats
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float reloadTime;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float maxAmmo;
+		int maxAmmo;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float currentAmmo;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -48,7 +48,7 @@ struct FGunStats
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool isAutomatic;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float numberOfProjectilesToShoot;
+		int numberOfProjectilesToShoot;
 
 	//Affect Projectile
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

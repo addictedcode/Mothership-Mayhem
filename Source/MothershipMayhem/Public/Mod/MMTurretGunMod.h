@@ -24,6 +24,6 @@ class MOTHERSHIPMAYHEM_API UMMTurretGunMod : public UMMModBase
 		UPARAM(DisplayName = "Gun") class AMMGunBase* gun) override;
 
 private:
-	float numProjectilesMultiplier;
-	float maxAmmoMultiplier;
+	int numProjectilesMultiplier;
+	int maxAmmoMultiplier;
 };

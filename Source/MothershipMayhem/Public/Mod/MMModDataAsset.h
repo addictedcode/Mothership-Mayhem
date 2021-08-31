@@ -64,7 +64,7 @@ public:
 		float add_fireRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
-		float add_maxAmmo;
+		int add_maxAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
 		float add_reloadTime;
@@ -73,7 +73,7 @@ public:
 		float add_accuracy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
-		float add_numberOfProjectilesToShoot;
+		int add_numberOfProjectilesToShoot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")
 		float add_damage;

@@ -4,35 +4,50 @@
 
 #include "CoreMinimal.h"
 
+template<typename T = float>
 class MOTHERSHIPMAYHEM_API TMMStatsBase
 {
 public:
-	TMMStatsBase();
-	~TMMStatsBase();
+	TMMStatsBase() = default;
+	~TMMStatsBase() = default;
 
 protected:
-	float baseValue; //base value to be added / times to final value
-	float finalValue; //total value of the base value added / times with the modifiers
+	T baseValue; //base value to be added / times to final value
+	T finalValue; //total value of the base value added / times with the modifiers
 
-	TArray<float> additionModifiers; //Modifiers to be added to the baseValue
-	TArray<float> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
+	TArray<T> additionModifiers; //Modifiers to be added to the baseValue
+	TArray<T> multiplicativeModifiers; //Modifiers to be multiply to the baseValue
 
 public:
 	//Get / Set variables
-	float GetFinalValue() const { return finalValue; };
+	T GetFinalValue() const { return finalValue; };
 
-	float GetBaseValue() const { return baseValue; };
-	void SetBaseValue(float& newValue) { baseValue = newValue; UpdateFinalValue(); };
+	T GetBaseValue() const { return baseValue; };
+	void SetBaseValue(T& newValue) { baseValue = newValue; UpdateFinalValue(); };
 
-	void AddAdditionModifier(float newValue) { additionModifiers.Add(newValue); UpdateFinalValue(); };
-	void RemoveAdditionModifier(float& value) { additionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
+	void AddAdditionModifier(T newValue) { additionModifiers.Add(newValue); UpdateFinalValue(); };
+	void RemoveAdditionModifier(T& value) { additionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 	
-	void AddMultiplicativeModifier(float newValue) { multiplicativeModifiers.Add(newValue); UpdateFinalValue(); };
-	void RemoveMultiplicativeModifier(float& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
+	void AddMultiplicativeModifier(T newValue) { multiplicativeModifiers.Add(newValue); UpdateFinalValue(); };
+	void RemoveMultiplicativeModifier(T& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 
 	void RemoveAllMultiplicativeModifiers() { multiplicativeModifiers.Empty(); UpdateFinalValue(); }
 	void RemoveAllAdditionModifiers() { additionModifiers.Empty(); UpdateFinalValue(); }
 protected:
 	//Add the additionModifiers first to the baseValue then multiply with multiplicativeModifiers, then set finalValue with the result
-	void UpdateFinalValue();
+	void UpdateFinalValue() {
+		T tempValue = baseValue;
+
+		for (T value : additionModifiers)
+		{
+			tempValue += value;
+		}
+
+		for (T value : multiplicativeModifiers)
+		{
+			tempValue *= value;
+		}
+
+		finalValue = tempValue;
+	}
 };
