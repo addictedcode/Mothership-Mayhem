@@ -71,14 +71,14 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 	}
 }
 //Checks if AICharacter is not stunned and is not reloading then shoots at target
-void AAICharacter::AttackTarget(AActor* target)
+bool AAICharacter::AttackTarget(AActor* target)
 {
 	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden()) {
 		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
 		{
-			return;
+			return false;
 		}
 		
 		//Get Spawn Location and Rotation for the projectile to spawn
@@ -102,6 +102,7 @@ void AAICharacter::AttackTarget(AActor* target)
 				{
 					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack, 
 						this->projectileGravityScale, nullptr, owningFaction::Enemy);
+					return true;
 				}
 			}
 			else
@@ -114,6 +115,7 @@ void AAICharacter::AttackTarget(AActor* target)
 			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference AICharacter"));
 		}
 	}
+	return false;
 }
 UEnemyStatsComponent* AAICharacter::getEnemyStats()
 {
@@ -173,5 +175,10 @@ void AAICharacter::SuckIntoVacuum(AActor* playerPtr, int executeThreshold)
 		this->isStunned = true;
 		isBeingSucked = true;
 	}
+}
+
+bool AAICharacter::isKnockbackImmune()
+{
+	return this->isImmuneToKnockback;
 }
 

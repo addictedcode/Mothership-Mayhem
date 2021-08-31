@@ -9,7 +9,6 @@
 ABossCharacter::ABossCharacter() 
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ABossCharacter::Tick(float DeltaTime)
@@ -28,14 +27,14 @@ void ABossCharacter::BeginPlay()
 }
 
 void ABossCharacter::SelectMoveIndex(int index, AActor* target) {
-	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden()) {
+	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden() && this->currentState == BossStates::Idle) {
 		this->currentReloadTime = 0;
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
 		{
 			return;
 		}
-
+		this->isImmuneToKnockback = true;
 		switch (index)
 		{
 		case 0:
@@ -72,6 +71,7 @@ void ABossCharacter::ReturnToIdle()
 {
 	this->currentState = BossStates::Idle;
 	this->currentReloadTime = 0;
+	this->isImmuneToKnockback = false;
 }
 
 void ABossCharacter::SetJumping(bool jumping)
