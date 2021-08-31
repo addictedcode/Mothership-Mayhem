@@ -36,7 +36,7 @@ public:
 		float fireRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
-		float maxAmmo;
+		int maxAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float reloadTime;
@@ -45,7 +45,7 @@ public:
 		float accuracy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
-		float numberOfProjectilesToShoot;
+		int numberOfProjectilesToShoot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float damage;
