@@ -33,6 +33,17 @@ enum class MMProjectileOnHitEffectType : uint8
 	StatusEffect	UMETA(DisplayName = "StatusEffect"),
 	SpawnEffect		UMETA(DisplayName = "SpawnEffect"),
 };
+
+UENUM(BlueprintType)
+enum class MMLegendaryGuns : uint8
+{
+	NoodleGun		UMETA(DisplayName = "NoodleGun"),
+	VacuumGun		UMETA(DisplayName = "VacuumGun"),
+	TurretGun		UMETA(DisplayName = "TurretGun"),
+	HookGun			UMETA(DisplayName = "HookGun"),
+	GrappleGun		UMETA(DisplayName = "GrappleGun"),
+};
+
 /**
  * 
  */
@@ -45,7 +56,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMModType modType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type", meta = (EditCondition = "modType != MMModType::Legendary", EditConditionHides))
 		MMModSlot modSlot;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
@@ -127,4 +138,10 @@ public:
 		TSubclassOf<AActor> projectileOnHitSpawnClass;
 	#pragma endregion
 
+	#pragma region Legendary Guns
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Legendary", meta = (EditCondition = "modType == MMModType::Legendary", EditConditionHides))
+		MMLegendaryGuns legendaryGun;
+	
+	#pragma endregion 
 };

@@ -122,3 +122,40 @@ UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* 
     return newMod;
 }
 
+UMMModBase* UMMModFactory::InstantiateModLegendary(UMMModDataAsset* modData, const FModStats& newAdditiveStats,
+	const FModStats& newMultiplicativeStats)
+{
+    UMMModBase* newMod = NewObject<UMMModBase>();
+    newMod->InitializeMod(newAdditiveStats, newMultiplicativeStats, modData->projectileClass, modData->name);
+    newMod->modType = modData->modType;
+    newMod->modSlot = modData->modSlot;
+    newMod->description = modData->description;
+    const auto& legendaryGunType = modData->legendaryGun;
+    //set newMod to the legendary mod
+    switch (legendaryGunType)
+    {
+    case MMLegendaryGuns::NoodleGun:
+    {
+		break;
+    }
+    case MMLegendaryGuns::VacuumGun:
+    {
+        break;
+    }
+    case MMLegendaryGuns::TurretGun:
+    {
+        break;
+    }
+    case MMLegendaryGuns::HookGun:
+	{
+    	
+        break;
+	}
+    case MMLegendaryGuns::GrappleGun:
+	{
+        break;
+	}
+    }
+    return newMod;
+}
+
