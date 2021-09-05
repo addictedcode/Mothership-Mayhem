@@ -36,4 +36,9 @@ public:
 		UPARAM(DisplayName = "Mod Data") UMMModDataAsset* modData,
 		UPARAM(DisplayName = "Additive Stats") const FModStats& newAdditiveStats,
 		UPARAM(DisplayName = "Multiplicative Stats") const FModStats& newMultiplicativeStats);
+
+	UFUNCTION(BlueprintCallable) static UMMModBase* InstantiateModLegendary(
+		UPARAM(DisplayName = "Mod Data") UMMModDataAsset* modData,
+		UPARAM(DisplayName = "Additive Stats") const FModStats& newAdditiveStats,
+		UPARAM(DisplayName = "Multiplicative Stats") const FModStats& newMultiplicativeStats);
 };

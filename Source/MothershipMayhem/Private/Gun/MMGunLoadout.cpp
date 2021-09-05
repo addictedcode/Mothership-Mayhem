@@ -116,6 +116,7 @@ void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
 	}
 	else
 	{
+		newGun->m_Player = (AMMCharacterBase*)this->GetOwner();
 		gunList.Insert(newGun, index);
 	}
 

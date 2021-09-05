@@ -6,6 +6,25 @@
 #include "GameFramework/Character.h"
 #include "MMCharacterBase.generated.h"
 
+UENUM(BlueprintType)
+enum class MMCharacterState : uint8
+{
+	Idle =			0			UMETA(DisplayName = "Idle"),
+	Crouching =		1 << 0		UMETA(DisplayName = "Crouching"),
+	//Running =		1 << 1		UMETA(DisplayName = "Running"),
+	//Jumping =		1 << 2		UMETA(DisplayName = "Jumping"),
+	//Shooting =		1 << 3		UMETA(DisplayName = "Shooting"),
+	Grappling =		1 << 4		UMETA(DisplayName = "Grappling"),
+};
+
+inline MMCharacterState operator~ (MMCharacterState a) { return (MMCharacterState)~(uint8)a; }
+inline MMCharacterState operator| (MMCharacterState a, MMCharacterState b) { return (MMCharacterState)((uint8)a | (uint8)b); }
+inline MMCharacterState operator& (MMCharacterState a, MMCharacterState b) { return (MMCharacterState)((uint8)a & (uint8)b); }
+inline MMCharacterState operator^ (MMCharacterState a, MMCharacterState b) { return (MMCharacterState)((uint8)a ^ (uint8)b); }
+inline MMCharacterState& operator|= (MMCharacterState& a, MMCharacterState b) { return (MMCharacterState&)((uint8&)a |= (uint8)b); }
+inline MMCharacterState& operator&= (MMCharacterState& a, MMCharacterState b) { return (MMCharacterState&)((uint8&)a &= (uint8)b); }
+inline MMCharacterState& operator^= (MMCharacterState& a, MMCharacterState b) { return (MMCharacterState&)((uint8&)a ^= (uint8)b); }
+
 UCLASS()
 class MOTHERSHIPMAYHEM_API AMMCharacterBase : public ACharacter
 {
@@ -21,6 +40,9 @@ protected:
 
 public:
 
+	//State
+	MMCharacterState m_State;
+	
 	//Keyboard
 	void MoveX(float value);
 	void MoveY(float value);
