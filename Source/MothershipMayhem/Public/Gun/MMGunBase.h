@@ -91,6 +91,9 @@ protected:
 public:
 	//object pool for the bullets
 	AActor** bulletPool;
+
+	//Player
+	class AMMCharacterBase* m_Player;
   
 	UBoxComponent* vacuumHitbox;
   
