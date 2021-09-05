@@ -94,6 +94,9 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void AMMCharacterBase::MoveX(float value)
 {
+	if (uint8(m_State & MMCharacterState::Grappling)) 
+		return;
+	
 	if ((Controller) && (value != 0.0f)) 
 	{
 		const FRotator rotation = Controller->GetControlRotation();
@@ -106,6 +109,9 @@ void AMMCharacterBase::MoveX(float value)
 
 void AMMCharacterBase::MoveY(float value)
 {
+	if (uint8(m_State & MMCharacterState::Grappling))
+		return;
+	
 	if ((Controller) && (value != 0.0f))
 	{
 		const FRotator rotation = Controller->GetControlRotation();
@@ -119,11 +125,13 @@ void AMMCharacterBase::MoveY(float value)
 void AMMCharacterBase::StartCrouch()
 {
 	Crouch(true);
+	m_State |= MMCharacterState::Crouching;
 }
 
 void AMMCharacterBase::EndCrouch()
 {
 	UnCrouch(true);
+	m_State &= ~MMCharacterState::Crouching;
 }
 
 
