@@ -87,7 +87,7 @@ void AEnemyController::SetNewTarget(AActor* newTarget)
 			if (newTarget->ActorHasTag("Player")) {
 				BlackboardComp->SetValueAsObject(BlackboardTarget, newTarget);
 				BlackboardComp->SetValueAsBool(BlackboardChasingTarget, true);
-				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, true);
+				BlackboardComp->SetValueAsBool(BlackboardSeesTarget, false);
 				ChangeTarget(newTarget);
 			}
 		}

@@ -36,4 +36,6 @@ private:
 
 	std::map<TSubclassOf<AActor>, std::vector<AActor*>> SpawnedPool;
 	std::map<TSubclassOf<AActor>, std::vector<AActor*>> DisabledSpawns;
+
+	AActor* initialTarget = nullptr;
 };
