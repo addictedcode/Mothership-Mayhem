@@ -36,7 +36,7 @@ public:
 		void UpdateWalkSpeed(float newWalkSpeed);
 
 	UFUNCTION(BlueprintCallable)
-		bool AttackTarget(AActor* target);
+		bool DetermineTarget(AActor* target);
 	#pragma endregion
 
 	#pragma region Projectile shooting
@@ -71,6 +71,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool isKnockbackImmune();
 
+	UFUNCTION(BlueprintCallable)
+		void shootTarget();
+
 protected:
 	float moveSpeedMultiplier = 1.0f;
 	float timeToReload;
@@ -84,5 +87,6 @@ protected:
 	AActor* player;
 	bool isBeingSucked = false;
 
+	AActor* shotTarget = nullptr;
 	bool isImmuneToKnockback = false;
 };

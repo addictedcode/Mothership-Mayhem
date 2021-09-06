@@ -70,50 +70,20 @@ void AAICharacter::UpdateWalkSpeed(float newWalkSpeed)
 		UE_LOG(LogTemp, Error, TEXT("Player has no character movement component"));
 	}
 }
-//Checks if AICharacter is not stunned and is not reloading then shoots at target
-bool AAICharacter::AttackTarget(AActor* target)
+//Checks if AICharacter is not stunned and is not reloading then prepares firing target
+bool AAICharacter::DetermineTarget(AActor* target)
 {
 	if (this->currentReloadTime >= this->timeToReload && !this->isStunned && !this->IsHidden()) {
 		this->currentReloadTime = 0;
+		
 		UWorld* const world = this->GetWorld();
 		if (world == NULL)
 		{
 			return false;
 		}
-		
-		//Get Spawn Location and Rotation for the projectile to spawn
-		FVector SpawnLocation = this->ProjectileLaunchArea->GetComponentLocation();
-		FVector lineToTarget = target->GetActorLocation() - ProjectileLaunchArea->GetComponentLocation();
 
-		FRotator SpawnRotation = lineToTarget.Rotation();
-
-		//Set Spawn Collision Handling Override
-		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-		// spawn the projectile at the muzzle
-		if (bulletPool != nullptr)
-		{
-			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
-			if (pool != nullptr)
-			{
-				AMMProjectileBase* projectile = pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-				if (projectile)
-				{
-					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack, 
-						this->projectileGravityScale, nullptr, owningFaction::Enemy);
-					return true;
-				}
-			}
-			else
-			{
-				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference AICharacter"));
-		}
+		this->shotTarget = target;
+		return true;
 	}
 	return false;
 }
@@ -180,5 +150,48 @@ void AAICharacter::SuckIntoVacuum(AActor* playerPtr, int executeThreshold)
 bool AAICharacter::isKnockbackImmune()
 {
 	return this->isImmuneToKnockback;
+}
+
+void AAICharacter::shootTarget()
+{
+	if (this->shotTarget != nullptr)
+	{
+		//Get Spawn Location and Rotation for the projectile to spawn
+		FVector SpawnLocation = this->ProjectileLaunchArea->GetComponentLocation();
+		FVector lineToTarget = this->shotTarget->GetActorLocation() - ProjectileLaunchArea->GetComponentLocation();
+
+		FRotator SpawnRotation = lineToTarget.Rotation();
+
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		// spawn the projectile at the muzzle
+		if (bulletPool != nullptr)
+		{
+			AProjectilePool* pool = Cast<AProjectilePool>(bulletPool);
+			if (pool != nullptr)
+			{
+				AMMProjectileBase* projectile = pool->SpawnObject(projectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				if (projectile)
+				{
+					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack,
+						this->projectileGravityScale, nullptr, owningFaction::Enemy);
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference AICharacter"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Target Actor Reference AICharacter"));
+	}
 }
 
