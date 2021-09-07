@@ -2,7 +2,7 @@
 
 
 #include "Enemy/AICharacter.h"
-
+#include "Enemy/EnemyPool.h"
 #include "Enemy/EnemyStatsComponent.h"
 #include "Projectiles/ProjectilePool.h"
 #include "GameFramework/CharacterMovementComponent.h"

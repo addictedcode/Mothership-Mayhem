@@ -26,11 +26,16 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 		AActor* bulletPool;
+	
+	UPROPERTY(EditAnywhere, Category = "Snipers")
+		TArray<AActor*> sniperPoints;
 
 	void SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRotator rot, FActorSpawnParameters spawnParams);
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateEnemyTargets(AActor* newTarget);
+
+	void RegisterEnemyDeath(AActor* deadEnemy);
 
 private:
 

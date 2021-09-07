@@ -74,6 +74,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void shootTarget();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void SetSnipingSpot(AActor* loc);
+
+	class AEnemyPool* enemyPool;
+
 protected:
 	float moveSpeedMultiplier = 1.0f;
 	float timeToReload;
