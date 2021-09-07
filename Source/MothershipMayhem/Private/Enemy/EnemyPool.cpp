@@ -65,7 +65,8 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 						currentController->SetNewTarget(initialTarget);
 					}
 				}
-				spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
+				if (sniperPoints.Num() > 0)
+					spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
 			}
 			if (SpawnedPool.count(ActorToSpawn))
 				SpawnedPool[ActorToSpawn].push_back(SpawnedActorRef);
@@ -95,7 +96,8 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 					currentController->SetNewTarget(initialTarget);
 				}
 			}
-			spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
+			if (sniperPoints.Num() > 0)
+				spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
 		}
 		else
 		{
