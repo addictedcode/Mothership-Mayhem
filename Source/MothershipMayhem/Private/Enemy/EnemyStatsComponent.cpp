@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyController.h"
+#include "Enemy/EnemyPool.h"
 
 // Sets default values for this component's properties
 UEnemyStatsComponent::UEnemyStatsComponent()
@@ -56,6 +57,7 @@ void UEnemyStatsComponent::TakeDamage(int damage)
 		{
 			parent->DeathGang();
 			parent->SetActorActivation(false);
+			parent->enemyPool->RegisterEnemyDeath(parent);
 		}
 		else
 		{
