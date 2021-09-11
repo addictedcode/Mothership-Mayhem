@@ -29,6 +29,9 @@ private:
 	void MoveX(float value);
 	void MoveY(float value);
 
+	void StartJump();
+	void EndJump();
+	
 	void StartCrouch();
 	void EndCrouch();
 

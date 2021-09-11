@@ -72,11 +72,11 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	/*PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterBase::MoveX);
 	PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterBase::MoveY);*/
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMMCharacterBase::StartJump);
+	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMMCharacterBase::EndJump);
 	
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMMCharacterBase::StartCrouch);
-	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterBase::EndCrouch);
+	//PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMMCharacterBase::StartCrouch);
+	//PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterBase::EndCrouch);
 	
 	//Mouse Movement
 	/*PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
@@ -121,6 +121,19 @@ void AMMCharacterBase::MoveY(float value)
 		AddMovementInput(direction, value);
 	}
 }
+
+void AMMCharacterBase::StartJump()
+{
+	Jump();
+	m_State |= MMCharacterState::Jumping;
+}
+
+void AMMCharacterBase::EndJump()
+{
+	StopJumping();
+	m_State &= ~MMCharacterState::Jumping;
+}
+
 
 void AMMCharacterBase::StartCrouch()
 {
