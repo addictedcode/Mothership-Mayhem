@@ -25,7 +25,7 @@ void AEnemyPool::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	for (std::map<TSubclassOf<AActor>, std::vector<AActor*>>::iterator iter = SpawnedPool.begin(); iter != SpawnedPool.end(); iter++) {
+	/*for (std::map<TSubclassOf<AActor>, std::vector<AActor*>>::iterator iter = SpawnedPool.begin(); iter != SpawnedPool.end(); iter++) {
 		for (int i = 0; i < iter->second.size(); i++)
 		{
 			if (iter->second[i]->IsHidden())
@@ -44,7 +44,7 @@ void AEnemyPool::Tick(float DeltaTime)
 				UE_LOG(LogTemp, Display, TEXT("Despawning"));
 			}
 		}
-	}
+	}*/
 }
 
 void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRotator rot, FActorSpawnParameters spawnParams)
@@ -57,6 +57,16 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 			if (spawnedEnemy != nullptr)
 			{
 				spawnedEnemy->bulletPool = this->bulletPool;
+				spawnedEnemy->enemyPool = this;
+				if (initialTarget != nullptr)
+				{
+					AEnemyController* currentController = Cast<AEnemyController>(spawnedEnemy->GetController());
+					if (currentController) {
+						currentController->SetNewTarget(initialTarget);
+					}
+				}
+				if (sniperPoints.Num() > 0)
+					spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
 			}
 			if (SpawnedPool.count(ActorToSpawn))
 				SpawnedPool[ActorToSpawn].push_back(SpawnedActorRef);
@@ -79,6 +89,15 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 		if (spawnedEnemy != nullptr)
 		{
 			spawnedEnemy->SetActorActivation(true);
+			if (initialTarget != nullptr)
+			{
+				AEnemyController* currentController = Cast<AEnemyController>(spawnedEnemy->GetController());
+				if (currentController) {
+					currentController->SetNewTarget(initialTarget);
+				}
+			}
+			if (sniperPoints.Num() > 0)
+				spawnedEnemy->SetSnipingSpot(sniperPoints[FMath::RandRange(0, sniperPoints.Num() - 1)]);
 		}
 		else
 		{
@@ -89,18 +108,29 @@ void AEnemyPool::SpawnEnemy(TSubclassOf<AActor> ActorToSpawn, FVector loc, FRota
 	}
 }
 
-void AEnemyPool::UpdateEnemyTargets(AActor* newTarget) {
-	std::map<TSubclassOf<AActor>, std::vector<AActor*>>::iterator iter;
+void AEnemyPool::UpdateEnemyTargets(AActor* newTarget) 
+{
+	initialTarget = newTarget;
+}
 
-	for (iter = SpawnedPool.begin(); iter != SpawnedPool.end(); iter++)
+void AEnemyPool::RegisterEnemyDeath(AActor* deadEnemy)
+{
+	if (DisabledSpawns.count(deadEnemy->GetClass()))
+		DisabledSpawns[deadEnemy->GetClass()].push_back(deadEnemy);
+	else
 	{
-		for (int i = 0; i < iter->second.size(); i++)
+		std::vector<AActor*> newEntry;
+		newEntry.push_back(deadEnemy);
+		DisabledSpawns.insert(std::pair<TSubclassOf<AActor>, std::vector<AActor*>>(deadEnemy->GetClass(), newEntry));
+	}
+
+	for (int i = 0; i < SpawnedPool[deadEnemy->GetClass()].size(); i++)
+	{
+		if (SpawnedPool[deadEnemy->GetClass()][i] == deadEnemy)
 		{
-			AAICharacter* currentEnemy = Cast<AAICharacter>(iter->second[i]);
-			AEnemyController* currentController = Cast<AEnemyController>(currentEnemy->GetController());
-			if (currentController) {
-				currentController->SetNewTarget(newTarget);
-			}
+			SpawnedPool[deadEnemy->GetClass()].erase(SpawnedPool[deadEnemy->GetClass()].begin() + i);
+			break;
 		}
 	}
+	UE_LOG(LogTemp, Display, TEXT("Despawning"));
 }

@@ -94,6 +94,7 @@ void ABossCharacter::ChargeTarget(AActor* target)
 	this->attackDestination = target->GetActorLocation();
 	this->player = target;
 	this->currentState = BossStates::Charge;
+	this->isWindingUp = true;
 }
 
 void ABossCharacter::JumpSmashTarget(AActor* target)
