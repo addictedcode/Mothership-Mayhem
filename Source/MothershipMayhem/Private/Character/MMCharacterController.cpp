@@ -18,8 +18,8 @@ void AMMCharacterController::SetupInputComponent()
 		PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterController::MoveX);
 		PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterController::MoveY);
 
-		/*PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMMCharacterController::Jump);
-		PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMMCharacterController::StopJumping);*/
+		PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMMCharacterController::StartJump);
+		PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMMCharacterController::EndJump);
 
 		PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMMCharacterController::StartCrouch);
 		PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterController::EndCrouch);
@@ -50,6 +50,16 @@ void AMMCharacterController::MoveY(float value)
 {
 	//this->characterCopy->MoveY(value);
 	this->GetPawn<AMMCharacterBase>()->MoveY(value);
+}
+
+void AMMCharacterController::StartJump()
+{
+	this->GetPawn<AMMCharacterBase>()->StartJump();
+}
+
+void AMMCharacterController::EndJump()
+{
+	this->GetPawn<AMMCharacterBase>()->EndJump();
 }
 
 void AMMCharacterController::StartCrouch()

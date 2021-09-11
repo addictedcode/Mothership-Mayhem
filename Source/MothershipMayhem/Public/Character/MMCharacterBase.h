@@ -12,7 +12,7 @@ enum class MMCharacterState : uint8
 	Idle =			0			UMETA(DisplayName = "Idle"),
 	Crouching =		1 << 0		UMETA(DisplayName = "Crouching"),
 	//Running =		1 << 1		UMETA(DisplayName = "Running"),
-	//Jumping =		1 << 2		UMETA(DisplayName = "Jumping"),
+	Jumping =		1 << 2		UMETA(DisplayName = "Jumping"),
 	//Shooting =		1 << 3		UMETA(DisplayName = "Shooting"),
 	Grappling =		1 << 4		UMETA(DisplayName = "Grappling"),
 };
@@ -47,6 +47,9 @@ public:
 	void MoveX(float value);
 	void MoveY(float value);
 
+	void StartJump();
+	void EndJump();
+	
 	void StartCrouch();
 	void EndCrouch();
 
