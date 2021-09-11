@@ -98,7 +98,10 @@ public:
 	UBoxComponent* vacuumHitbox;
   
 	TArray<class UMMProjectileOnHitEffect*> projectileOnHitEffects;
-	
+
+	USoundBase* m_shoot_sfx;
+	USoundBase* m_reload_sfx;
+	UAudioComponent* m_current_reload_sfx;
 //UE Visible Variables
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */
@@ -138,6 +141,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void PlayReloadAnimation();
+
+	UFUNCTION(BlueprintCallable)
+		void PlayShootSFX();
+
+	UFUNCTION(BlueprintCallable)
+		void PlayReloadSFX();
 
 protected:
 

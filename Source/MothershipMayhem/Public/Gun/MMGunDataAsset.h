@@ -26,6 +26,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FX")
 		UNiagaraSystem* muzzleFlashFX;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_shoot_sfx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_reload_sfx;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 

@@ -7,6 +7,7 @@
 #include "Mod/MMModBase.h"
 #include "Character/MMCharacterBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyStatsComponent.h"
 
@@ -141,6 +142,11 @@ void AMMGunBase::OnPrimaryShootPressed()
 	{
 		return;
 	}
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(reloadTimerHandle))
+	{
+		return;
+	}
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(primaryShootTimerHandle, this, &AMMGunBase::PrimaryShoot, gunStats.fireRate.GetFinalValue(), gunStats.isAutomatic, 0.0f);
@@ -161,6 +167,7 @@ void AMMGunBase::OnReload()
 
 	isReloading = true;
 	this->PlayReloadAnimation();
+	PlayReloadSFX();
 	
 	GetWorld()->GetTimerManager().SetTimer
 	(reloadTimerHandle, this, &AMMGunBase::Reload, gunStats.reloadTime.GetFinalValue());
@@ -222,12 +229,27 @@ void AMMGunBase::OnHolster()
 {
 	isReloading = false;
 	isShooting = false;
-	
+
+	m_current_reload_sfx->Stop();
 	GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
 }
 
 
 #pragma endregion 
+
+void AMMGunBase::PlayShootSFX()
+{
+	if (!m_shoot_sfx) return;
+	
+	UGameplayStatics::PlaySoundAtLocation(this, m_shoot_sfx, this->GetTransform().GetLocation());
+}
+
+void AMMGunBase::PlayReloadSFX()
+{
+	if (!m_reload_sfx) return;
+
+	m_current_reload_sfx = UGameplayStatics::SpawnSoundAttached(m_reload_sfx, RootComponent);
+}
 
 void AMMGunBase::PrimaryShoot()
 {
@@ -247,7 +269,8 @@ void AMMGunBase::PrimaryShoot()
 				//UE_LOG(LogTemp, Error, TEXT("Bang!"));
 				ShootProjectile();
 				// play sound ===
-				AMMCharacterBase* characterParent =
+				PlayShootSFX();
+				/*AMMCharacterBase* characterParent =
 					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 				if (characterParent != NULL) {
 					characterParent->PlayShootingSound();
@@ -255,7 +278,7 @@ void AMMGunBase::PrimaryShoot()
 				}
 				else {
 					UE_LOG(LogTemp, Error, TEXT("No Character"));
-				}
+				}*/
 
 			}
 			gunStats.currentAmmo--;
