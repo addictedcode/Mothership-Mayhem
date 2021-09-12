@@ -28,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		MMChallengeType challengeType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		int difficultyLevel;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Time Limit")
 		int timeLimitSeconds;
 

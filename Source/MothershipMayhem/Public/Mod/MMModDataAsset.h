@@ -27,6 +27,16 @@ enum class MMModSlot : uint8
 };
 
 UENUM(BlueprintType)
+enum class MMModRarity : uint8
+{
+	Common		UMETA(DisplayName = "Common"),
+	Uncommon	UMETA(DisplayName = "Uncommon"),
+	Rare	UMETA(DisplayName = "Rare"),
+	Epic		UMETA(DisplayName = "Epic"),
+	Legendary	UMETA(DisplayName = "Legendary"),
+};
+
+UENUM(BlueprintType)
 enum class MMProjectileOnHitEffectType : uint8
 {
 	None			UMETA(DisplayName = "None"),
@@ -58,6 +68,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type", meta = (EditCondition = "modType != MMModType::Legendary", EditConditionHides))
 		MMModSlot modSlot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		MMModRarity modRarity;
+
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString name;
