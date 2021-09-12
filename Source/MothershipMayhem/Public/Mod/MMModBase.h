@@ -14,9 +14,9 @@ struct FModStats
 
 	UPROPERTY(BlueprintReadWrite) float fireRate;
 	UPROPERTY(BlueprintReadWrite) float reloadTime;
-	UPROPERTY(BlueprintReadWrite) int maxAmmo;
+	UPROPERTY(BlueprintReadWrite) float maxAmmo;
 	UPROPERTY(BlueprintReadWrite) float accuracy;
-	UPROPERTY(BlueprintReadWrite) int numberOfProjectilesToShoot;
+	UPROPERTY(BlueprintReadWrite) float numberOfProjectilesToShoot;
 	UPROPERTY(BlueprintReadWrite) float damage;
 	UPROPERTY(BlueprintReadWrite) float projectileSpeed;
 	UPROPERTY(BlueprintReadWrite) float projectileGravityScale;

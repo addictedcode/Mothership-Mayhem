@@ -122,7 +122,7 @@ void UMMModBase::RemoveFromGun(AMMGunBase* gun)
 	}
 	if (additiveModStats.numberOfProjectilesToShoot != 0)
 	{
-		gunStats.numberOfProjectilesToShoot.RemoveAdditionModifier(additiveModStats.numberOfProjectilesToShoot);
+		gunStats.numberOfProjectilesToShoot.RemoveAdditionModifier((int)additiveModStats.numberOfProjectilesToShoot);
 	}
 	if (additiveModStats.projectileGravityScale != 0)
 	{
@@ -134,7 +134,7 @@ void UMMModBase::RemoveFromGun(AMMGunBase* gun)
 	}
 	if (additiveModStats.maxAmmo != 0)
 	{
-		gunStats.maxAmmo.RemoveAdditionModifier(additiveModStats.maxAmmo);
+		gunStats.maxAmmo.RemoveAdditionModifier((int)additiveModStats.maxAmmo);
 	}
 	//End Additive Stats
 

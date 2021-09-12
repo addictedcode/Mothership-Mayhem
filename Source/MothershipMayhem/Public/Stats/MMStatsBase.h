@@ -29,10 +29,10 @@ public:
 	void SetBaseValue(T& newValue) { baseValue = newValue; UpdateFinalValue(); };
 
 	void AddAdditionModifier(T newValue) { additionModifiers.Add(newValue); UpdateFinalValue(); };
-	void RemoveAdditionModifier(T& value) { additionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
+	void RemoveAdditionModifier(const T& value) { additionModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 	
-	void AddMultiplicativeModifier(T newValue) { multiplicativeModifiers.Add(newValue); UpdateFinalValue(); };
-	void RemoveMultiplicativeModifier(T& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
+	void AddMultiplicativeModifier(float newValue) { multiplicativeModifiers.Add(newValue); UpdateFinalValue(); };
+	void RemoveMultiplicativeModifier(const float& value) { multiplicativeModifiers.RemoveSingleSwap(value); UpdateFinalValue(); };
 
 	void RemoveAllMultiplicativeModifiers() { multiplicativeModifiers.Empty(); UpdateFinalValue(); }
 	void RemoveAllAdditionModifiers() { additionModifiers.Empty(); UpdateFinalValue(); }
