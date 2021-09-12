@@ -176,7 +176,7 @@ void AAICharacter::shootTarget()
 				if (projectile)
 				{
 					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack,
-						this->projectileGravityScale, nullptr, owningFaction::Enemy);
+						this->projectileGravityScale, nullptr, owningFaction::Enemy, nullptr);
 				}
 			}
 			else

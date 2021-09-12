@@ -353,7 +353,7 @@ bool AMMGunBase::ShootProjectile()
 			if (!projectile)
 				return false;
 			projectile->InitializeProjectile(gunStats.damage.GetFinalValue(), gunStats.projectileSpeed.GetFinalValue(), 
-				gunStats.isBouncingProjectile, gunStats.projectileGravityScale.GetFinalValue(), &projectileOnHitEffects, owningFaction::Player);
+				gunStats.isBouncingProjectile, gunStats.projectileGravityScale.GetFinalValue(), &projectileOnHitEffects, owningFaction::Player, m_hit_sfx);
 		}
 		else
 		{

@@ -91,6 +91,10 @@ void UMMModBase::AddToGun(AMMGunBase* gun)
 		gunStats.maxAmmo.AddMultiplicativeModifier(multiplicativeModStats.maxAmmo);
 	}
 
+	if (m_shoot_sfx)
+		gun->m_shoot_sfx = m_shoot_sfx;
+	if (m_hit_sfx)
+		gun->m_hit_sfx = m_hit_sfx;
 	//
 	//End Multiplicative Stats
 }
@@ -168,6 +172,9 @@ void UMMModBase::RemoveFromGun(AMMGunBase* gun)
 		gunStats.maxAmmo.RemoveMultiplicativeModifier(multiplicativeModStats.maxAmmo);
 	}
 	//End Multiplicative Stats
+
+	gun->m_shoot_sfx = gun->m_default_shoot_sfx;
+	gun->m_hit_sfx = gun->m_default_hit_sfx;
 }
 
 FModStats UMMModBase::GetAdditiveModStats()

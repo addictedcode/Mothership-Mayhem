@@ -99,7 +99,11 @@ public:
   
 	TArray<class UMMProjectileOnHitEffect*> projectileOnHitEffects;
 
+	//SFX
 	USoundBase* m_shoot_sfx;
+	USoundBase* m_default_shoot_sfx;
+	USoundBase* m_hit_sfx;
+	USoundBase* m_default_hit_sfx;
 	USoundBase* m_reload_sfx;
 	UAudioComponent* m_current_reload_sfx;
 //UE Visible Variables

@@ -30,6 +30,9 @@ public:
 		USoundBase* m_gun_shoot_sfx;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_hit_sfx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
 		USoundBase* m_gun_reload_sfx;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)

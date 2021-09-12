@@ -50,6 +50,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		USoundBase* m_shoot_sfx;
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		USoundBase* m_hit_sfx;
+	
 	//Called when creating a mod
 	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
 		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,

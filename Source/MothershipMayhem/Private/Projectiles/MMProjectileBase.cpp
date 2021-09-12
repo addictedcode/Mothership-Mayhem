@@ -6,6 +6,8 @@
 #include "Projectiles/ProjectilePool.h"
 #include "Projectiles/MMProjectileOnHitEffect.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 #include "Enemy/AICharacter.h"
 #include "Enemy/EnemyStatsComponent.h"
 
@@ -74,7 +76,8 @@ void AMMProjectileBase::BeginPlay()
 //	}
 //}
 
-void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction)
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, 
+	TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction, USoundBase* hit_sfx)
 {
 	damage = newDamage;
 	projectileSpeed = newProjectileSpeed;
@@ -83,6 +86,7 @@ void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectil
 	projectileMovement->bShouldBounce = isProjectileBounce;
 	projectileMovement->ProjectileGravityScale = gravityScale;
 	faction = newFaction;
+	m_hit_sfx = hit_sfx;
 }
 
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -161,6 +165,11 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 			if (world != nullptr)
 				effect->ApplyEffect(world, Hit);
 		}
+	}
+
+	if (m_hit_sfx)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, m_hit_sfx, Hit.ImpactPoint);
 	}
 }
 
