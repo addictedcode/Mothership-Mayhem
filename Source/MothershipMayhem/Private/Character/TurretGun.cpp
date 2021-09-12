@@ -77,7 +77,7 @@ void ATurretGun::AttackTarget(AActor* targetActor)
 				if (projectile)
 				{
 					projectile->InitializeProjectile(this->attackDamage, this->projectileSpeed, this->hasBouncingAttack,
-						this->projectileGravityScale, nullptr, owningFaction::Neutral);
+						this->projectileGravityScale, nullptr, owningFaction::Neutral, nullptr);
 				}
 			}
 			else

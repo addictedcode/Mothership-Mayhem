@@ -50,6 +50,9 @@ protected:
 public:
 	TArray<class UMMProjectileOnHitEffect*>* projectileOnHitEffects;
 
+	UPROPERTY(EditAnywhere)
+	USoundBase* m_hit_sfx;
+	
 	//Move to timer function - Richmond
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
@@ -74,7 +77,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnFireEvent();
 
-	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction);
+	void InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, 
+		TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction, USoundBase* hit_sfx);
 protected:
 	UFUNCTION()
 		void OnLifespanEnd();

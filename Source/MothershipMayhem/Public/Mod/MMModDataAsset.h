@@ -69,6 +69,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
 		TSubclassOf<class AMMProjectileBase> projectileClass;
 
+	#pragma region SFX
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
+		USoundBase* shoot_sfx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
+		USoundBase* hit_sfx;
+	
+	#pragma endregion 
 
 	#pragma region Additive Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")

@@ -68,6 +68,13 @@ AMMGunBase* UMMGunFactory::SpawnGun(UMMGunDataAsset* gunData, UWorld* const worl
         newGun->SetDefaultProjectile(gunData->projectileClass);
         newGun->SetMuzzleFlash(gunData->muzzleFlashFX);
 
+    	//SFX
+        newGun->m_shoot_sfx = gunData->m_gun_shoot_sfx;
+        newGun->m_default_shoot_sfx = gunData->m_gun_shoot_sfx;
+        newGun->m_hit_sfx = gunData->m_gun_hit_sfx;
+        newGun->m_default_hit_sfx = gunData->m_gun_hit_sfx;
+        newGun->m_reload_sfx = gunData->m_gun_reload_sfx;
+
         //set gun stats
         TGunStats& gunStats = newGun->GetGunStats();
         gunStats.fireRate.SetBaseValue(gunData->fireRate);
