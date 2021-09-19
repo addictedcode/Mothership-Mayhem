@@ -90,6 +90,8 @@ UMMModBase* UMMModFactory::InstantiateModBasic(UMMModDataAsset* modData, const F
     newMod->description = modData->description;
     newMod->m_shoot_sfx = modData->shoot_sfx;
     newMod->m_hit_sfx = modData->hit_sfx;
+    //newMod->muzzleFlashFX = modData->muzzleFlashFX;
+    newMod->icon = modData->icon;
     return newMod;
 }
 
@@ -103,6 +105,8 @@ UMMModBase* UMMModFactory::InstantiateModProjectileOnHitEffect(UMMModDataAsset* 
     newMod->description = modData->description;
     newMod->m_shoot_sfx = modData->shoot_sfx;
     newMod->m_hit_sfx = modData->hit_sfx;
+    newMod->muzzleFlashFX = modData->muzzleFlashFX;
+    newMod->icon = modData->icon;
     const auto& onHitEffectType = modData->projectileOnHitEffectType;
 	switch(onHitEffectType)
 	{
@@ -136,6 +140,8 @@ UMMModBase* UMMModFactory::InstantiateModLegendary(UMMModDataAsset* modData, con
     newMod->description = modData->description;
     newMod->m_shoot_sfx = modData->shoot_sfx;
     newMod->m_hit_sfx = modData->hit_sfx;
+    newMod->muzzleFlashFX = modData->muzzleFlashFX;
+    newMod->icon = modData->icon;
     const auto& legendaryGunType = modData->legendaryGun;
     //set newMod to the legendary mod
     switch (legendaryGunType)

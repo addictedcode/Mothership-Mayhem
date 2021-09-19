@@ -3,7 +3,6 @@
 
 #include "Mod/MMModBase.h"
 #include "Gun/MMGunBase.h"
-
 #include "Mod/MMModFactory.h"
 
 UMMModBase* UMMModBase::InitializeMod(FModStats newAdditiveModStats, 
@@ -185,4 +184,144 @@ FModStats UMMModBase::GetAdditiveModStats()
 FModStats UMMModBase::GetMultiplicativeModStats()
 {
 	return multiplicativeModStats;
+}
+
+UMMModBase* UMMModBase::UpdateMuzzleFlash(UNiagaraSystem* newMuzzleFlash)
+{
+	this->muzzleFlashFX = newMuzzleFlash;
+	return this;
+}
+
+TArray<FString> UMMModBase::getRelevantStatNames()
+{
+	TArray<FString> names;
+	if (additiveModStats.damage != 0 || multiplicativeModStats.damage != 1)
+	{
+		names.Add(TEXT("Damage"));
+	}
+	if (additiveModStats.fireRate != 0 || multiplicativeModStats.fireRate != 1)
+	{
+		names.Add(TEXT("Fire Rate"));
+	}
+	if (additiveModStats.reloadTime != 0 || multiplicativeModStats.projectileGravityScale != 1)
+	{
+		names.Add(TEXT("Reload Speed"));
+	}
+	if (additiveModStats.maxAmmo != 0 || multiplicativeModStats.reloadTime != 1)
+	{
+		names.Add(TEXT("Mag Size"));
+	}
+	if (additiveModStats.accuracy != 0 || multiplicativeModStats.accuracy != 1)
+	{
+		names.Add(TEXT("Accuracy"));
+	}
+
+	if (additiveModStats.projectileSpeed != 0 || multiplicativeModStats.projectileSpeed != 1)
+	{
+		names.Add(TEXT("Projectile Speed"));
+	}
+	if (additiveModStats.numberOfProjectilesToShoot != 0 || multiplicativeModStats.numberOfProjectilesToShoot != 1)
+	{
+		names.Add(TEXT("Projectile Count"));
+	}
+	if (additiveModStats.projectileGravityScale != 0 || multiplicativeModStats.projectileGravityScale != 1)
+	{
+		names.Add(TEXT("Gravity Scale"));
+	}
+	
+	return names;
+}
+
+TArray<float> UMMModBase::getRelevantAdditiveStats() 
+{
+
+	TArray<FString> names = this->getRelevantStatNames();
+
+	TArray<float> addStats;
+
+	for (int32 Index = 0; Index != names.Num(); ++Index)
+	{
+		if (names[Index] == TEXT("Damage"))
+		{
+			addStats.Add(additiveModStats.damage);
+		}
+		if (names[Index] == TEXT("Fire Rate"))
+		{
+			addStats.Add(additiveModStats.fireRate);
+		}
+		if (names[Index] == TEXT("Reload Speed"))
+		{
+			addStats.Add(additiveModStats.reloadTime);
+		}
+		if (names[Index] == TEXT("Mag Size"))
+		{
+			addStats.Add(additiveModStats.maxAmmo);
+		}
+		if (names[Index] == TEXT("Accuracy"))
+		{
+			addStats.Add(additiveModStats.accuracy);
+		}
+
+		if (names[Index] == TEXT("Projectile Speed"))
+		{
+			addStats.Add(additiveModStats.projectileSpeed);
+		}
+		if (names[Index] == TEXT("Projectile Count"))
+		{
+			addStats.Add(additiveModStats.numberOfProjectilesToShoot);
+		}
+		if (names[Index] == TEXT("Gravity Scale"))
+		{
+			addStats.Add(additiveModStats.projectileGravityScale);
+		}
+	}
+
+	return addStats;
+}
+
+TArray<float> UMMModBase::getRelevantMultiplicativeStats() 
+{
+	TArray<float> multStats;
+
+	TArray<FString> names = this->getRelevantStatNames();
+
+
+	for (int32 Index = 0; Index != names.Num(); ++Index)
+	{
+		if (names[Index] == TEXT("Damage"))
+		{
+			multStats.Add(multiplicativeModStats.damage);
+		}
+		if (names[Index] == TEXT("Fire Rate"))
+		{
+			multStats.Add(multiplicativeModStats.fireRate);
+		}
+		if (names[Index] == TEXT("Reload Speed"))
+		{
+			multStats.Add(multiplicativeModStats.reloadTime);
+		}
+		if (names[Index] == TEXT("Mag Size"))
+		{
+			multStats.Add(multiplicativeModStats.maxAmmo);
+		}
+		if (names[Index] == TEXT("Accuracy"))
+		{
+			multStats.Add(multiplicativeModStats.accuracy);
+		}
+
+		if (names[Index] == TEXT("Projectile Speed"))
+		{
+			multStats.Add(multiplicativeModStats.projectileSpeed);
+		}
+		if (names[Index] == TEXT("Projectile Count"))
+		{
+			multStats.Add(multiplicativeModStats.numberOfProjectilesToShoot);
+		}
+		if (names[Index] == TEXT("Gravity Scale"))
+		{
+			multStats.Add(multiplicativeModStats.projectileGravityScale);
+		}
+	}
+
+	return multStats;
 }

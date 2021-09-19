@@ -227,10 +227,18 @@ void AMMGunBase::OnDraw()
 
 void AMMGunBase::OnHolster()
 {
-	isReloading = false;
-	isShooting = false;
+	/*if (isReloading)
+		m_current_reload_sfx->Stop();
 
-	m_current_reload_sfx->Stop();
+	isReloading = false;
+	isShooting = false;*/
+
+	//if(m_current_reload_sfx != NULL)
+	//	if(m_current_reload_sfx)
+	//		if(m_current_reload_sfx->IsPlaying())
+	//			m_current_reload_sfx->Stop();
+
+
 	GetWorld()->GetTimerManager().ClearTimer(reloadTimerHandle);
 }
 
@@ -239,16 +247,16 @@ void AMMGunBase::OnHolster()
 
 void AMMGunBase::PlayShootSFX()
 {
-	if (!m_shoot_sfx) return;
+	/*if (!m_shoot_sfx) return;
 	
-	UGameplayStatics::PlaySoundAtLocation(this, m_shoot_sfx, this->GetTransform().GetLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, m_shoot_sfx, this->GetTransform().GetLocation());*/
 }
 
 void AMMGunBase::PlayReloadSFX()
 {
-	if (!m_reload_sfx) return;
-
-	m_current_reload_sfx = UGameplayStatics::SpawnSoundAttached(m_reload_sfx, RootComponent);
+	/*if (!m_reload_sfx) return;
+	if(isReloading)
+	m_current_reload_sfx = UGameplayStatics::SpawnSoundAttached(m_reload_sfx, RootComponent);*/
 }
 
 void AMMGunBase::PrimaryShoot()
@@ -270,15 +278,14 @@ void AMMGunBase::PrimaryShoot()
 				ShootProjectile();
 				// play sound ===
 				PlayShootSFX();
-				/*AMMCharacterBase* characterParent =
+				AMMCharacterBase* characterParent =
 					Cast<AMMCharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 				if (characterParent != NULL) {
-					characterParent->PlayShootingSound();
 					this->PlayRecoilAnimation();
 				}
 				else {
 					UE_LOG(LogTemp, Error, TEXT("No Character"));
-				}*/
+				}
 
 			}
 			gunStats.currentAmmo--;
@@ -371,6 +378,9 @@ bool AMMGunBase::ShootProjectile()
 void AMMGunBase::Reload()
 {
 	gunStats.currentAmmo = gunStats.maxAmmo.GetFinalValue();
+	/*if (isReloading) {
+		m_current_reload_sfx->Stop();
+	}*/
 	isReloading = false;
 	if (isShooting)
 	{

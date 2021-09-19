@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Mod/MMModDataAsset.h"
+#include "NiagaraSystem.h"
+#include "Engine/Texture2D.h"
 #include "MMModBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -56,12 +58,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		USoundBase* m_hit_sfx;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+		UNiagaraSystem* muzzleFlashFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
+		UTexture2D* icon;
+
 	//Called when creating a mod
 	UFUNCTION(BlueprintCallable) virtual UMMModBase* InitializeMod(
 		UPARAM(DisplayName = "New Additive Mod Stats") FModStats newAdditiveModStats,
 		UPARAM(DisplayName = "New Multiplicative Mod Stats") FModStats newMultiplicativeModStats,
 		TSubclassOf<class AMMProjectileBase> newProjectileClass,
 		FString newName);
+
+	UFUNCTION(BlueprintCallable) UMMModBase* UpdateMuzzleFlash(UNiagaraSystem* newMuzzleFlash);
 
 	//Called when added a mod to a gun
 	UFUNCTION(BlueprintCallable) virtual void AddToGun(
@@ -73,4 +83,9 @@ public:
 
 	UFUNCTION(BlueprintPure) FModStats GetAdditiveModStats();
 	UFUNCTION(BlueprintPure) FModStats GetMultiplicativeModStats();
+
+
+	UFUNCTION(BlueprintCallable) TArray<FString> getRelevantStatNames();
+	UFUNCTION(BlueprintCallable) TArray<float> getRelevantAdditiveStats();
+	UFUNCTION(BlueprintCallable) TArray<float> getRelevantMultiplicativeStats();
 };

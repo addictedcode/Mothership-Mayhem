@@ -47,8 +47,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		UChildActorComponent* ProjectileLaunchArea;
 	#pragma endregion
-	
+
 	class UEnemyStatsComponent* enemyStats;
+
+	UPROPERTY(EditAnywhere)
+		FString assetName;
 
 	UFUNCTION(BlueprintCallable)
 		UEnemyStatsComponent* getEnemyStats();
@@ -78,6 +81,10 @@ public:
 		void SetSnipingSpot(AActor* loc);
 
 	class AEnemyPool* enemyPool;
+
+	UFUNCTION(BlueprintCallable)
+	void setTimeToReload(float time);
+
 
 protected:
 	float moveSpeedMultiplier = 1.0f;
