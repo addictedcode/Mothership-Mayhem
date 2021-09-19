@@ -24,7 +24,7 @@ void AEnemyController::OnPossess(APawn *InPawn) {
 			BlackboardComp->SetValueAsFloat(BlackboardRunSpeed, 500.0f);
 			BlackboardComp->SetValueAsFloat(BlackboardAttackRange, 2000.0f);
 
-			EnemyFactory::InitializeEnemy("baseEnemy", AICharacter, this);
+			EnemyFactory::InitializeEnemy(AICharacter->assetName, AICharacter, this);
 
 			AMMCharacterBase* player = Cast<AMMCharacterBase>(GetWorld()->GetFirstPlayerController()->GetPawn());
 			if (player != nullptr)

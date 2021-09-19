@@ -167,10 +167,10 @@ void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		}
 	}
 
-	if (m_hit_sfx)
+	/*if (m_hit_sfx)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, m_hit_sfx, Hit.ImpactPoint);
-	}
+	}*/
 }
 
 int AMMProjectileBase::getDamageValue()

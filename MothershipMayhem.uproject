@@ -23,6 +23,11 @@
 		{
 			"Name": "NiagaraExtras",
 			"Enabled": true
+		},
+		{
+			"Name": "InstancePlugin",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/53814dcaeb194d838817e5563fcf1ec2"
 		}
 	]
 }

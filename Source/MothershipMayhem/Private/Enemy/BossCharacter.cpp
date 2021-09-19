@@ -22,7 +22,7 @@ void ABossCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	this->timeToReload = 5.0f;
+	this->timeToReload = 2.0f;
 	Cast<AEnemyController>(this->GetController())->UpdateAttackRange(INT_MAX);
 }
 

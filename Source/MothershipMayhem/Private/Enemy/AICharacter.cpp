@@ -195,3 +195,7 @@ void AAICharacter::shootTarget()
 	}
 }
 
+void AAICharacter::setTimeToReload(float time) {
+	this->timeToReload = time;
+}
+

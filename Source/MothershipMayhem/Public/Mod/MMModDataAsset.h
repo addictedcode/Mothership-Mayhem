@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Engine/Texture2D.h"
 #include "Enemy/EnemyStatsComponent.h"
 #include "Projectiles/MMProjectileOnHitEffect.h"
+#include "NiagaraSystem.h"
 #include "MMModDataAsset.generated.h"
 
 UENUM(BlueprintType)
@@ -79,6 +81,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
 		FString description;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
+		UTexture2D* icon;
+
 	//PROJECTILE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
 		TSubclassOf<class AMMProjectileBase> projectileClass;
@@ -92,6 +97,13 @@ public:
 		USoundBase* hit_sfx;
 	
 	#pragma endregion 
+
+#pragma region VFX
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX", meta = (EditCondition = "modSlot == MMModSlot::Projectile", EditConditionHides))
+		UNiagaraSystem* muzzleFlashFX;
+
+#pragma endregion 
 
 	#pragma region Additive Stats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Additive Stats")

@@ -113,6 +113,7 @@ void AEnemyPool::UpdateEnemyTargets(AActor* newTarget)
 	initialTarget = newTarget;
 }
 
+
 void AEnemyPool::RegisterEnemyDeath(AActor* deadEnemy)
 {
 	if (DisabledSpawns.count(deadEnemy->GetClass()))

@@ -35,10 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateEnemyTargets(AActor* newTarget);
 
+
 	void RegisterEnemyDeath(AActor* deadEnemy);
 
 private:
-
 	std::map<TSubclassOf<AActor>, std::vector<AActor*>> SpawnedPool;
 	std::map<TSubclassOf<AActor>, std::vector<AActor*>> DisabledSpawns;
 
