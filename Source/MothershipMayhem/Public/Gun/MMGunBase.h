@@ -4,23 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "Stats/MMStatsBase.h"
+#include "NiagaraSystem.h"
 #include "MMGunBase.generated.h"
 
 struct TGunStats
 {
 	//Affect Gun
-	TMMStatsBase fireRate;
-	TMMStatsBase reloadTime;
-	TMMStatsBase maxAmmo;
-	float currentAmmo = 0;
-	TMMStatsBase accuracy;
+	TMMStatsBase<float> fireRate;
+	TMMStatsBase<float> reloadTime;
+	TMMStatsBase<int> maxAmmo;
+	int currentAmmo = 0;
+	TMMStatsBase<float> accuracy;
 	bool isAutomatic;
-	TMMStatsBase numberOfProjectilesToShoot;
+	TMMStatsBase<int> numberOfProjectilesToShoot;
 
 	//Affect Projectile
-	TMMStatsBase damage;
-	TMMStatsBase projectileSpeed;
+	TMMStatsBase<float> damage;
+	TMMStatsBase<float> projectileSpeed;
+	bool isBouncingProjectile;
+	TMMStatsBase<float> projectileGravityScale;
 };
 
 
@@ -36,7 +40,7 @@ struct FGunStats
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float reloadTime;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float maxAmmo;
+		int maxAmmo;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float currentAmmo;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -44,7 +48,7 @@ struct FGunStats
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool isAutomatic;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float numberOfProjectilesToShoot;
+		int numberOfProjectilesToShoot;
 
 	//Affect Projectile
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -71,6 +75,8 @@ protected:
 	
 	TGunStats gunStats;
 
+	UPROPERTY(BlueprintReadOnly) TArray<class UMMModBase*> modList;
+	
 	FTimerHandle primaryShootTimerHandle;
 	bool isShooting = false;
 
@@ -78,15 +84,46 @@ protected:
 	bool isReloading = false;
 
 	float accuracyAngle;
+
+	bool isVacuum = false;
+	bool isVacuumShooting = false;
+
+public:
+	//object pool for the bullets
+	AActor** bulletPool;
+
+	//Player
+	class AMMCharacterBase* m_Player;
+  
+	UBoxComponent* vacuumHitbox;
+  
+	TArray<class UMMProjectileOnHitEffect*> projectileOnHitEffects;
+
+	//SFX
+	USoundBase* m_shoot_sfx;
+	USoundBase* m_default_shoot_sfx;
+	USoundBase* m_hit_sfx;
+	USoundBase* m_default_hit_sfx;
+	USoundBase* m_reload_sfx;
+	UAudioComponent* m_current_reload_sfx;
 //UE Visible Variables
 protected:
 	/** Gun mesh: 1st person view (seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class UStaticMeshComponent* gunMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		class USkeletalMeshComponent* skeletalGunMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		class USkeletalMeshComponent* skeletalGunMesh2;
+
+	UPROPERTY(BlueprintReadWrite, Category = Mesh)
+		class UNiagaraSystem* muzzleFlashFX;
 
 	// Projectile class to shoot
 	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
+	UPROPERTY(EditAnywhere, Category = Projectile)
+		TSubclassOf<class AMMProjectileBase> defaultProjectileClass;
 	
 //Functions
 public:	
@@ -98,6 +135,22 @@ public:
 	void OnDraw();
 	
 	void OnReload();
+
+	UFUNCTION(BlueprintCallable) bool AddMod(class UMMModBase* newMod);
+	UFUNCTION(BlueprintCallable) void RemoveModByMod(class UMMModBase* mod);
+	UFUNCTION(BlueprintCallable) class UMMModBase* RemoveModByIndex(int index);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayRecoilAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void PlayReloadAnimation();
+
+	UFUNCTION(BlueprintCallable)
+		void PlayShootSFX();
+
+	UFUNCTION(BlueprintCallable)
+		void PlayReloadSFX();
 
 protected:
 
@@ -115,8 +168,23 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FGunStats GetStats();
+	UFUNCTION(BlueprintCallable)
+		FGunStats GetFinalStats();
+
+	UFUNCTION(BlueprintPure) TArray<class UMMModBase*>& GetModList();
+
+	void UpdateStats(int index,
+		int attack,
+		float fireRate,
+		float reloadSpeed,
+		int magazineSize,
+		float accuracy);
+
 	TGunStats& GetGunStats() { return gunStats; };
 	
-	void SetMesh(class UStaticMesh*);
+	void SetSkeletalMesh(class USkeletalMesh*);
+	void SetMuzzleFlash(class UNiagaraSystem*);
 	void SetProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
+	void SetDefaultProjectile(TSubclassOf<class AMMProjectileBase> newProjectileClass);
+	void SetVacuumMod(bool isVacuumModded);
 };

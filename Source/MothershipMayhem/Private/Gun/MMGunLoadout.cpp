@@ -25,23 +25,24 @@ void UMMGunLoadout::BeginPlay()
 	// ...
 	UWorld* world = this->GetWorld();
 	
-	ChangeGun(GunFactory::CreateGun("Pistol", world), 0);
-	ChangeGun(GunFactory::CreateGun("MachineGun", world), 1);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Pistol", world), 0);
+	ChangeGun(UMMGunFactory::CreateGunWithName("MachineGun", world), 1);
+	ChangeGun(UMMGunFactory::CreateGunWithName("Shotgun", world), 2);
 }
 
 void UMMGunLoadout::OnPrimaryShootPressed()
 {
-	if (gun[currentGunIndex] != NULL) 
+	if (gunList.IsValidIndex(currentGunIndex)) 
 	{
-		gun[currentGunIndex]->OnPrimaryShootPressed();
+		gunList[currentGunIndex]->OnPrimaryShootPressed();
 	}
 }
 
 void UMMGunLoadout::OnPrimaryShootReleased()
 {
-	if (gun[currentGunIndex] != NULL)
+	if (gunList.IsValidIndex(currentGunIndex))
 	{
-		gun[currentGunIndex]->OnPrimaryShootReleased();
+		gunList[currentGunIndex]->OnPrimaryShootReleased();
 	}
 }
 
@@ -59,7 +60,7 @@ void UMMGunLoadout::OnSwapWheel(float value)
 			{
 				currentGunIndex = 2;
 			}
-			if (gun[currentGunIndex] != NULL)
+			if (gunList.IsValidIndex(currentGunIndex))
 			{
 				break;
 			}
@@ -74,7 +75,7 @@ void UMMGunLoadout::OnSwapWheel(float value)
 			{
 				currentGunIndex = 0;
 			}
-			if (gun[currentGunIndex] != NULL)
+			if (gunList.IsValidIndex(currentGunIndex))
 			{
 				break;
 			}
@@ -86,54 +87,73 @@ void UMMGunLoadout::OnSwapWheel(float value)
 		return;
 	}
 	
-	gun[previousGunIndex]->SetActorHiddenInGame(true);
-	gun[previousGunIndex]->OnHolster();
+	gunList[previousGunIndex]->SetActorHiddenInGame(true);
+	gunList[previousGunIndex]->OnHolster();
 	
-	gun[currentGunIndex]->SetActorHiddenInGame(false);
-	gun[currentGunIndex]->OnDraw();
+	gunList[currentGunIndex]->SetActorHiddenInGame(false);
+	gunList[currentGunIndex]->OnDraw();
 }
 
 void UMMGunLoadout::OnReload()
 {
-	if (gun[currentGunIndex] != NULL)
+	if (gunList.IsValidIndex(currentGunIndex))
 	{
-		gun[currentGunIndex]->OnReload();
+		gunList[currentGunIndex]->OnReload();
 	}
 }
 
 void UMMGunLoadout::ChangeGun(AMMGunBase* newGun, int index)
 {
+	if (this->bulletPool != nullptr) {
+		newGun->bulletPool = this->bulletPool;
+	}
+	
 	// old gun
-	if (gun[index] != NULL)
+	if (gunList.IsValidIndex(index))
 	{
-		gun[index]->Destroy();
-		gun[index] = newGun;
+		gunList[index]->Destroy();
+		gunList.Insert(newGun, index);
 	}
 	else
 	{
-		gun[index] = newGun;
+		newGun->m_Player = (AMMCharacterBase*)this->GetOwner();
+		gunList.Insert(newGun, index);
 	}
 
 	//new gun
-	if (gun[index] != NULL)
+	if (gunList.IsValidIndex(index))
 	{
-		gun[index]->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		gunList[index]->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		if (index != currentGunIndex)
 		{
-			gun[index]->SetActorHiddenInGame(true);
+			gunList[index]->SetActorHiddenInGame(true);
 		}
 	}
 }
 
 TArray<AMMGunBase*> UMMGunLoadout::getGuns()
 {
-	TArray<AMMGunBase*> gunsToReturn;
-	for (int i = 0; i < 3; ++i) {
-		gunsToReturn.Emplace(gun[i]);
-	}
-	return gunsToReturn;
+	return gunList;
 }
 
+void UMMGunLoadout::UpdateGunStats(int index, int attack, float fireRate, float reloadSpeed, int magazineSize, float accuracy) {
+	if (gunList.IsValidIndex(index))
+	{
+		gunList[index]->UpdateStats(index, attack, fireRate, reloadSpeed, magazineSize, accuracy);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No Gun"));
+	}
+}
+
+void UMMGunLoadout::setVacuumHitbox(UBoxComponent* hitbox)
+{
+	if (hitbox != nullptr) {
+		for (int i = 0; i < gunList.Num(); i++) {
+			gunList[i]->vacuumHitbox = hitbox;
+		}
+	}
+}
 
 
 

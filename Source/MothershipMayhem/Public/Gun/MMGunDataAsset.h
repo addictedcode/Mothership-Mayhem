@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Gun/MMGunBase.h"
+#include "NiagaraSystem.h"
 #include "MMGunDataAsset.generated.h"
 
 /**
@@ -19,7 +21,19 @@ public:
 		FString name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gun")
-		UStaticMesh* gunMesh;
+		TSubclassOf<class AMMGunBase> gunBP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FX")
+		UNiagaraSystem* muzzleFlashFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_shoot_sfx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_hit_sfx;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SFX")
+		USoundBase* m_gun_reload_sfx;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Projectile)
 		TSubclassOf<class AMMProjectileBase> projectileClass;
@@ -31,7 +45,7 @@ public:
 		float fireRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
-		float maxAmmo;
+		int maxAmmo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
 		float reloadTime;
@@ -40,5 +54,17 @@ public:
 		float accuracy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
-		float numberOfProjectilesToShoot;
+		int numberOfProjectilesToShoot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float projectileSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		bool isBouncingProjectile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
+		float projectileGravityScale;
 };

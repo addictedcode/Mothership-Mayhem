@@ -3,7 +3,13 @@
 
 #include "Projectiles/MMProjectileBase.h"
 #include "Components/SphereComponent.h"
+#include "Projectiles/ProjectilePool.h"
+#include "Projectiles/MMProjectileOnHitEffect.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
+#include "Enemy/AICharacter.h"
+#include "Enemy/EnemyStatsComponent.h"
 
 // Sets default values
 AMMProjectileBase::AMMProjectileBase()
@@ -27,32 +33,190 @@ AMMProjectileBase::AMMProjectileBase()
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	projectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("projectileComp"));
 	projectileMovement->UpdatedComponent = collisionComp;
-	projectileMovement->InitialSpeed = 3000.f;
-	projectileMovement->MaxSpeed = 3000.f;
+	projectileMovement->MaxSpeed = 3000.0f;
 	projectileMovement->bRotationFollowsVelocity = true;
 	projectileMovement->bShouldBounce = true;
+	projectileMovement->ProjectileGravityScale = 1;
 
-	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	// Die after 20 seconds by default
+	this->lifespan = 20.0f;
 	
 }
 
 // Called when the game starts or when spawned
-void AMMProjectileBase::BeginPlay()
+void AMMProjectileBase::BeginPlay() 
 {
 	Super::BeginPlay();
-	
+}
+
+// Called every frame
+//void AMMProjectileBase::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//	this->currentLifePeriod += DeltaTime;
+//	if (this->currentLifePeriod >= this->lifespan)
+//	{
+//		this->currentLifePeriod = 0;
+//		if (parentPool != nullptr) {
+//			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+//			if (pool != nullptr) {
+//				pool->ReturnObject(this);
+//				this->SetActorActivation(false);
+//			}
+//			else
+//			{
+//				UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+//			}
+//		}
+//		else
+//		{
+//			UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+//		}
+//	}
+//}
+
+void AMMProjectileBase::InitializeProjectile(float newDamage, float newProjectileSpeed, bool isProjectileBounce, float gravityScale, 
+	TArray<UMMProjectileOnHitEffect*>* newProjectileOnHitEffects, owningFaction newFaction, USoundBase* hit_sfx)
+{
+	damage = newDamage;
+	projectileSpeed = newProjectileSpeed;
+	projectileOnHitEffects = newProjectileOnHitEffects;
+	projectileMovement->MaxSpeed = newProjectileSpeed;
+	projectileMovement->bShouldBounce = isProjectileBounce;
+	projectileMovement->ProjectileGravityScale = gravityScale;
+	faction = newFaction;
+	m_hit_sfx = hit_sfx;
 }
 
 void AMMProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		if (!isPiercing || (isPiercing && Cast<AAICharacter>(OtherActor) == nullptr))
+		{
+			if (parentPool != nullptr) {
+				AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+				if (pool != nullptr) {
+					pool->ReturnObject(this);
+					this->SetActorActivation(false);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+			}
+		}
+		if (faction != owningFaction::Enemy) {
+			AAICharacter* enemy = Cast<AAICharacter>(OtherActor);
+			if (enemy != nullptr)
+			{
+				UEnemyStatsComponent* enemyStats = enemy->getEnemyStats();
+				if (enemyStats != nullptr) {
+					enemyStats->TakeDamage(damage);
+					//enemyStats->ApplyStatusEffect(DISORIENTED);
 
-		Destroy();
+					//Calls all ApplyEffects (UMMProjectileOnHitEffect) from a pointer to the MMGunBase class, projectileOnHitEffects TArray
+					if (projectileOnHitEffects != nullptr) {
+						for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
+						{
+							effect->ApplyEffect(enemyStats, Hit.ImpactPoint);
+						}
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("HIT ENEMY DOES NOT HAVE STATS COMPONENT"));
+				}
+			}
+			else
+			{
+				//UE_LOG(LogTemp, Error, TEXT("Hit target is not an enemy"));
+			}
+		}
+	}
+	else{
+		if (parentPool != nullptr) {
+			AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+			if (pool != nullptr) {
+				pool->ReturnObject(this);
+				this->SetActorActivation(false);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Class Reference"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PROJECTILEBASE ONHIT: No Pool Actor Reference"));
+		}
+	}
+	onHitSpecialEffect(Hit);
+	if (projectileOnHitEffects != nullptr) {
+		for (UMMProjectileOnHitEffect* effect : *projectileOnHitEffects)
+		{
+			UWorld* world = GetWorld();
+			if (world != nullptr)
+				effect->ApplyEffect(world, Hit);
+		}
+	}
+
+	/*if (m_hit_sfx)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, m_hit_sfx, Hit.ImpactPoint);
+	}*/
+}
+
+int AMMProjectileBase::getDamageValue()
+{
+	return this->damage;
+}
+
+void AMMProjectileBase::onHitSpecialEffect(FHitResult hit)
+{
+}
+
+void AMMProjectileBase::SetActorActivation(bool state)
+{
+	this->SetActorHiddenInGame(!state);
+	this->SetActorEnableCollision(state);
+	//this->SetActorTickEnabled(state);
+
+	if (state)
+	{
+		projectileMovement->UpdatedComponent = RootComponent;
+		projectileMovement->Velocity = FVector(GetActorForwardVector() * projectileSpeed);
+		projectileMovement->MaxSpeed = projectileSpeed;
+		GetWorld()->GetTimerManager().SetTimer(projectileLifespanTimerHandle, this, &AMMProjectileBase::OnLifespanEnd, lifespan);
+		projectileMovement->SetComponentTickEnabled(true);
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 	}
 }
 
-
+void AMMProjectileBase::OnLifespanEnd()
+{
+	if (parentPool != nullptr) {
+		AProjectilePool* pool = Cast<AProjectilePool>(parentPool);
+		if (pool != nullptr) {
+			pool->ReturnObject(this);
+			this->SetActorActivation(false);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("No Pool Class Reference"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Pool Actor Reference"));
+	}
+}

@@ -5,6 +5,7 @@
 #include "Gun/MMGunLoadout.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AMMCharacterBase::AMMCharacterBase()
@@ -31,6 +32,7 @@ AMMCharacterBase::AMMCharacterBase()
 	#pragma region Gun Loadout Component
 	//Create Gun Loadout Component
 	gunLoadoutComponent = CreateDefaultSubobject<UMMGunLoadout>(TEXT("PlayerGunLoadout"));
+	gunLoadoutComponent->bulletPool = &this->bulletPool;
 	#pragma endregion 
 }
 
@@ -38,6 +40,18 @@ AMMCharacterBase::AMMCharacterBase()
 void AMMCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<UActorComponent*> children;
+	this->GetComponents(children, true);
+	for (int i = 0; i < children.Num(); i++)
+	{
+		UActorComponent* child = children[i];
+		FString name = child->GetName();
+		if (child->GetName() == "VacuumHitbox")
+		{
+			gunLoadoutComponent->setVacuumHitbox(Cast<UBoxComponent>(child));
+		}
+	}
 
 	if (tempMesh->DoesSocketExist("GripPoint")) {
 		const FRotator gunRotation = tempMesh->GetSocketRotation("GripPoint");
@@ -55,24 +69,24 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	//Character Movement
-	PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterBase::MoveX);
-	PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterBase::MoveY);
+	/*PlayerInputComponent->BindAxis("MoveX", this, &AMMCharacterBase::MoveX);
+	PlayerInputComponent->BindAxis("MoveY", this, &AMMCharacterBase::MoveY);*/
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	//PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMMCharacterBase::StartJump);
+	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMMCharacterBase::EndJump);
 	
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMMCharacterBase::StartCrouch);
-	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterBase::EndCrouch);
+	//PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMMCharacterBase::StartCrouch);
+	//PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMMCharacterBase::EndCrouch);
 	
 	//Mouse Movement
-	PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
-	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);
+	/*PlayerInputComponent->BindAxis("MouseX", this, &AMMCharacterBase::MouseX);
+	PlayerInputComponent->BindAxis("MouseY", this, &AMMCharacterBase::MouseY);*/
 
 	//Gun Controls
-	PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AMMCharacterBase::OnPrimaryShootPressed);
+	/*PlayerInputComponent->BindAction("PrimaryFire", IE_Pressed, this, &AMMCharacterBase::OnPrimaryShootPressed);
 	PlayerInputComponent->BindAction("PrimaryFire", IE_Released, this, &AMMCharacterBase::OnPrimaryShootReleased);
 	PlayerInputComponent->BindAxis("SwapGunWheel", this, &AMMCharacterBase::OnSwapWheel);
-	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMMCharacterBase::OnReload);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMMCharacterBase::OnReload);*/
 
 }
 
@@ -80,6 +94,9 @@ void AMMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void AMMCharacterBase::MoveX(float value)
 {
+	if (uint8(m_State & MMCharacterState::Grappling)) 
+		return;
+	
 	if ((Controller) && (value != 0.0f)) 
 	{
 		const FRotator rotation = Controller->GetControlRotation();
@@ -92,6 +109,9 @@ void AMMCharacterBase::MoveX(float value)
 
 void AMMCharacterBase::MoveY(float value)
 {
+	if (uint8(m_State & MMCharacterState::Grappling))
+		return;
+	
 	if ((Controller) && (value != 0.0f))
 	{
 		const FRotator rotation = Controller->GetControlRotation();
@@ -102,14 +122,29 @@ void AMMCharacterBase::MoveY(float value)
 	}
 }
 
+void AMMCharacterBase::StartJump()
+{
+	Jump();
+	m_State |= MMCharacterState::Jumping;
+}
+
+void AMMCharacterBase::EndJump()
+{
+	StopJumping();
+	m_State &= ~MMCharacterState::Jumping;
+}
+
+
 void AMMCharacterBase::StartCrouch()
 {
 	Crouch(true);
+	m_State |= MMCharacterState::Crouching;
 }
 
 void AMMCharacterBase::EndCrouch()
 {
 	UnCrouch(true);
+	m_State &= ~MMCharacterState::Crouching;
 }
 
 
